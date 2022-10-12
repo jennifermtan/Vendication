@@ -6,3 +6,5 @@ package CC_04_Wed_16_Frank_Group._Assignment2;
 public class App {
     public static void main(String[] args){}
 }
+
+// Test comment
