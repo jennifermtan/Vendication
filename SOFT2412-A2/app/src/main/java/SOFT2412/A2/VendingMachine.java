@@ -5,5 +5,6 @@ public class VendingMachine {
     private Map<String, Integer> cash = new HashMap<String, Integer>();
     private List<Customer> customers = new ArrayList<>();
     private List<Card> cards = new ArrayList<Card>();
+    private Map<Food, Integer> food = new HashMap<>();
 
 }
