@@ -1,9 +1,10 @@
 package SOFT2412.A2;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
-
+import java.io.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
@@ -17,7 +18,25 @@ public class VendingMachine {
 
     public VendingMachine(){
         // Load in the cash and the inventory from "inventory.txt" and "cash.txt" files
+        try{
+            // load in the cash numbers from "cash.txt"
+            File cashFile = new File("./src/main/resources/cash.txt");
+            Scanner scan1 = new Scanner(cashFile);
+            while (scan1.hasNextLine()){
+                String[] line = scan1.nextLine().split(", ");
+                cash.put(line[0], Integer.valueOf(line[1]));
+            }
 
+            // load in the inventory from "inventory.txt"
+            File invenFile = new File("./src/main/resources/inventory.txt");
+            Scanner scan2 = new Scanner(invenFile);
+            while (scan2.hasNextLine()){
+                String[] line = scan2.nextLine().split(", ");
+                inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
+            }
+
+        }
+        catch(FileNotFoundException f){System.out.println(f);}
     }
 
     // I'm following Frank's structure that user input will be of the form:
@@ -36,6 +55,7 @@ public class VendingMachine {
                 String[] thisCash = typeOfCash.split("\\*");
 
                 if (!cash.keySet().contains(thisCash[0])) {
+                    System.out.println(thisCash[0]);
                     return "incorrect format";
                 }
                 // Check if the input type given is a dollar (starts with $)
@@ -46,6 +66,7 @@ public class VendingMachine {
                 else {
                     paid += ((Double.parseDouble(thisCash[0].substring(0, thisCash[0].length() - 1)) / 100) * Double.parseDouble(thisCash[1]));
                 }
+
             }
             catch(NumberFormatException f){ return "incorrect format";}
 
@@ -125,8 +146,7 @@ public class VendingMachine {
         return null;
     }
 
-    public static BigDecimal round(BigDecimal value, BigDecimal increment,
-                                   RoundingMode roundingMode) {
+    public static BigDecimal round(BigDecimal value, BigDecimal increment, RoundingMode roundingMode) {
         if (increment.signum() == 0) {
             // 0 increment does not make much sense, but prevent division by 0
             return value;
