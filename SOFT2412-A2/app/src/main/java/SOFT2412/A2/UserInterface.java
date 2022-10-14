@@ -3,6 +3,7 @@ package SOFT2412.A2;
 import java.util.*;
 public class UserInterface {
     private Scanner scan = new Scanner(System.in);
+    VendingMachine vm = new VendingMachine();
     public void buy(){
         System.out.println("Aren't you salivating at the mouth-watering image that this list of product options has conjured?");
         System.out.println("If you're paying with card today, just input your request in the form: \npaymentType quantity itemCode");
@@ -22,7 +23,7 @@ public class UserInterface {
                     Integer.valueOf(input[1]);
 
                     // Check that the third input is a viable item code
-                    if (VendingMachine.searchByItemCode(input[2]) == null){
+                    if (vm.searchByItemCode(input[2]) == null){
                         throw new NoSuchFieldException();
                     }
                     // STILL NEED TO CHECK IF THE CASH IS GIVEN CORRECTLY,
@@ -40,8 +41,10 @@ public class UserInterface {
             for (int i = 3; i < input.length ; i++){
                 cashInput += (input[i] + " ");
             }
+            cashInput = cashInput.substring(0, cashInput.length() - 1);
 
-            System.out.println(VendingMachine.payByCash(Integer.valueOf(input[1]), input[2], cashInput));
+
+            System.out.println(vm.payByCash(Integer.valueOf(input[1]), input[2], cashInput));
         }
 
     }
