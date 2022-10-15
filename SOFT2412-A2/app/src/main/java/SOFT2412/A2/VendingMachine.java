@@ -157,12 +157,14 @@ public class VendingMachine {
         }
     }
 
-    // When adding an item make sure that there can only be max 15 items for each food!!
     public void addItem(Food item, int quantity) {
-        if (! inventory.containsKey(item)) {
+        if (! inventory.containsKey(item) && quantity <= 15) {
             inventory.put(item, quantity);
-        } else {
+        } else if (inventory.get(item) + quantity <= 15) {
             inventory.put(item, inventory.get(item) + quantity);
+        } else {
+            System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
+            System.out.println();
         }
     }
 
