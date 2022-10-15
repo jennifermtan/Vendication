@@ -157,4 +157,25 @@ public class VendingMachine {
         }
     }
 
+    // When adding an item make sure that there can only be max 15 items for each food!!
+    public void addItem(Food item, int quantity) {
+        if (! inventory.containsKey(item)) {
+            inventory.put(item, quantity);
+        } else {
+            inventory.put(item, inventory.get(item) + quantity);
+        }
+    }
+
+    public Map<String, Integer> getCash() {
+        return cash;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public Map<Food, Integer> getInventory() {
+        return inventory;
+    }
+
 }
