@@ -6,54 +6,9 @@ public class UserInterface {
     private Scanner scan = new Scanner(System.in);
     VendingMachine vm = new VendingMachine();
 
-    public String[] validateInput(){
-        String line = "";
-        String[] input;
-        while (true){
-            line= scan.nextLine();
-            input = line.split(" ");
 
-            // Let the user exit
-            if (input[0].equals("e") || input[0].equals("E")){
-                return input;
-            }
-            // Stop asking for info if their info is correct
-            if (input.length > 2 && (input[0].equals("card") || input[0].equals("cash"))){
-                try{
-                    // Check that the second input is a quantity
-                    Integer.valueOf(input[1]);
-
-                    // Check that the third input is a viable item code
-                    if (vm.searchByItemCode(input[2]) == null){
-                        throw new NoSuchFieldException();
-                    }
-
-                    // Check that their given cash was in the correct format
-                    if (input[0].equals("cash")){
-                        // check that each cash item was of the form $cash*int
-                        for (int i = 3; i < input.length; i++){
-                            String[] cashGiven = input[i].split("\\*");
-                            if (!vm.getCash().containsKey(cashGiven[0])) {
-                                throw new NumberFormatException();
-                            }
-                            int numGiven = Integer.parseInt(cashGiven[1]);
-                        }
-
-                    }
-
-                    break;
-                }
-                catch(NumberFormatException F){}
-                catch(NoSuchFieldException nf){}
-                catch(ArrayIndexOutOfBoundsException a){}
-
-            }
-            System.out.println("We apologise. Please check that was the correct format. Press 'E' to exit.");
-        }
-        return input;
-    }
     public void buy(){
-        System.out.println("Aren't you salivating at the mouth-watering image that this list of product options has conjured?");
+        System.out.println("\nAren't you salivating at the mouth-watering image that this list of product options has conjured?");
         System.out.println("If you're paying with CARD today, just input your request in the form: \npaymentType quantity itemCode");
         System.out.println("\n For example, a purchase of 4 sprites with card would be: card 4 se\n");
         System.out.println("If you're paying with CASH today, just input your request in the form: \npaymentType quantity itemCode $dollar*quantity centsc*quantity (and so on for the number of coins and notes you're inputting)");
@@ -76,7 +31,7 @@ public class UserInterface {
                 // Try to process their transaction
                 try{
                     System.out.println(vm.payByCash(Integer.valueOf(input[1]), input[2], cashInput));
-                    System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press E to exit");
+                    System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'E' to exit.");
                 }
                 // If the customer has not given enough money
                 catch(ArithmeticException ae){
@@ -164,5 +119,52 @@ public class UserInterface {
             }
         }
         System.out.println();
+    }
+
+    public String[] validateInput(){
+        String line = "";
+        String[] input;
+        while (true){
+            line= scan.nextLine();
+            input = line.split(" ");
+
+            // Let the user exit
+            if (input[0].equals("e") || input[0].equals("E")){
+                return input;
+            }
+            // Stop asking for info if their info is correct
+            if (input.length > 2 && (input[0].equals("card") || input[0].equals("cash"))){
+                try{
+                    // Check that the second input is a quantity
+                    Integer.valueOf(input[1]);
+
+                    // Check that the third input is a viable item code
+                    if (vm.searchByItemCode(input[2]) == null){
+                        throw new NoSuchFieldException();
+                    }
+
+                    // Check that their given cash was in the correct format
+                    if (input[0].equals("cash")){
+                        // check that each cash item was of the form $cash*int
+                        for (int i = 3; i < input.length; i++){
+                            String[] cashGiven = input[i].split("\\*");
+                            if (!vm.getCash().containsKey(cashGiven[0])) {
+                                throw new NumberFormatException();
+                            }
+                            int numGiven = Integer.parseInt(cashGiven[1]);
+                        }
+
+                    }
+
+                    break;
+                }
+                catch(NumberFormatException F){}
+                catch(NoSuchFieldException nf){}
+                catch(ArrayIndexOutOfBoundsException a){}
+
+            }
+            System.out.println("We apologise. Please check that was the correct format. Press 'E' to exit.");
+        }
+        return input;
     }
 }
