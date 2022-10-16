@@ -19,16 +19,19 @@ public abstract class User {
     public static void loadUsers() {
         String[] userInfo;
         try {
-            Scanner usersFile = new Scanner(new File("./SOFT2412-A2/app/src/main/resources/users.txt"));
+            Scanner usersFile = new Scanner(new File("./src/main/resources/users.txt"));
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");
-                System.out.println(line);
+                if(!userLogins.containsKey(userInfo[1]))
+                    userLogins.put(userInfo[1], userInfo[2]);
+                else
+                    System.out.println("That username already exists.");
             }
             usersFile.close();
         }
         catch(FileNotFoundException e) {
-            System.out.println("File not found exception.");
+            System.out.println("loadUsers: File not found exception.");
         }
     }
 }
