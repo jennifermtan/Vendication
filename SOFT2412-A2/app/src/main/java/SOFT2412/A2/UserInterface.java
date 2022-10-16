@@ -14,7 +14,7 @@ public class UserInterface {
         String line = "";
         String[] input;
         while (true){
-            line= scan.nextLine();
+            line = scan.nextLine();
             input = line.split(" ");
             // Stop asking for info if their info is correct
             if (input.length > 2 && (input[0].equals("card") || input[0].equals("cash"))){
