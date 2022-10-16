@@ -102,4 +102,67 @@ public class UserInterface {
 
 
     }
+
+    public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
+        List<Food> drinks = new ArrayList<>();
+        List<Food> chocolates = new ArrayList<>();
+        List<Food> chips = new ArrayList<>();
+        List<Food> candies = new ArrayList<>();
+
+        System.out.println("Snacks available:");
+        for (Food key : inventory.keySet()) {
+            if (inventory.get(key) != 0) {
+                // Drinks
+                if (key.getCategory().equals("Drinks")) {
+                    drinks.add(key);
+                } else if (key.getCategory().equals("Chocolates")) {
+                    chocolates.add(key);
+                } else if (key.getCategory().equals("Chips")) {
+                    chips.add(key);
+                } else if (key.getCategory().equals("Candies")) {
+                    candies.add(key);
+                }
+            }
+        }
+
+        System.out.print("Drinks: ");
+        for (int i = 0; i < drinks.size(); i++) {
+            if (i != drinks.size() - 1) {
+                System.out.printf("%s ($%.2f) (%s), ", drinks.get(i).getName(), drinks.get(i).getCost(), drinks.get(i).getItemCode());
+            } else {
+                System.out.printf("%s ($%.2f) (%s)", drinks.get(i).getName(), drinks.get(i).getCost(), drinks.get(i).getItemCode());
+            }
+        }
+        System.out.println();
+
+        System.out.print("Chocolates: ");
+        for (int i = 0; i < chocolates.size(); i++) {
+            if (i != chocolates.size() - 1) {
+                System.out.printf("%s ($%.2f) (%s), ", chocolates.get(i).getName(), chocolates.get(i).getCost(), chocolates.get(i).getItemCode());
+            } else {
+                System.out.printf("%s ($%.2f) (%s)", chocolates.get(i).getName(), chocolates.get(i).getCost(), chocolates.get(i).getItemCode());
+            }
+        }
+        System.out.println();
+
+        System.out.print("Chips: ");
+        for (int i = 0; i < chips.size(); i++) {
+            if (i != chips.size() - 1) {
+                System.out.printf("%s ($%.2f) (%s), ", chips.get(i).getName(), chips.get(i).getCost(), chips.get(i).getItemCode());
+            } else {
+                System.out.printf("%s ($%.2f) (%s)", chips.get(i).getName(), chips.get(i).getCost(), chips.get(i).getItemCode());
+            }
+        }
+        System.out.println();
+
+        System.out.print("Candies: ");
+        for (int i = 0; i < candies.size(); i++) {
+            if (i != candies.size() - 1) {
+                System.out.printf("%s ($%.2f) (%s), ", candies.get(i).getName(), candies.get(i).getCost(), candies.get(i).getItemCode());
+            } else {
+                System.out.printf("%s ($%.2f) (%s)", candies.get(i).getName(), candies.get(i).getCost(), candies.get(i).getItemCode());
+            }
+        }
+        System.out.println();
+    }
 }

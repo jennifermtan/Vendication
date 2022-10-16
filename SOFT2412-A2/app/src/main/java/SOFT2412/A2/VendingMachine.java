@@ -178,8 +178,28 @@ public class VendingMachine {
         }
     }
 
-    public HashMap<String, Integer> getCash(){return cash;}
-    public HashMap<Food, Integer> getInventory(){return inventory;}
-    public List<Customer> getCustomers(){return customers;}
+    public void addItem(Food item, int quantity) {
+        if (! inventory.containsKey(item) && quantity <= 15) {
+            inventory.put(item, quantity);
+        } else if (inventory.get(item) + quantity <= 15) {
+            inventory.put(item, inventory.get(item) + quantity);
+        } else {
+            System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
+            System.out.println();
+        }
+    }
+
+    public HashMap<String, Integer> getCash() {
+        return cash;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public HashMap<Food, Integer> getInventory() {
+        return inventory;
+    }
+
 
 }

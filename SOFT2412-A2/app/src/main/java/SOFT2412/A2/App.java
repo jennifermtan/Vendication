@@ -4,7 +4,9 @@ import java.util.*;
 public class App {
 
     public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
         UserInterface ui = new UserInterface();
-        ui.buy();
+        ui.displaySnacks(scan, ui.vm.getInventory());
+
     }
 }
