@@ -82,7 +82,7 @@ public class VendingMachine {
 
         // Calculate change breakdown
         Map<String, Integer> changeCash = new LinkedHashMap<String, Integer>();
-        List<String> cashTypes = new ArrayList<>(){{
+        List<String> cashTypes = new ArrayList<String>(){{
            add("$100");
            add("$50");
            add("$20");

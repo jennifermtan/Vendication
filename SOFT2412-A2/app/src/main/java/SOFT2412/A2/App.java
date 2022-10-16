@@ -7,6 +7,6 @@ public class App {
         Scanner scan = new Scanner(System.in);
         UserInterface ui = new UserInterface();
         ui.displaySnacks(scan, ui.vm.getInventory());
-
+        User.loadUsers();
     }
 }
