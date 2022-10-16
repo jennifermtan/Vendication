@@ -41,8 +41,9 @@ public class UserInterface {
             for (int i = 3; i < input.length ; i++){
                 cashInput += (input[i] + " ");
             }
-            cashInput = cashInput.substring(0, cashInput.length() - 1);
-
+            if (cashInput.length() > 0) {
+                cashInput = cashInput.substring(0, cashInput.length() - 1);
+            }
 
             System.out.println(vm.payByCash(Integer.valueOf(input[1]), input[2], cashInput));
         }

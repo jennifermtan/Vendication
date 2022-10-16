@@ -53,9 +53,10 @@ public class VendingMachine {
         for (String typeOfCash: givenCash){
             try {
                 String[] thisCash = typeOfCash.split("\\*");
-
+                if (thisCash[0].equals("")){
+                    return "not enough paid";
+                }
                 if (!cash.keySet().contains(thisCash[0])) {
-                    System.out.println(thisCash[0]);
                     return "incorrect format";
                 }
                 // Check if the input type given is a dollar (starts with $)
@@ -96,9 +97,15 @@ public class VendingMachine {
            add("5c");
         }};
         BigDecimal changeNum = change;
+        int prevChange = -1;
+        int currChange = 0;
         // This is a disgusting line but basically it's giving change to the customer while there is still change to be given (change > 0)
         while (change.subtract(new BigDecimal(0.0001)).compareTo(new BigDecimal(0)) == 1){
-
+            // If we haven't added any new change this round, then we can't figure out a way to give them change so return
+            if (prevChange == currChange){
+                return "no possible change";
+            }
+            prevChange = currChange;
             // Check every cash value to try to add a coin or note to the change
             for (String cashType: cashTypes){
                 BigDecimal value;
@@ -116,7 +123,7 @@ public class VendingMachine {
                 // Try to add it to the list of change as many times as you can
                 while (change.compareTo(value) >= 0 && cash.get(cashType) > 0){
                     change = change.subtract(value);
-
+                    currChange++;
                     if (!changeCash.containsKey(cashType)){
                         changeCash.put(cashType, 1);
                     }
