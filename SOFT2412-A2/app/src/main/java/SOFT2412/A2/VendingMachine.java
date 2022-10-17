@@ -10,7 +10,6 @@ import org.json.simple.parser.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
-    private List<Card> cards = new ArrayList<Card>();
 
     // A hashmap of the form: foodType: quantity in the vending machine
     private HashMap<Food, Integer> inventory = new HashMap<Food, Integer>();
@@ -18,17 +17,19 @@ public class VendingMachine {
     // A hashmap that records all the cash in the form cashType: quantity
     private HashMap<String, Integer> cash = new LinkedHashMap<String, Integer>();
 
-    // A JSONArray to store card details for reading and writing to JSON file
-    private JSONArray cardArray;
+    // Current user
+    private User currentUser;
 
     public VendingMachine(){
         // Load in the cash and the inventory from "inventory.txt" and "cash.txt" files using methods in case we need to reload them
         // load in the cash numbers from "cash.txt"
         loadCash();
         // Load in the card details from "creditCards.json"
-        loadCard();
+        Card.loadCards();
         // load in the inventory from "inventory.txt"
         loadInventory();
+        // Set default user null
+        this.currentUser = null;
     }
 
     public void loadCash(){
@@ -41,24 +42,6 @@ public class VendingMachine {
             }
         }
         catch(FileNotFoundException fe){}
-    }
-
-    public void loadCard() {
-        JSONParser parser = new JSONParser();
-        try {
-            Object object = parser.parse(new FileReader("./src/main/resources/creditCards.json"));
-            cardArray = (JSONArray) object;
-            for (Object o : cardArray) {
-                JSONObject entry = (JSONObject) o;
-                String name = (String) entry.get("name");
-                String number = (String) entry.get("number");
-                Card card = new Card(name, number);
-                cards.add(card);
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     public void loadInventory(){
@@ -111,6 +94,20 @@ public class VendingMachine {
 
     public Map<String, Integer> calculateChange(BigDecimal change){
         Map<String, Integer> changeCash = new LinkedHashMap<String, Integer>();
+        List<String> cashTypes = new ArrayList<String>(){{
+           add("$100");
+           add("$50");
+           add("$20");
+           add("$10");
+           add("$5");
+           add("$2");
+           add("$1");
+           add("50c");
+           add("20c");
+           add("10c");
+           add("5c");
+        }};
+        BigDecimal changeNum = change;
         int prevChange = -1;
         int currChange = 0;
         // This is a disgusting line but basically it's giving change to the customer while there is still change to be given (change > 0)
@@ -209,33 +206,6 @@ public class VendingMachine {
         return true;
     }
 
-    public boolean checkCardDetails(String name, String number) {
-        for (Card c : cards) {
-            if ((name.equals(c.getName())) && (number.equals(c.getNumber()))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Adds a card to saved card list and the json file
-    @SuppressWarnings("unchecked")
-    public void addCard(Card card) {
-        System.out.println(cardArray);
-        cards.add(card);
-        JSONObject newCard = new JSONObject();
-        newCard.put("name", card.getName());
-        newCard.put("number", card.getNumber());
-        cardArray.add(newCard);
-        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
-            file.write(cardArray.toJSONString());
-            file.flush();
-            file.close();
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
 
     public void addItem(Food item, int quantity) {
         if (! inventory.containsKey(item) && quantity <= 15) {
@@ -259,10 +229,6 @@ public class VendingMachine {
 
     public HashMap<String, Integer> getCash() {
         return cash;
-    }
-
-    public List<Card> getCards() {
-        return cards;
     }
 
     public HashMap<Food, Integer> getInventory() {

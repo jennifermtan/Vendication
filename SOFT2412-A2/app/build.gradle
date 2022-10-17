@@ -25,6 +25,7 @@ dependencies {
 
     // This dependency is used to process JSON-related code
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
 }
 
 application {
