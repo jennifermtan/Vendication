@@ -9,7 +9,7 @@ public class App {
     // Method takes user input as a single line
     public void takeInput(String command, List<String> args) {
         Scanner scan = new Scanner(System.in);
-
+        
     }
 
 
@@ -20,5 +20,8 @@ public class App {
         ui.displaySnacks(scan, ui.vm.getInventory());
         User.loadUsers();
         ui.buy();
+        Card mycard = new Card("John", "123456");
+        User john = new Cashier("John", "john123", "pass234");
+        john.saveCard(mycard);
     }
 }

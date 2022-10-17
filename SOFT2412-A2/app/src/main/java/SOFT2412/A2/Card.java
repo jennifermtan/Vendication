@@ -2,8 +2,8 @@ package SOFT2412.A2;
 import java.util.*;
 
 public class Card extends Payment{
-    private name;
-    private number;
+    private String name;
+    private String number;
     public static List<Card> cards = new ArrayList<Card>();
     public Card(String name, String number) {
         this.name = name;
