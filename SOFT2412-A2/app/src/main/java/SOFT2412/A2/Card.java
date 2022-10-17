@@ -5,6 +5,7 @@ public class Card extends Payment{
     private String name;
     private String number;
     public static List<Card> cards = new ArrayList<Card>();
+
     public Card(String name, String number) {
         this.name = name;
         this.number = number;
@@ -17,4 +18,5 @@ public class Card extends Payment{
     public String getNumber() {
         return this.number;
     }
+
 }

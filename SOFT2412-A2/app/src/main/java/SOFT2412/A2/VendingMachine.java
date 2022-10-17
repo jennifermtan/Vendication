@@ -5,6 +5,8 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
+import org.json.simple.*;
+import org.json.simple.parser.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
@@ -16,14 +18,19 @@ public class VendingMachine {
     // A hashmap that records all the cash in the form cashType: quantity
     private HashMap<String, Integer> cash = new LinkedHashMap<String, Integer>();
 
+    // A JSONArray to store card details for reading and writing to JSON file
+    private JSONArray cardArray;
+
     public VendingMachine(){
         // Load in the cash and the inventory from "inventory.txt" and "cash.txt" files using methods in case we need to reload them
         // load in the cash numbers from "cash.txt"
         loadCash();
-
+        // Load in the card details from "creditCards.json"
+        loadCard();
         // load in the inventory from "inventory.txt"
         loadInventory();
     }
+
     public void loadCash(){
         try{
             File cashFile = new File("./src/main/resources/cash.txt");
@@ -35,6 +42,25 @@ public class VendingMachine {
         }
         catch(FileNotFoundException fe){}
     }
+
+    public void loadCard() {
+        JSONParser parser = new JSONParser();
+        try {
+            Object object = parser.parse(new FileReader("./src/main/resources/creditCards.json"));
+            cardArray = (JSONArray) object;
+            for (Object o : cardArray) {
+                JSONObject entry = (JSONObject) o;
+                String name = (String) entry.get("name");
+                String number = (String) entry.get("number");
+                Card card = new Card(name, number);
+                cards.add(card);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public void loadInventory(){
         try{
             File invenFile = new File("./src/main/resources/inventory.txt");
@@ -192,6 +218,41 @@ public class VendingMachine {
         }
     }
 
+    public boolean checkStock(Food item, int quantity) {
+        if (inventory.get(item) < quantity) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkCardDetails(String name, String number) {
+        for (Card c : cards) {
+            if ((name.equals(c.getName())) && (number.equals(c.getNumber()))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Adds a card to saved card list and the json file
+    @SuppressWarnings("unchecked")
+    public void addCard(Card card) {
+        System.out.println(cardArray);
+        cards.add(card);
+        JSONObject newCard = new JSONObject();
+        newCard.put("name", card.getName());
+        newCard.put("number", card.getNumber());
+        cardArray.add(newCard);
+        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
+            file.write(cardArray.toJSONString());
+            file.flush();
+            file.close();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public void addItem(Food item, int quantity) {
         if (! inventory.containsKey(item) && quantity <= 15) {
             inventory.put(item, quantity);
@@ -201,6 +262,11 @@ public class VendingMachine {
             System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
             System.out.println();
         }
+    }
+
+    // Need to update inventory.txt as well? (!)
+    public void removeItem(Food item, int quantity) {
+        inventory.put(item, inventory.get(item) - quantity);
     }
 
     public HashMap<String, Integer> getCash() {

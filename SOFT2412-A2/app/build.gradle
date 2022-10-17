@@ -23,6 +23,11 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1.1-jre'
 
+<<<<<<< HEAD
+=======
+    // This dependency is used to process JSON-related code
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+>>>>>>> 9e4748b021910f4b3d980b1b54f275f9b2de630e
 }
 
 application {
