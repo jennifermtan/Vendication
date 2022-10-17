@@ -98,6 +98,8 @@ public class VendingMachine {
         String changeBreakdown = "";
         for (Map.Entry<String, Integer> payment: changeCash.entrySet()){
             changeBreakdown += (" (" + payment.getKey() + "*" + payment.getValue() + ")");
+            System.out.println(payment.getKey());
+            System.out.println(payment.getValue());
         }
 
         String resultString = "Transaction successful!\n" + "Paid: $" + df.format(paid) + "\nDue: $" + df.format(toPay) + "\nChange: $" + df.format(change);
@@ -105,8 +107,6 @@ public class VendingMachine {
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
         return resultString;
-
-
     }
 
     public Map<String, Integer> calculateChange(BigDecimal change){
@@ -146,12 +146,10 @@ public class VendingMachine {
                     else{
                         changeCash.put(cashType, changeCash.get(cashType) + 1);
                     }
-                    cash.put(cashType, cash.get(cashType) - 1);
-
+                    updateCash(cashType, 1);
                 }
             }
         }
-
         return changeCash;
     }
 
@@ -250,9 +248,13 @@ public class VendingMachine {
         }
     }
 
-    // Need to update inventory.txt as well? (!)
-    public void removeItem(Food item, int quantity) {
-        inventory.put(item, inventory.get(item) - quantity);
+    //When a user makes a transaction, update the quantity and/or cash
+    public void updateItem(String itemCode, int quantity) {
+        inventory.put(searchByItemCode(itemCode), inventory.get(searchByItemCode(itemCode)) - quantity);
+    }
+
+    public void updateCash(String cashAmount, int quantity) {
+        cash.put(cashAmount, cash.get(cashAmount) - quantity);
     }
 
     public HashMap<String, Integer> getCash() {
