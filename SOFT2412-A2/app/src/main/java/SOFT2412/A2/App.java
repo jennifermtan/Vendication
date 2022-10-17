@@ -1,4 +1,3 @@
-
 package SOFT2412.A2;
 import java.util.*;
 public class App {
@@ -7,6 +6,6 @@ public class App {
         Scanner scan = new Scanner(System.in);
         UserInterface ui = new UserInterface();
         ui.displaySnacks(scan, ui.vm.getInventory());
-
+        ui.buy();
     }
 }
