@@ -62,7 +62,7 @@ public class UserInterface {
                 }
                 Food itemPurchased = vm.searchByItemCode(input[2]);
                 int itemQuantity = Integer.parseInt(input[1]);
-                vm.removeItem(itemPurchased, itemQuantity); // removing items from inventory (assume enough stock)
+                vm.updateItem(input[2], itemQuantity); // removing items from inventory (assume enough stock)
                 System.out.printf("Thank you! Here are your items.\n User received %s %s(s)!\n", input[1], itemPurchased.getName());
                 // if (user is logged in), option to save credit card details (!)
             }

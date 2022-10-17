@@ -20,12 +20,12 @@ class AppTest {
         assertEquals(vm.getInventory().get(vm.searchByItemCode("cc")), 6);
     }
 
-    // This also tests updateCash() because the method is called in payByCash()
+    // This also tests updateCash() and calculateChange() because the method is called in payByCash()
     @Test
     public void testPayByCash() {
         vm.payByCash(1, "cc", "$5*1");
+        assertEquals(vm.getCash().get("$5"), 6);
         assertEquals(vm.getCash().get("$2"), 4);
         assertEquals(vm.getCash().get("50c"), 4);
     }
-
 }
