@@ -8,6 +8,5 @@ public class App {
         UserInterface ui = new UserInterface();
         ui.displaySnacks(scan, ui.vm.getInventory());
         ui.buy();
-        System.out.println(ui.vm.getCash());
     }
 }
