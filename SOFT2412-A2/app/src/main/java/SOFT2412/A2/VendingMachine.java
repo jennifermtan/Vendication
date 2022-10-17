@@ -17,6 +17,9 @@ public class VendingMachine {
     // A hashmap that records all the cash in the form cashType: quantity
     private HashMap<String, Integer> cash = new LinkedHashMap<String, Integer>();
 
+    // Current user
+    private User currentUser;
+
     public VendingMachine(){
         // Load in the cash and the inventory from "inventory.txt" and "cash.txt" files using methods in case we need to reload them
         // load in the cash numbers from "cash.txt"
@@ -25,6 +28,8 @@ public class VendingMachine {
         Card.loadCards();
         // load in the inventory from "inventory.txt"
         loadInventory();
+        // Set default user null
+        this.currentUser = null;
     }
 
     public void loadCash(){
