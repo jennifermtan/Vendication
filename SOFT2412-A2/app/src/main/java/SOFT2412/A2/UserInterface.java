@@ -48,8 +48,23 @@ public class UserInterface {
 
             }
 
-            if (input[0].equals("card")){
-                // card logic
+            if (input[0].equals("card")) {
+                String[] details;
+                System.out.println("Please input your card details in the form:\nName Number\n\n For example: Max 40420");
+                // check details against saved cards, prompts user again if fails
+                while (true) {
+                    String cardInput = scan.nextLine();
+                    details = cardInput.split(" ");
+                    if (vm.checkCardDetails(details[0], details[1])) {
+                        break;
+                    }
+                    System.out.println("We were unable to match your card, please try again.");
+                }
+                Food itemPurchased = vm.searchByItemCode(input[2]);
+                int itemQuantity = Integer.parseInt(input[1]);
+                vm.removeItem(itemPurchased, itemQuantity); // removing items from inventory (assume enough stock)
+                System.out.printf("Thank you! Here are your items.\n User received %s %s(s)!\n", input[1], itemPurchased.getName());
+                // if (user is logged in), option to save credit card details (!)
             }
             // Reprocess user input
             input = validateInput();
