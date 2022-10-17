@@ -19,5 +19,6 @@ public class App {
         UserInterface ui = new UserInterface();
         ui.displaySnacks(scan, ui.vm.getInventory());
         User.loadUsers();
+        ui.buy();
     }
 }
