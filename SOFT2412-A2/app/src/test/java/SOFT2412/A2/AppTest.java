@@ -7,5 +7,24 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
+    VendingMachine vm = new VendingMachine();
 
+    @Test
+    public void testAddItem() {
+        return;
+    }
+
+    // @Test
+    // public void testUpdateItem() {
+    //     vm.updateItem("cc", 1);
+    //     assertEquals(vm.getInventory().get(vm.searchByItemCode("cc")), 6);
+    // }
+
+    // This also tests updateCash() because the method is called in payByCash()
+    @Test
+    public void testPayByCash() {
+        vm.payByCash(1, "cc", "$5*1");
+        assertEquals(vm.getCash().get("$2"), 4);
+        assertEquals(vm.getCash().get("50c"), 4);
+    }
 }
