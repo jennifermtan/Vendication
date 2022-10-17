@@ -131,6 +131,7 @@ public class VendingMachine {
         String changeBreakdown = "";
         for (Map.Entry<String, Integer> payment: changeCash.entrySet()){
             changeBreakdown += (" (" + payment.getKey() + "*" + payment.getValue() + ")");
+            updateCash(payment.getKey(), payment.getValue());
         }
         return "Transaction successful!\n" + "Paid: $" + df.format(paid) + "\nDue: $" + df.format(toPay) + "\nChange: $" + df.format(changeNum)
                 + "\n\nChange Breakdown: \n" + changeBreakdown;
@@ -166,6 +167,15 @@ public class VendingMachine {
             System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
             System.out.println();
         }
+    }
+
+    //When a user makes a transaction, update the quantity and/or cash
+    public void updateItem(String itemCode, int quantity) {
+        inventory.put(searchByItemCode(itemCode), inventory.get(searchByItemCode(itemCode)) - quantity);
+    }
+
+    public void updateCash(String cashAmount, int quantity) {
+        cash.put(cashAmount, cash.get(cashAmount) - quantity);
     }
 
     public Map<String, Integer> getCash() {
