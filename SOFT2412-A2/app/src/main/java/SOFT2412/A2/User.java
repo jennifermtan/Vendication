@@ -1,12 +1,8 @@
 package SOFT2412.A2;
 import java.util.*;
 import java.io.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import processing.data.JSONObject;
-import processing.data.JSONArray;
+import org.json.simple.*;
+import org.json.simple.parser.*;
 
 public abstract class User {
     private static Map<String, String> userLogins = new HashMap<String, String>();
@@ -20,16 +16,27 @@ public abstract class User {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.type = type;
     }
 
-    // Save a card for the user
-    public void saveCard(Card card) {
-        this.card = card;
-        // JSONParser jsonParser = new JSONParser();
-        JSONObject jsonArray = loadJSONArray("./src/main/resources/creditCards.json");
-        System.out.println(jsonArray);
 
+    // Adds a card to saved card list and the json file
+    @SuppressWarnings("unchecked")
+    public void addCard(Card card) {
+        System.out.println(Card.getCardArray());
+        Card.getCards().add(card);
+        this.card = card;
+        JSONObject newCard = new JSONObject();
+        newCard.put("name", card.getName());
+        newCard.put("number", card.getNumber());
+        Card.getCardArray().add(newCard);
+        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
+            file.write(Card.getCardArray().toJSONString());
+            file.flush();
+            file.close();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static void loadUsers() {

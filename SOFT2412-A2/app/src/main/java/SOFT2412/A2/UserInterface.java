@@ -55,7 +55,7 @@ public class UserInterface {
                 while (true) {
                     String cardInput = scan.nextLine();
                     details = cardInput.split(" ");
-                    if (vm.checkCardDetails(details[0], details[1])) {
+                    if (Card.checkCardDetails(details[0], details[1])) {
                         break;
                     }
                     System.out.println("We were unable to match your card, please try again.");
