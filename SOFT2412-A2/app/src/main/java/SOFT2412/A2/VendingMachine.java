@@ -10,7 +10,6 @@ import org.json.simple.parser.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
-    private List<Card> cards = new ArrayList<Card>();
 
     // A hashmap of the form: foodType: quantity in the vending machine
     private HashMap<Food, Integer> inventory = new HashMap<Food, Integer>();
@@ -18,8 +17,8 @@ public class VendingMachine {
     // A hashmap that records all the cash in the form cashType: quantity
     private HashMap<String, Integer> cash = new LinkedHashMap<String, Integer>();
 
-    // A JSONArray to store card details for reading and writing to JSON file
-    private JSONArray cardArray;
+    // Current user
+    private User currentUser;
 
     // private JSONParser = new JSONParser();
     private JSONArray cardArray;
@@ -29,9 +28,11 @@ public class VendingMachine {
         // load in the cash numbers from "cash.txt"
         loadCash();
         // Load in the card details from "creditCards.json"
-        loadCard();
+        Card.loadCards();
         // load in the inventory from "inventory.txt"
         loadInventory();
+        // Set default user null
+        this.currentUser = null;
     }
 
     public void loadCash(){
@@ -44,24 +45,6 @@ public class VendingMachine {
             }
         }
         catch(FileNotFoundException fe){}
-    }
-
-    public void loadCard() {
-        JSONParser parser = new JSONParser();
-        try {
-            Object object = parser.parse(new FileReader("./src/main/resources/creditCards.json"));
-            cardArray = (JSONArray) object;
-            for (Object o : cardArray) {
-                JSONObject entry = (JSONObject) o;
-                String name = (String) entry.get("name");
-                String number = (String) entry.get("number");
-                Card card = new Card(name, number);
-                cards.add(card);
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     public void loadInventory(){
@@ -81,6 +64,8 @@ public class VendingMachine {
     // i.e. userType paymentType quantity itemCode givenMoney
     // GivenMoney can have a variable length so it's simply all the inputs after the itemCode
     public String payByCash(int quantity, String itemCode, String givenMoney){
+
+        updateItem(itemCode, quantity);
 
         double toPay = calculateToPay(itemCode, quantity);
         String[] givenCash = givenMoney.split(" ");
@@ -108,12 +93,24 @@ public class VendingMachine {
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
         return resultString;
-
-
     }
 
     public Map<String, Integer> calculateChange(BigDecimal change){
         Map<String, Integer> changeCash = new LinkedHashMap<String, Integer>();
+        List<String> cashTypes = new ArrayList<String>(){{
+           add("$100");
+           add("$50");
+           add("$20");
+           add("$10");
+           add("$5");
+           add("$2");
+           add("$1");
+           add("50c");
+           add("20c");
+           add("10c");
+           add("5c");
+        }};
+        BigDecimal changeNum = change;
         int prevChange = -1;
         int currChange = 0;
         // This is a disgusting line but basically it's giving change to the customer while there is still change to be given (change > 0)
@@ -149,12 +146,10 @@ public class VendingMachine {
                     else{
                         changeCash.put(cashType, changeCash.get(cashType) + 1);
                     }
-                    cash.put(cashType, cash.get(cashType) - 1);
-
+                    removeCash(cashType, 1);
                 }
             }
         }
-
         return changeCash;
     }
 
@@ -173,7 +168,7 @@ public class VendingMachine {
             }
 
             // Add the given cash into our list of cash
-            cash.put(thisCash[0], cash.get(thisCash[0]) + Integer.parseInt(thisCash[1]));
+            addCash(thisCash[0], Integer.parseInt(thisCash[1]));
             // Check if the input type given is a dollar (starts with $)
             if (Character.toString(thisCash[0].charAt(0)).equals("$")) {
                 paid += (Double.parseDouble(thisCash[0].substring(1)) * Double.parseDouble(thisCash[1]));
@@ -214,61 +209,71 @@ public class VendingMachine {
         return true;
     }
 
-    public boolean checkCardDetails(String name, String number) {
-        for (Card c : cards) {
-            if ((name.equals(c.getName())) && (number.equals(c.getNumber()))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Adds a card to saved card list and the json file
-    @SuppressWarnings("unchecked")
-    public void addCard(Card card) {
-        System.out.println(cardArray);
-        cards.add(card);
-        JSONObject newCard = new JSONObject();
-        newCard.put("name", card.getName());
-        newCard.put("number", card.getNumber());
-        cardArray.add(newCard);
-        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
-            file.write(cardArray.toJSONString());
-            file.flush();
-            file.close();
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
     public void addItem(Food item, int quantity) {
         if (! inventory.containsKey(item) && quantity <= 15) {
             inventory.put(item, quantity);
+            // Append a line in the txt file
         } else if (inventory.get(item) + quantity <= 15) {
             inventory.put(item, inventory.get(item) + quantity);
+            updateLine("./src/main/resources/inventory.txt", item.getName(), Integer.toString(quantity), 4);
         } else {
+            inventory.put(item, 15);
+            updateLine("./src/main/resources/inventory.txt", item.getName(), "15", 4);
             System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
             System.out.println();
         }
     }
 
-    // Need to update inventory.txt as well? (!)
-    public void removeItem(Food item, int quantity) {
-        inventory.put(item, inventory.get(item) - quantity);
+    //When a user makes a transaction, update the quantity and/or cash
+    public void updateItem(String itemCode, int quantity) {
+        Food foodItem = searchByItemCode(itemCode);
+        inventory.put(foodItem, inventory.get(foodItem) - quantity);
+        updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);        
+    }
+
+    public void removeCash(String cashAmount, int quantity) {
+        cash.put(cashAmount, cash.get(cashAmount) - quantity);
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+    }
+
+    public void addCash(String cashAmount, int quantity) {
+        cash.put(cashAmount, cash.get(cashAmount) + quantity);
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+    }
+    // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
+    // and replacing a string on a specified index
+    public void updateLine(String fileName, String findString, String replacedString, int index) {
+        try{
+            File file = new File(fileName);
+            Scanner scan = new Scanner(file);
+            StringBuffer inputBuffer = new StringBuffer();
+            while (scan.hasNextLine()){
+                String line = scan.nextLine();
+                String[] parts =  line.split(", ");
+                for (int i = 0; i < parts.length; i++) {
+                    if (parts[i].equals(findString)) {
+                        parts[index] = replacedString;
+                    }
+                }
+                inputBuffer.append(String.join(", ", parts));
+                inputBuffer.append("\n");
+            }
+            scan.close();
+            String inputStr = inputBuffer.toString();
+            FileOutputStream output = new FileOutputStream(fileName);
+            output.write(inputStr.getBytes());
+            output.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        } 
     }
 
     public HashMap<String, Integer> getCash() {
         return cash;
     }
 
-    public List<Card> getCards() {
-        return cards;
-    }
-
     public HashMap<Food, Integer> getInventory() {
         return inventory;
     }
-
-
 }

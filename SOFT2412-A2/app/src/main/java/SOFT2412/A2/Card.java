@@ -1,8 +1,15 @@
 package SOFT2412.A2;
+import java.util.*;
+import java.io.*;
+import org.json.simple.*;
+import org.json.simple.parser.*;
 
-public class Card extends Payment {
+public class Card extends Payment{
     private String name;
     private String number;
+    private static List<Card> cards = new ArrayList<Card>();
+    // A JSONArray to store card details for reading and writing to JSON file
+    private static JSONArray cardArray;
 
     public Card(String name, String number) {
         this.name = name;
@@ -10,10 +17,45 @@ public class Card extends Payment {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getNumber() {
-        return number;
+        return this.number;
+    }
+
+    public static List<Card> getCards() {
+        return cards;
+    }
+
+    public static JSONArray getCardArray() {
+        return cardArray;
+    }
+
+    public static void loadCards() {
+        JSONParser parser = new JSONParser();
+        try {
+            Object object = parser.parse(new FileReader("./src/main/resources/creditCards.json"));
+            cardArray = (JSONArray) object;
+            for (Object o : cardArray) {
+                JSONObject entry = (JSONObject) o;
+                String name = (String) entry.get("name");
+                String number = (String) entry.get("number");
+                Card card = new Card(name, number);
+                cards.add(card);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static boolean checkCardDetails(String name, String number) {
+        for (Card c : cards) {
+            if ((name.equals(c.getName())) && (number.equals(c.getNumber()))) {
+                return true;
+            }
+        }
+        return false;
     }
 }
