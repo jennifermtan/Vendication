@@ -62,6 +62,8 @@ public class VendingMachine {
     // GivenMoney can have a variable length so it's simply all the inputs after the itemCode
     public String payByCash(int quantity, String itemCode, String givenMoney){
 
+        updateItem(itemCode, quantity);
+
         double toPay = calculateToPay(itemCode, quantity);
         String[] givenCash = givenMoney.split(" ");
         double paid = calculateGivenCash(givenCash);
@@ -81,8 +83,6 @@ public class VendingMachine {
         String changeBreakdown = "";
         for (Map.Entry<String, Integer> payment: changeCash.entrySet()){
             changeBreakdown += (" (" + payment.getKey() + "*" + payment.getValue() + ")");
-            System.out.println(payment.getKey());
-            System.out.println(payment.getValue());
         }
 
         String resultString = "Transaction successful!\n" + "Paid: $" + df.format(paid) + "\nDue: $" + df.format(toPay) + "\nChange: $" + df.format(change);
@@ -220,7 +220,36 @@ public class VendingMachine {
 
     //When a user makes a transaction, update the quantity and/or cash
     public void updateItem(String itemCode, int quantity) {
-        inventory.put(searchByItemCode(itemCode), inventory.get(searchByItemCode(itemCode)) - quantity);
+        Food foodItem = searchByItemCode(itemCode);
+        inventory.put(foodItem, inventory.get(foodItem) - quantity);
+
+        try{
+            File file = new File("./src/main/resources/inventory.txt");
+            Scanner scan = new Scanner(file);
+            StringBuffer inputBuffer = new StringBuffer();
+            // FileWriter writer = new FileWriter(file);
+            // FileWriter writer = new FileWriter("./src/main/resources/inventory.txt");
+            while (scan.hasNextLine()){
+                String line = scan.nextLine();
+                if (line.contains(itemCode)) {
+                    String[] parts =  line.split(", ");
+                    parts[parts.length - 1] = Integer.toString(inventory.get(foodItem));
+                    inputBuffer.append(String.join(", ", parts));
+                    inputBuffer.append("\n");
+                } else {
+                    inputBuffer.append(line);
+                    inputBuffer.append("\n");
+                }
+            }
+            scan.close();
+            String inputStr = inputBuffer.toString();
+            FileOutputStream output = new FileOutputStream("./src/main/resources/inventory.txt");
+            output.write(inputStr.getBytes());
+            output.close();
+        }
+        catch(FileNotFoundException fe){
+            fe.printStackTrace();
+        }          
     }
 
     public void updateCash(String cashAmount, int quantity) {
