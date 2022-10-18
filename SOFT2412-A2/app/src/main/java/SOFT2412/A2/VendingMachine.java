@@ -94,19 +94,6 @@ public class VendingMachine {
 
     public Map<String, Integer> calculateChange(BigDecimal change){
         Map<String, Integer> changeCash = new LinkedHashMap<String, Integer>();
-        List<String> cashTypes = new ArrayList<String>(){{
-           add("$100");
-           add("$50");
-           add("$20");
-           add("$10");
-           add("$5");
-           add("$2");
-           add("$1");
-           add("50c");
-           add("20c");
-           add("10c");
-           add("5c");
-        }};
         BigDecimal changeNum = change;
         int prevChange = -1;
         int currChange = 0;

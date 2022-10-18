@@ -8,11 +8,6 @@ public class UserInterface {
 
 
     public void buy(List<String> input){
-        System.out.println("\nAren't you salivating at the mouth-watering image that this list of product options has conjured?");
-        System.out.println("If you're paying with CARD today, just input your request in the form: \npaymentType quantity itemCode");
-        System.out.println("\nFor example, a purchase of 4 sprites with card would be: card 4 se\n");
-        System.out.println("If you're paying with CASH today, just input your request in the form: \npaymentType quantity itemCode $dollar*quantity centsc*quantity (and so on for the number of coins and notes you're inputting)");
-        System.out.println("\nFor example, a purchase of 4 sprites with cash would be: cash 4 se 50c*3 $5*3\n");
 
         if (!validateInput(input)) {
             System.out.println("We apologise. Please check that was the correct format. Type 'exit' to quit the program.");
@@ -32,7 +27,7 @@ public class UserInterface {
             // Try to process their transaction
             try{
                 System.out.println(vm.payByCash(Integer.valueOf(input.get(1)), input.get(2), cashInput));
-                System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'E' to exit.");
+                System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'exit' to exit.");
                 
             }
             // If the customer has not given enough money
@@ -41,12 +36,12 @@ public class UserInterface {
                 double toPay = vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1)));
                 System.out.print(" You are to pay $" + String.format("%.2f",toPay) + ".");
 
-                System.out.println("\nReinput your payment type, item code, quantity, and cash input in that order to continue payment. Otherwise input 'E' to cancel your transaction.");
+                System.out.println("\nReinput your payment type, item code, quantity, and cash input in that order to continue payment. Otherwise input 'exit' to cancel your transaction.");
                 return;
             }
             // If the machine can't give the right change
             catch(IllegalStateException is){
-                System.out.println("Sincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'E' to cancel your transaction");
+                System.out.println("Sincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction");
                 return;
             }
         }
@@ -56,7 +51,12 @@ public class UserInterface {
             System.out.println("Please input your card details in the form:\nName Number\n\nFor example: Max 40420");
             // check details against saved cards, prompts user again if fails
             while (true) {
-                String cardInput = scan.nextLine();
+                String cardInput = App.timeOut();
+                // Restart the app if this doesn't get an answer in 2 mins
+                if (cardInput.equals("never initialised")){
+                    App.start();
+                    return;
+                }
                 details = cardInput.split(" ");
                 if (Card.checkCardDetails(details[0], details[1])) {
                     break;
@@ -163,13 +163,12 @@ public class UserInterface {
 
                 }
 
-            }
-            catch(NumberFormatException F) { return false; }
+            }catch(NumberFormatException F) { return false; }
             catch(NoSuchFieldException nf) { return false; }
             catch(ArrayIndexOutOfBoundsException a) { return false; }
+
         }
         return true;
-        // System.out.println("We apologise. Please check that was the correct format. Type 'exit' to quit the program.");
-        
+
     }
 }
