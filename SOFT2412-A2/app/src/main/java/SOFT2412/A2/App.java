@@ -27,22 +27,20 @@ public class App {
     public static void main(String[] args) throws IOException{
 
         UserInterface ui = new UserInterface();
-        // ui.displaySnacks(scan, ui.vm.getInventory());
+        ui.displaySnacks(scan, ui.vm.getInventory());
 
-        // System.out.println(ui.vm.getCash());
-        // ui.buy();
-        // System.out.println(ui.vm.getCash());
-        String command;
-        ArrayList<String> arguments;
-        while (true) {
-            String input = scan.nextLine();
-            String[] temp = input.split(" ");
-            List<String> temp2 = Arrays.asList(temp);
-            arguments = new ArrayList<String>(temp2);
-            command = arguments.get(0);
-            arguments.remove(0);
-            takeInput(command, arguments);
-        }
-        
+        ui.buy();
+
+        // String command;
+        // ArrayList<String> arguments;
+        // while (true) {
+        //     String input = scan.nextLine();
+        //     String[] temp = input.split(" ");
+        //     List<String> temp2 = Arrays.asList(temp);
+        //     arguments = new ArrayList<String>(temp2);
+        //     command = arguments.get(0);
+        //     arguments.remove(0);
+        //     takeInput(command, arguments);
+        // }  
     }
 }

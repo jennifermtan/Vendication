@@ -62,6 +62,8 @@ public class VendingMachine {
     // GivenMoney can have a variable length so it's simply all the inputs after the itemCode
     public String payByCash(int quantity, String itemCode, String givenMoney){
 
+        updateItem(itemCode, quantity);
+
         double toPay = calculateToPay(itemCode, quantity);
         String[] givenCash = givenMoney.split(" ");
         double paid = calculateGivenCash(givenCash);
@@ -81,8 +83,6 @@ public class VendingMachine {
         String changeBreakdown = "";
         for (Map.Entry<String, Integer> payment: changeCash.entrySet()){
             changeBreakdown += (" (" + payment.getKey() + "*" + payment.getValue() + ")");
-            System.out.println(payment.getKey());
-            System.out.println(payment.getValue());
         }
 
         String resultString = "Transaction successful!\n" + "Paid: $" + df.format(paid) + "\nDue: $" + df.format(toPay) + "\nChange: $" + df.format(change);
@@ -143,7 +143,7 @@ public class VendingMachine {
                     else{
                         changeCash.put(cashType, changeCash.get(cashType) + 1);
                     }
-                    updateCash(cashType, 1);
+                    removeCash(cashType, 1);
                 }
             }
         }
@@ -165,7 +165,7 @@ public class VendingMachine {
             }
 
             // Add the given cash into our list of cash
-            cash.put(thisCash[0], cash.get(thisCash[0]) + Integer.parseInt(thisCash[1]));
+            addCash(thisCash[0], Integer.parseInt(thisCash[1]));
             // Check if the input type given is a dollar (starts with $)
             if (Character.toString(thisCash[0].charAt(0)).equals("$")) {
                 paid += (Double.parseDouble(thisCash[0].substring(1)) * Double.parseDouble(thisCash[1]));
@@ -206,13 +206,16 @@ public class VendingMachine {
         return true;
     }
 
-
     public void addItem(Food item, int quantity) {
         if (! inventory.containsKey(item) && quantity <= 15) {
             inventory.put(item, quantity);
+            // Append a line in the txt file
         } else if (inventory.get(item) + quantity <= 15) {
             inventory.put(item, inventory.get(item) + quantity);
+            updateLine("./src/main/resources/inventory.txt", item.getName(), Integer.toString(quantity), 4);
         } else {
+            inventory.put(item, 15);
+            updateLine("./src/main/resources/inventory.txt", item.getName(), "15", 4);
             System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
             System.out.println();
         }
@@ -220,11 +223,47 @@ public class VendingMachine {
 
     //When a user makes a transaction, update the quantity and/or cash
     public void updateItem(String itemCode, int quantity) {
-        inventory.put(searchByItemCode(itemCode), inventory.get(searchByItemCode(itemCode)) - quantity);
+        Food foodItem = searchByItemCode(itemCode);
+        inventory.put(foodItem, inventory.get(foodItem) - quantity);
+        updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);        
     }
 
-    public void updateCash(String cashAmount, int quantity) {
+    public void removeCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) - quantity);
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+    }
+
+    public void addCash(String cashAmount, int quantity) {
+        cash.put(cashAmount, cash.get(cashAmount) + quantity);
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+    }
+    // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
+    // and replacing a string on a specified index
+    public void updateLine(String fileName, String findString, String replacedString, int index) {
+        try{
+            File file = new File(fileName);
+            Scanner scan = new Scanner(file);
+            StringBuffer inputBuffer = new StringBuffer();
+            while (scan.hasNextLine()){
+                String line = scan.nextLine();
+                String[] parts =  line.split(", ");
+                for (int i = 0; i < parts.length; i++) {
+                    if (parts[i].equals(findString)) {
+                        parts[index] = replacedString;
+                    }
+                }
+                inputBuffer.append(String.join(", ", parts));
+                inputBuffer.append("\n");
+            }
+            scan.close();
+            String inputStr = inputBuffer.toString();
+            FileOutputStream output = new FileOutputStream(fileName);
+            output.write(inputStr.getBytes());
+            output.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        } 
     }
 
     public HashMap<String, Integer> getCash() {
@@ -234,6 +273,4 @@ public class VendingMachine {
     public HashMap<Food, Integer> getInventory() {
         return inventory;
     }
-
-
 }
