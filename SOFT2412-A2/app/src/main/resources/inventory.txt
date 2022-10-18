@@ -1,7 +1,7 @@
 Mineral Water, Drinks, mw, 1.5, 7
 Sprite, Drinks, se, 2.5, 7
-Coca Cola, Drinks, cc, 2.5, 5
-Pepsi, Drinks, pi, 2.5, 7
+Coca Cola, Drinks, cc, 2.5, 7
+Pepsi, Drinks, pi, 2.5, 1
 Juice, Drinks, js, 2.5, 7
 Mars, Chocolates, ms, 1.5, 7
 M&M, Chocolates, mm, 1.7, 7
