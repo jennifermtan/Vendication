@@ -180,7 +180,7 @@ public class UserInterface {
                 catch(ArrayIndexOutOfBoundsException a){}
 
             }
-            System.out.println("We apologise. Please check that was the correct format. Press 'E' to exit.");
+            System.out.println("We apologise. Please check that was the correct format. Otherwise press 'E' to exit.");
         }
         return input;
     }

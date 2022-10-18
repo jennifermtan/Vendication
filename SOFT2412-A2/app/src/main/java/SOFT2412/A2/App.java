@@ -30,17 +30,16 @@ public class App {
         ui.displaySnacks(scan, ui.vm.getInventory());
 
         ui.buy();
-
-        // String command;
-        // ArrayList<String> arguments;
-        // while (true) {
-        //     String input = scan.nextLine();
-        //     String[] temp = input.split(" ");
-        //     List<String> temp2 = Arrays.asList(temp);
-        //     arguments = new ArrayList<String>(temp2);
-        //     command = arguments.get(0);
-        //     arguments.remove(0);
-        //     takeInput(command, arguments);
-        // }  
+        String command;
+        ArrayList<String> arguments;
+        while (true) {
+            String input = scan.nextLine();
+            String[] temp = input.split(" ");
+            List<String> temp2 = Arrays.asList(temp);
+            arguments = new ArrayList<String>(temp2);
+            command = arguments.get(0);
+            arguments.remove(0);
+            takeInput(command, arguments);
+         }
     }
 }
