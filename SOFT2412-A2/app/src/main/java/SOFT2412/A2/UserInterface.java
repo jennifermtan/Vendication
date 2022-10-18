@@ -10,9 +10,9 @@ public class UserInterface {
     public void buy(List<String> input){
         System.out.println("\nAren't you salivating at the mouth-watering image that this list of product options has conjured?");
         System.out.println("If you're paying with CARD today, just input your request in the form: \npaymentType quantity itemCode");
-        System.out.println("\n For example, a purchase of 4 sprites with card would be: card 4 se\n");
+        System.out.println("\nFor example, a purchase of 4 sprites with card would be: card 4 se\n");
         System.out.println("If you're paying with CASH today, just input your request in the form: \npaymentType quantity itemCode $dollar*quantity centsc*quantity (and so on for the number of coins and notes you're inputting)");
-        System.out.println("\n For example, a purchase of 4 sprites with cash would be: cash 4 se 50c*3 $5*3\n");
+        System.out.println("\nFor example, a purchase of 4 sprites with cash would be: cash 4 se 50c*3 $5*3\n");
 
         if (!validateInput(input)) {
             System.out.println("We apologise. Please check that was the correct format. Type 'exit' to quit the program.");
@@ -43,18 +43,18 @@ public class UserInterface {
                     System.out.print(" You are to pay $" + String.format("%.2f",toPay) + ".");
 
                     System.out.println("\nReinput your payment type, item code, quantity, and cash input in that order to continue payment. Otherwise input 'E' to cancel your transaction.");
+                    return;
                 }
                 // If the machine can't give the right change
                 catch(IllegalStateException is){
                     System.out.println("Sincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'E' to cancel your transaction");
+                    return;
                 }
-
-
             }
 
             if (input.get(0).equals("card")) {
                 String[] details;
-                System.out.println("Please input your card details in the form:\nName Number\n\n For example: Max 40420");
+                System.out.println("Please input your card details in the form:\nName Number\n\nFor example: Max 40420");
                 // check details against saved cards, prompts user again if fails
                 while (true) {
                     String cardInput = scan.nextLine();
@@ -71,8 +71,6 @@ public class UserInterface {
                 // if (user is logged in), option to save credit card details (!)
             }
         }
-
-
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
