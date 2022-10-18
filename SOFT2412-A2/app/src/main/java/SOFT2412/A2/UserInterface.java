@@ -28,7 +28,7 @@ public class UserInterface {
             try{
                 System.out.println(vm.payByCash(Integer.valueOf(input.get(1)), input.get(2), cashInput));
                 System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'exit' to exit.");
-                
+
             }
             // If the customer has not given enough money
             catch(ArithmeticException ae){
@@ -63,10 +63,8 @@ public class UserInterface {
                 }
                 System.out.println("We were unable to match your card, please try again.");
             }
-            Food itemPurchased = vm.searchByItemCode(input.get(2));
-            int itemQuantity = Integer.parseInt(input.get(1));
-            vm.updateItem(input.get(2), itemQuantity); // removing items from inventory (assume enough stock)
-            System.out.printf("Thank you! Here are your items.\n User received %s %s(s)!\n", input.get(1), itemPurchased.getName());
+            System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
+            System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'exit' to exit.");
             // if (user is logged in), option to save credit card details (!)
         }
     }

@@ -13,7 +13,14 @@ class AppTest {
     public void testAddItem() {
         return;
     }
-    
+
+    @Test
+    public void testPayByCard() {
+        int quantity = 4;
+        String itemCode = "se";
+        vm.payByCard(quantity, itemCode);
+    }
+
     // Need to find a way to update the txt file to its original inventory after testing
     // @Test
     // public void testUpdateItem() {

@@ -168,6 +168,12 @@ public class VendingMachine {
         return paid;
     }
 
+    public String payByCard(int quantity, String itemCode) {
+        updateItem(itemCode, quantity);
+        Food item = searchByItemCode(itemCode);
+        return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
+    }
+
     public Food searchByItemCode(String itemCode){
         for (Food f: inventory.keySet()){
             if (f.getItemCode().equals(itemCode)){
@@ -215,17 +221,17 @@ public class VendingMachine {
     public void updateItem(String itemCode, int quantity) {
         Food foodItem = searchByItemCode(itemCode);
         inventory.put(foodItem, inventory.get(foodItem) - quantity);
-        updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);        
+        updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);
     }
 
     public void removeCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) - quantity);
-        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
     }
 
     public void addCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) + quantity);
-        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
     }
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
@@ -253,7 +259,7 @@ public class VendingMachine {
         }
         catch(Exception e){
             e.printStackTrace();
-        } 
+        }
     }
 
     public HashMap<String, Integer> getCash() {
