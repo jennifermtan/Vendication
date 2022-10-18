@@ -32,6 +32,7 @@ public class UserInterface {
                 try{
                     System.out.println(vm.payByCash(Integer.valueOf(input[1]), input[2], cashInput));
                     System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'E' to exit.");
+                    
                 }
                 // If the customer has not given enough money
                 catch(ArithmeticException ae){
@@ -45,6 +46,7 @@ public class UserInterface {
                 catch(IllegalStateException is){
                     System.out.println("Sincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'E' to cancel your transaction");
                 }
+
 
             }
 
