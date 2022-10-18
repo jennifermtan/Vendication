@@ -227,8 +227,6 @@ public class VendingMachine {
             File file = new File("./src/main/resources/inventory.txt");
             Scanner scan = new Scanner(file);
             StringBuffer inputBuffer = new StringBuffer();
-            // FileWriter writer = new FileWriter(file);
-            // FileWriter writer = new FileWriter("./src/main/resources/inventory.txt");
             while (scan.hasNextLine()){
                 String line = scan.nextLine();
                 if (line.contains(itemCode)) {
@@ -247,8 +245,8 @@ public class VendingMachine {
             output.write(inputStr.getBytes());
             output.close();
         }
-        catch(FileNotFoundException fe){
-            fe.printStackTrace();
+        catch(Exception e){
+            e.printStackTrace();
         }          
     }
 
