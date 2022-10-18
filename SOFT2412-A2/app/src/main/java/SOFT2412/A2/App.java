@@ -13,7 +13,7 @@ public class App {
         // Some command examples
         switch (command) {
             case "buy":
-                // System.out.println("buy successful");
+                // System.out.println(arguments);
                 ui.buy(arguments);
                 break;
             case "sell":
