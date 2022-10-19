@@ -23,7 +23,9 @@ public class App {
                 break;
             case "login":
                 break;
-
+            case "exit":
+                System.out.println("Thank you for using our vending machine! Have a good day :)");
+                System.exit(0);
         }
     }
 
