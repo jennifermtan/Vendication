@@ -11,7 +11,7 @@ public class App {
     private static UserInterface ui = new UserInterface();
 
     // Method takes user input as a single line
-    public static void takeInput(UserInterface ui, String command, List<String> arguments) {
+    public static void takeInput(String command, List<String> arguments) {
         // Some command examples
         switch (command) {
             case "buy":
@@ -27,7 +27,7 @@ public class App {
                 ui.help(arguments);
                 break;
             case "exit":
-                System.out.println("\nThank you for using our vending machine! Have a good day :)");
+                System.out.println("\nYou have been sufficiently Vendicated! Have a good day :)");
                 System.out.println("--------------------------------END OF PROGRAM--------------------------------");
                 System.exit(0);
             default:
@@ -45,6 +45,8 @@ public class App {
         String command;
         ArrayList<String> arguments;
         ui.displaySnacks(scan, ui.vm.getInventory());
+        System.out.println("\nTo be Vendicated, please read our help guidelines:");
+        ui.help(new ArrayList<String>());
 
         while (true) {
             String input = timeOut();
@@ -58,7 +60,7 @@ public class App {
             arguments = new ArrayList<String>(temp2);
             command = arguments.get(0);
             arguments.remove(0);
-            takeInput(ui, command, arguments);
+            takeInput(command, arguments);
         }
     }
 
