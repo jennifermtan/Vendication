@@ -35,8 +35,9 @@ plugins {
 // }
 jar {
     manifest {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         attributes(
-            'Main-Class': 'SOFT2412.A2.App'
+            'Main-Class': 'SOFT2412.app.build.classes.java.main.SOFT2412.A2.App.class'
         )
     }
     from {
@@ -46,11 +47,11 @@ jar {
 
 task fatJar(type: Jar) {
   manifest {
-    attributes 'Main-Class': 'SOFT2412.A2.App'
+    attributes 'Main-Class': 'SOFT2412.app.build.classes.java.main.SOFT2412.A2.App.class'
   }
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   baseName = 'testJar'
-  archiveClassifier = "all"
+  // archiveClassifier = "all"
   from {
     // configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
@@ -75,10 +76,10 @@ dependencies {
 
 }
 
-jar {
-    archiveBaseName = 'gs-gradle'
-    archiveVersion =  '0.1.0'
-}
+// jar {
+//     archiveBaseName = 'gs-gradle'
+//     archiveVersion =  '0.1.0'
+// }
 
 application {
     // Define the main class for the application.
