@@ -4,7 +4,7 @@ import java.io.*;
 import org.json.simple.*;
 import org.json.simple.parser.*;
 
-public class Card extends Payment{
+public class Card {
     private String name;
     private String number;
     private static List<Card> cards = new ArrayList<Card>();
