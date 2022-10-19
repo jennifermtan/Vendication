@@ -32,7 +32,13 @@ public class UserInterface {
     public void buy(List<String> input){
 
         if (!validateInput(input)) {
-            System.out.println("We apologise. Please check that was the correct format. Type 'exit' to quit the program.");
+            System.out.println("\nWe apologise. Please check that was the correct format. Type 'help' for help or 'exit' to quit the program.");
+            return;
+        }
+
+        // Check that we have enough stock for the purchase
+        if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
+            System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to cancel your transaction.");
             return;
         }
         // Call user into a loop of buying items until they exit
@@ -49,12 +55,10 @@ public class UserInterface {
             // Try to process their transaction
             try{
                 System.out.println(vm.payByCash(Integer.valueOf(input.get(1)), input.get(2), cashInput));
-                System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'exit' to exit.");
-                
             }
             // If the customer has not given enough money
             catch(ArithmeticException ae){
-                System.out.print("Apologies, but that is not enough for your purchase. Please check your input.");
+                System.out.print("\nApologies, but that is not enough for your purchase. Please check your input.");
                 double toPay = vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1)));
                 System.out.print(" You are to pay $" + String.format("%.2f",toPay) + ".");
 
@@ -63,14 +67,15 @@ public class UserInterface {
             }
             // If the machine can't give the right change
             catch(IllegalStateException is){
-                System.out.println("Sincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction");
+                System.out.println("\nSincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction.");
                 return;
             }
         }
 
         if (input.get(0).equals("card")) {
             String[] details;
-            System.out.println("Please input your card details in the form:\nName Number\n\nFor example: Max 40420");
+            System.out.println("\nPlease input your card details in the form:\nName Number\n\nFor example: Max 40420");
+
             // check details against saved cards, prompts user again if fails
             while (true) {
                 String cardInput = App.timeOut();
@@ -80,17 +85,21 @@ public class UserInterface {
                     return;
                 }
                 details = cardInput.split(" ");
-                if (Card.checkCardDetails(details[0], details[1])) {
-                    break;
+                // If they haven't given a viable input then keep asking
+                if (details.length != 2 || !Card.checkCardDetails(details[0], details[1])){
+                    System.out.println("\nWe were unable to match your card, please try again.");
+                    continue;
                 }
-                System.out.println("We were unable to match your card, please try again.");
+                break;
+
             }
             Food itemPurchased = vm.searchByItemCode(input.get(2));
             int itemQuantity = Integer.parseInt(input.get(1));
             vm.updateItem(input.get(2), itemQuantity); // removing items from inventory (assume enough stock)
-            System.out.printf("Thank you! Here are your items.\n User received %s %s(s)!\n", input.get(1), itemPurchased.getName());
+            System.out.printf("\nThank you! Here are your items.\n User received %s %s(s)!\n", input.get(1), itemPurchased.getName());
             // if (user is logged in), option to save credit card details (!)
         }
+        System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'helpbuy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {

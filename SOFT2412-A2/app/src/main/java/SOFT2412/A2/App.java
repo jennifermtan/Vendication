@@ -15,7 +15,6 @@ public class App {
         // Some command examples
         switch (command) {
             case "buy":
-                // System.out.println(arguments);
                 ui.buy(arguments);
                 break;
             case "sell":
@@ -47,10 +46,6 @@ public class App {
         ArrayList<String> arguments;
         ui.displaySnacks(scan, ui.vm.getInventory());
 
-        System.out.println("\nIf you're paying with CARD today, just input your request in the form: \nbuy paymentType quantity itemCode");
-        System.out.println("\nFor example, a purchase of 4 sprites with card would be: buy card 4 se\n");
-        System.out.println("If you're paying with CASH today, just input your request in the form: \nbuy paymentType quantity itemCode $dollar*quantity centsc*quantity (and so on for the number of coins and notes you're inputting)");
-        System.out.println("\nFor example, a purchase of 4 sprites with cash would be: buy cash 4 se 50c*3 $5*3\n");
         while (true) {
             String input = timeOut();
             // If they were timed out, repeat the loop
