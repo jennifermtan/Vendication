@@ -5,8 +5,13 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 
 public abstract class User {
+    // Stores the current user and the type
+    public static String currentUser = "";
+    // HashMap to store the user's name, username, password and card number (optional)
     private static Map<String, String> userLogins = new HashMap<String, String>();
+    // List to store all the users
     private static List<User> users = new ArrayList<User>();
+    // Object attributes
     protected String name;
     protected String username;
     protected String password;
