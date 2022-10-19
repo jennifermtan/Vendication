@@ -21,6 +21,11 @@ class AppTest {
         vm.payByCard(quantity, itemCode);
     }
 
+    @Test
+    public void testCardInput() {
+        
+    }
+
     // Need to find a way to update the txt file to its original inventory after testing
     // @Test
     // public void testUpdateItem() {
