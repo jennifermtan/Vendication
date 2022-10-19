@@ -5,6 +5,28 @@ import java.lang.NumberFormatException;
 public class UserInterface {
     private Scanner scan = new Scanner(System.in);
     VendingMachine vm = new VendingMachine();
+    // HashMap of all valid commands and their brief description
+    public static final Map<String, String> allCommandBriefs = new HashMap<String, String>() {{
+        put("buy", "Allows any user to buy a product from the vending machine.");
+        put("sell", "Allows a vending machine owner to sell a product.");
+        put("signup", "Allows any user to create an account for the machine.");
+        put("login", "Allows any user to login to their account in the machine.");
+        put("help", "Gives information on how to use the application.");
+        put("exit", "Exits the application.");
+    }};
+    // HashMap of all valid commands and their usage
+    public static final Map<String, String> allCommandUsage = new HashMap<String, String>() {{
+        put("buy", "Allows any user to buy a product from the vending machine.\n" + 
+        "Usage: buy <payment method> <amount> <product code> [currency]\n" + 
+        "<payment method> -> card or cash\n<amount>         -> amount of the product\n" + 
+        "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
+        "\nExample of usage: buy cash 4 se $5*2 $1*5\n");
+        put("sell", "Allows a vending machine owner to sell a product.");
+        put("signup", "Allows any user to create an account for the machine.");
+        put("login", "Allows any user to login to their account in the machine.");
+        put("help", "Gives information on how to use the application.");
+        put("exit", "Exits the application.");
+    }};
 
 
     public void buy(List<String> input){
@@ -170,6 +192,24 @@ public class UserInterface {
         }
         return true;
         // System.out.println("We apologise. Please check that was the correct format. Type 'exit' to quit the program.");
-        
     }
+
+    // Help command
+    public void help(List<String> arguments) {
+        if(arguments.size() == 0) {
+            System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
+            for(String command : allCommandBriefs.keySet())
+                System.out.printf("%6s:          %s%n", command, allCommandBriefs.get(command));
+        }
+        else {
+            for(int i = 0; i < arguments.size(); i++) {
+                for(String command : allCommandUsage.keySet()) {
+                    if(command.equals(arguments.get(i)))
+                        System.out.println(allCommandUsage.get(command));
+                }
+            }
+        }
+
+    }
+
 }

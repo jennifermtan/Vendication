@@ -22,23 +22,31 @@ public class App {
                 break;
             case "login":
                 break;
+            case "help":
+                ui.help(arguments);
+                break;
             case "exit":
-                System.out.println("Thank you for using our vending machine! Have a good day :)");
+                System.out.println("\nThank you for using our vending machine! Have a good day :)");
+                System.out.println("--------------------------------END OF PROGRAM--------------------------------");
                 System.exit(0);
+            default:
+                System.out.printf("Command \"%s\" not found, please type \"help\" to view a list of commands and their usage.\n", command);
+                break;
         }
     }
 
 
     public static void main(String[] args) throws IOException{
-
+        System.out.println("--------------------------------START OF PROGRAM--------------------------------");
         UserInterface ui = new UserInterface();
         ui.displaySnacks(scan, ui.vm.getInventory());
 
         // ui.buy();
-
         String command;
         ArrayList<String> arguments;
         while (true) {
+            System.out.println("\n--------------------------------NEXT INPUT--------------------------------");
+            System.out.printf("%s> ", User.currentUser);
             String input = scan.nextLine();
             String[] temp = input.split(" ");
             List<String> temp2 = Arrays.asList(temp);
