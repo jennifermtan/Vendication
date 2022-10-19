@@ -62,8 +62,6 @@ public class VendingMachine {
     // GivenMoney can have a variable length so it's simply all the inputs after the itemCode
     public String payByCash(int quantity, String itemCode, String givenMoney){
 
-        updateItem(itemCode, quantity);
-
         double toPay = calculateToPay(itemCode, quantity);
         String[] givenCash = givenMoney.split(" ");
         double paid = calculateGivenCash(givenCash);
@@ -89,12 +87,13 @@ public class VendingMachine {
         if (changeBreakdown != ""){
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
+        updateItem(itemCode, quantity);
+
         return resultString;
     }
 
     public Map<String, Integer> calculateChange(BigDecimal change){
         Map<String, Integer> changeCash = new LinkedHashMap<String, Integer>();
-        BigDecimal changeNum = change;
         int prevChange = -1;
         int currChange = 0;
         // This is a disgusting line but basically it's giving change to the customer while there is still change to be given (change > 0)
