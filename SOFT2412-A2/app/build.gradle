@@ -35,6 +35,7 @@ plugins {
 // }
 jar {
     manifest {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         attributes(
             'Main-Class': 'SOFT2412.app.build.classes.java.main.SOFT2412.A2.App.class'
         )
