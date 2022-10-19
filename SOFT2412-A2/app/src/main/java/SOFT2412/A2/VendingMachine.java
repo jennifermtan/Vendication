@@ -34,11 +34,12 @@ public class VendingMachine {
 
     public void loadCash(){
         try{
-            File cashFile = new File("./src/main/resources/cash.txt");
+            File cashFile = new File("./src/main/resources/StableCash.txt");
             Scanner scan1 = new Scanner(cashFile);
             while (scan1.hasNextLine()){
                 String[] line = scan1.nextLine().split(", ");
                 cash.put(line[0], Integer.valueOf(line[1]));
+                updateLine("./src/main/resources/cash.txt", line[0], line[1], 1);
             }
         }
         catch(FileNotFoundException fe){}
@@ -46,11 +47,12 @@ public class VendingMachine {
 
     public void loadInventory(){
         try{
-            File invenFile = new File("./src/main/resources/inventory.txt");
+            File invenFile = new File("./src/main/resources/StableInventory.txt");
             Scanner scan2 = new Scanner(invenFile);
             while (scan2.hasNextLine()){
                 String[] line = scan2.nextLine().split(", ");
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
+                updateLine("./src/main/resources/inventory.txt", line[0], line[4], 4);
             }
         }
         catch(FileNotFoundException fe){}
@@ -94,19 +96,6 @@ public class VendingMachine {
 
     public Map<String, Integer> calculateChange(BigDecimal change){
         Map<String, Integer> changeCash = new LinkedHashMap<String, Integer>();
-        List<String> cashTypes = new ArrayList<String>(){{
-           add("$100");
-           add("$50");
-           add("$20");
-           add("$10");
-           add("$5");
-           add("$2");
-           add("$1");
-           add("50c");
-           add("20c");
-           add("10c");
-           add("5c");
-        }};
         BigDecimal changeNum = change;
         int prevChange = -1;
         int currChange = 0;
