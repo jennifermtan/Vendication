@@ -20,7 +20,7 @@ public class UserInterface {
         "Usage: buy <payment method> <amount> <product code> [currency]\n" + 
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" + 
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
-        "\nExample of usage: buy cash 4 se $5*2 $1*5\n");
+        "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
         put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows any user to create an account for the machine.");
         put("login", "Allows any user to login to their account in the machine.");
@@ -78,10 +78,14 @@ public class UserInterface {
 
             // check details against saved cards, prompts user again if fails
             while (true) {
-                String cardInput = App.timeOut();
+                String cardInput = null;
+                try{
+                    cardInput = App.readLine();
+                }
+                catch(InterruptedException ie){}
                 // Restart the app if this doesn't get an answer in 2 mins
-                if (cardInput.equals("never initialised")){
-                    App.start();
+                if (cardInput == null){
+                    App.menu();
                     return;
                 }
                 details = cardInput.split(" ");
@@ -99,7 +103,7 @@ public class UserInterface {
             System.out.printf("\nThank you! Here are your items.\n User received %s %s(s)!\n", input.get(1), itemPurchased.getName());
             // if (user is logged in), option to save credit card details (!)
         }
-        System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'helpbuy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
+        System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'help buy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
