@@ -5,6 +5,7 @@ package SOFT2412.A2;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
 
 class AppTest {
     VendingMachine vm = new VendingMachine();
@@ -17,13 +18,36 @@ class AppTest {
     // This also tests updateCash(), updateItem(), updateTransactions(), and calculateChange() because the method is called in payByCash()
     @Test
     public void testPayByCash() {
+        vm.defaultCashAndInventory();
         vm.payByCash(1, "cc", "$5*1");
         assertEquals(vm.getCash().get("$5"), 6);
         assertEquals(vm.getCash().get("$2"), 4);
         assertEquals(vm.getCash().get("50c"), 4);
+        assertEquals(6, vm.getInventory().get(vm.searchByItemCode("cc")), 2.5);
         vm.updateTransactions("cc", -1);
-        vm.loadInventory();
-        vm.loadCash();
+        vm.defaultCashAndInventory();
     }
+
+    @Test public void testUser(){
+        UserInterface ui = new UserInterface();
+        Map<String, String> holder = ui.allCommandBriefs;
+        holder = ui.allCommandUsage;
+
+        User md = new Customer("Md", "Emmder", "password124");
+        // Check that we've saved this card for the user and for the overall card JSON array
+        Card coolCard = new Card("Md", "123456");
+        md.addCard(coolCard);
+        assertEquals(md.getCard(), coolCard);
+
+        // These aren't implemented yet
+        //assertTrue(Card.getCardArray().contains(coolCard));
+        //assertTrue(Card.checkCardDetails("Md", "123456"));
+    }
+
+    @Test public void testVendingMachineValidation(){
+
+    }
+
+
 
 }

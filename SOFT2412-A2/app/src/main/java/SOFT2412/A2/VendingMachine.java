@@ -34,12 +34,11 @@ public class VendingMachine {
 
     public void loadCash(){
         try{
-            File cashFile = new File("./src/main/resources/StableCash.txt");
+            File cashFile = new File("./src/main/resources/cash.txt");
             Scanner scan1 = new Scanner(cashFile);
             while (scan1.hasNextLine()){
                 String[] line = scan1.nextLine().split(", ");
                 cash.put(line[0], Integer.valueOf(line[1]));
-                updateLine("./src/main/resources/cash.txt", line[0], line[1], 1);
             }
         }
         catch(FileNotFoundException fe){}
@@ -47,12 +46,11 @@ public class VendingMachine {
 
     public void loadInventory(){
         try{
-            File invenFile = new File("./src/main/resources/StableInventory.txt");
+            File invenFile = new File("./src/main/resources/inventory.txt");
             Scanner scan2 = new Scanner(invenFile);
             while (scan2.hasNextLine()){
                 String[] line = scan2.nextLine().split(", ");
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
-                updateLine("./src/main/resources/inventory.txt", line[0], line[4], 4);
             }
         }
         catch(FileNotFoundException fe){}
@@ -291,6 +289,28 @@ public class VendingMachine {
         catch(Exception e){
             e.printStackTrace();
         } 
+    }
+
+    // Method used for testing to make cash.txt, inventory.txt, and their respective hashmaps reflect StableCash.txt and StableInventory.txt so that expected output is consistent
+    public void defaultCashAndInventory(){
+        try{
+            File cashFile = new File("./src/main/resources/StableCash.txt");
+            Scanner scan1 = new Scanner(cashFile);
+            while (scan1.hasNextLine()){
+                String[] line = scan1.nextLine().split(", ");
+                cash.put(line[0], Integer.valueOf(line[1]));
+                updateLine("./src/main/resources/cash.txt", line[0], line[1], 1);
+            }
+
+            File invenFile = new File("./src/main/resources/StableInventory.txt");
+            Scanner scan2 = new Scanner(invenFile);
+            while (scan2.hasNextLine()) {
+                String[] line = scan2.nextLine().split(", ");
+                inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
+                updateLine("./src/main/resources/inventory.txt", line[0], line[4], 4);
+            }
+        }
+        catch(FileNotFoundException fe){System.out.println(fe);}
     }
 
     public HashMap<String, Integer> getCash() {

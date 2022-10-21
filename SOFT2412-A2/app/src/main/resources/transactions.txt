@@ -1,1 +1,3 @@
-Coca Cola, cc, 0
+Coca Cola, cc, 1
+Sprite, se, 8
+Mineral Water, mw, 4
