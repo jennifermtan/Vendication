@@ -38,7 +38,7 @@ public class UserInterface {
 
         // Check that we have enough stock for the purchase
         if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
-            System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to cancel your transaction.");
+            System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
             return;
         }
         // Call user into a loop of buying items until they exit
