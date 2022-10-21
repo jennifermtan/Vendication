@@ -90,6 +90,7 @@ public class VendingMachine {
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
         updateItem(itemCode, quantity);
+        updateTransactions(itemCode, quantity);
 
         return resultString;
     }
@@ -225,8 +226,10 @@ public class VendingMachine {
         cash.put(cashAmount, cash.get(cashAmount) + quantity);
         updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
     }
+
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
+    // If string is not in file, append to the file
     public void updateLine(String fileName, String findString, String replacedString, int index) {
         try{
             File file = new File(fileName);
@@ -246,6 +249,42 @@ public class VendingMachine {
             scan.close();
             String inputStr = inputBuffer.toString();
             FileOutputStream output = new FileOutputStream(fileName);
+            output.write(inputStr.getBytes());
+            output.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        } 
+    }
+
+    // Update transactions.txt with the format "name, itemCode, quantity sold"
+    public void updateTransactions(String itemCode, int quantity) {
+        boolean hasItem = false;
+        try{
+            File file = new File("./src/main/resources/transactions.txt");
+            Scanner scan = new Scanner(file);
+            StringBuffer inputBuffer = new StringBuffer();
+        
+            while (scan.hasNextLine()){
+                String line = scan.nextLine();
+                if (line.contains(itemCode)) {
+                    hasItem = true;
+                    String[] parts =  line.split(", ");
+                    int newQuantity = Integer.parseInt(parts[2]) + quantity;
+                    parts[2] = Integer.toString(newQuantity);
+                    inputBuffer.append(String.join(", ", parts));
+                    inputBuffer.append("\n");
+                } else if (! line.equals("")) {
+                    inputBuffer.append(line);
+                    inputBuffer.append("\n");
+                }
+            }
+            if (! hasItem) {
+                inputBuffer.append(searchByItemCode(itemCode).getName() + ", " + itemCode + ", " + Integer.toString(quantity) + "\n");
+            }
+            scan.close();
+            String inputStr = inputBuffer.toString();
+            FileOutputStream output = new FileOutputStream(file);
             output.write(inputStr.getBytes());
             output.close();
         }
