@@ -44,6 +44,7 @@ public abstract class User {
         }
     }
 
+    // Untested and unused
     public static void loadUsers() {
         String[] userInfo;
         try {
@@ -62,4 +63,9 @@ public abstract class User {
             System.out.println("loadUsers: File not found exception.");
         }
     }
+    
+    public String getName(){return name;}
+    public String getUsername(){return username;}
+    public String getPassword(){return password;}
+    public Card getCard(){return card;}
 }

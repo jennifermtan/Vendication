@@ -101,7 +101,8 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "**/App.class",
-                    "**/UserInterface.class"
+                    "**/UserInterface.class",
+                    "**/ConsoleInputReadTask.class"
             ])
         }))
     }
