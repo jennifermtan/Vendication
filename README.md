@@ -1,4 +1,4 @@
-Vendication- A Vending Machine Revolution
+Vendication- A Vending Machine Revolution.
     Bop it, Twist it, Vend it
     
 How to use our app:
