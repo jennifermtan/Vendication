@@ -10,6 +10,7 @@ public class App {
     private static Scanner scan = new Scanner(System.in);
     private static UserInterface ui = new UserInterface();
 
+
     // Method takes user input as a single line
     public static void takeInput(String command, List<String> arguments) {
         // Some command examples
@@ -36,24 +37,24 @@ public class App {
         }
     }
 
-    public static void main(String[] args) {start();}
-
-
-    // Let's use this method as the entry point of the app since we need to be able to restart here if the user times out
-    public static void start(){
+    public static void main(String[] args) {
         System.out.println("--------------------------------START OF PROGRAM--------------------------------");
         String command;
         ArrayList<String> arguments;
-        ui.displaySnacks(scan, ui.vm.getInventory());
-        System.out.println("\nTo be Vendicated, please read our help guidelines:");
-        ui.help(new ArrayList<String>());
+        menu();
 
         while (true) {
-            String input = timeOut();
-            // If they were timed out, repeat the loop
-            if (input.equals("never initialised")) {
-                ui.displaySnacks(scan, ui.vm.getInventory());
+            String input = null;
+            try{
+                input = readLine();
+            }
+            catch(InterruptedException ie){}
+
+            // If they were timed out and input was never initialised, repeat the loop
+            if (input == null) {
+                menu();
                 continue;
+
             }
             String[] temp = input.split(" ");
             List<String> temp2 = Arrays.asList(temp);
@@ -64,28 +65,36 @@ public class App {
         }
     }
 
-    public static String timeOut(){
-        System.out.println("\n--------------------------------NEXT INPUT--------------------------------");
+    public static String readLine() throws InterruptedException {
+        System.out.println("---------------------------------- NEXT INPUT -----------------------------------");
+        ExecutorService ex = Executors.newSingleThreadExecutor();
+        String input = null;
         System.out.printf("%s> ", User.currentUser);
-        Callable<String> k = () -> new Scanner(System.in).nextLine();
-        Long start= System.currentTimeMillis();
-        String choice="never initialised";
-        ExecutorService l = Executors.newFixedThreadPool(1);  ;
-        Future<String> g;
 
-        g= l.submit(k);
-        // Times out after 120 seconds
-        while(System.currentTimeMillis()-start<120*1000 && !g.isDone()){}
-        if(g.isDone()){
-            try {
-                choice=g.get();
-            } catch (InterruptedException | ExecutionException e) {
-                //e.printStackTrace();
-            }
+        Future<String> result = ex.submit(new ConsoleInputReadTask());
+        try {
+            // Timeout after 120 seconds (2 mins)
+            input = result.get(120, TimeUnit.SECONDS);
+        } catch (ExecutionException e) {
+            e.getCause().printStackTrace();
+        } catch (TimeoutException e) {
+            result.cancel(true);
         }
-        g.cancel(true);
-        return choice;
+        finally {
+            ex.shutdownNow();
+        }
+        return input;
+    }
+
+    // This is the 'entry point' to the program
+    public static void menu(){
+        ui.displaySnacks(scan, ui.vm.getInventory());
+        System.out.println("\nTo be Vendicated, please read our help guidelines:");
+        ui.help(new ArrayList<String>());
     }
 
 }
+
+
+
 
