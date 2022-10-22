@@ -9,7 +9,6 @@ public class App {
     private static Scanner scan = new Scanner(System.in);
     private static UserInterface ui = new UserInterface();
 
-
     // Method takes user input as a single line
     public static void takeInput(String command, List<String> arguments) {
         // Some command examples
@@ -93,7 +92,3 @@ public class App {
     }
 
 }
-
-
-
-

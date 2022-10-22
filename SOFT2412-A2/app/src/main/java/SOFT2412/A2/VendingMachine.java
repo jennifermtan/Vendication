@@ -8,18 +8,12 @@ import java.io.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
-
     // A hashmap of the form: foodType: quantity in the vending machine
     private HashMap<Food, Integer> inventory = new HashMap<Food, Integer>();
-
     // A hashmap that records all the cash in the form cashType: quantity
     private HashMap<String, Integer> cash = new LinkedHashMap<String, Integer>();
-
     // Current user
     private User currentUser;
-
-    // private JSONParser = new JSONParser();
-    // private JSONArray cardArray;
 
     public VendingMachine(){
         // Load in the cash and the inventory from "inventory.txt" and "cash.txt" files using methods in case we need to reload them
@@ -180,7 +174,7 @@ public class VendingMachine {
 
     public String payByCard(int quantity, String itemCode) {
         updateItem(itemCode, quantity);
-        // update transactions
+        updateTransactions(itemCode, quantity);
         Food item = searchByItemCode(itemCode);
         return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
     }
@@ -250,7 +244,6 @@ public class VendingMachine {
         cash.put(cashAmount, cash.get(cashAmount) + quantity);
         updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
     }
-
 
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index

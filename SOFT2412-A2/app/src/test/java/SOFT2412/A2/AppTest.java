@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 class AppTest {
+    UserInterface ui = new UserInterface();
     VendingMachine vm = new VendingMachine();
 
     @Test
@@ -22,10 +23,12 @@ class AppTest {
         vm.payByCard(quantity, itemCode);
     }
 
-    @Test
-    public void testCardInput() {
-
-    }
+    // @Test
+    // public void testCardInput() {
+    //     String[] temp = {"buy", "card", "4", "se"};
+    //     List<String> input = Arrays.asList(temp);
+    //     ui.buy(input);
+    // }
 
     // Need to find a way to update the txt file to its original inventory after testing
     // @Test
@@ -46,8 +49,12 @@ class AppTest {
         vm.defaultCashAndInventory();
     }
 
+    // @Test
+    // public void saveCardDetails() {
+    //     Card.
+    // }
+
     @Test void testUser(){
-        UserInterface ui = new UserInterface();
         Map<String, String> holder = ui.allCommandBriefs;
         holder = ui.allCommandUsage;
 
@@ -108,7 +115,5 @@ class AppTest {
 
         vm.defaultCashAndInventory();
     }
-
-
 
 }

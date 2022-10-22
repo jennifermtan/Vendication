@@ -78,4 +78,8 @@ public class Card {
         }
         return false;
     }
+
+    public static void defaultCards() {
+
+    }
 }
