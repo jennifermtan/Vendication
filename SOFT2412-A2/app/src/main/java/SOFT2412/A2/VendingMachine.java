@@ -34,12 +34,12 @@ public class VendingMachine {
 
     public void loadCash(){
         try{
-            File cashFile = new File("./resources/StableCash.txt");
+            File cashFile = new File("../src/main/resources/StableCash.txt");
             Scanner scan1 = new Scanner(cashFile);
             while (scan1.hasNextLine()){
                 String[] line = scan1.nextLine().split(", ");
                 cash.put(line[0], Integer.valueOf(line[1]));
-                updateLine("./resources/cash.txt", line[0], line[1], 1);
+                updateLine("../src/main/resources/cash.txt", line[0], line[1], 1);
             }
         }
         catch(FileNotFoundException fe){}
@@ -47,12 +47,12 @@ public class VendingMachine {
 
     public void loadInventory(){
         try{
-            File invenFile = new File("./resources/StableInventory.txt");
+            File invenFile = new File("../src/main/resources/StableInventory.txt");
             Scanner scan2 = new Scanner(invenFile);
             while (scan2.hasNextLine()){
                 String[] line = scan2.nextLine().split(", ");
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
-                updateLine("./resources/inventory.txt", line[0], line[4], 4);
+                updateLine("../src/main/resources/inventory.txt", line[0], line[4], 4);
             }
         }
         catch(FileNotFoundException fe){}
@@ -200,10 +200,10 @@ public class VendingMachine {
             // Append a line in the txt file
         } else if (inventory.get(item) + quantity <= 15) {
             inventory.put(item, inventory.get(item) + quantity);
-            updateLine("./resources/inventory.txt", item.getName(), Integer.toString(quantity), 4);
+            updateLine("../src/main/resources/inventory.txt", item.getName(), Integer.toString(quantity), 4);
         } else {
             inventory.put(item, 15);
-            updateLine("./resources/inventory.txt", item.getName(), "15", 4);
+            updateLine("../src/main/resources/inventory.txt", item.getName(), "15", 4);
             System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
             System.out.println();
         }
@@ -213,17 +213,17 @@ public class VendingMachine {
     public void updateItem(String itemCode, int quantity) {
         Food foodItem = searchByItemCode(itemCode);
         inventory.put(foodItem, inventory.get(foodItem) - quantity);
-        updateLine("./resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);        
+        updateLine("../src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);        
     }
 
     public void removeCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) - quantity);
-        updateLine("./resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+        updateLine("../src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
     }
 
     public void addCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) + quantity);
-        updateLine("./resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+        updateLine("../src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
     }
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
