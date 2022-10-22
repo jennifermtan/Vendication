@@ -105,8 +105,32 @@ public class UserInterface {
 
             }
             System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
-            System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'exit' to exit.");
             // if (user is logged in), option to save credit card details (!)
+            System.out.println("Would you like to save your card details to your account? Input 'yes' or 'no' to continue.");
+            while (true) {
+                String saveCard = null;
+                try {
+                    saveCard = App.readLine();
+                }
+                catch(InterruptedException ie) { }
+                if (saveCard == null) {
+                    App.menu();
+                    return;
+                }
+                if (saveCard.equals("yes")) {
+                    System.out.println("Card details were successfully saved to your account!");
+                    // method to update json file and cards list
+                    break;
+                }
+                else if (saveCard.equals("no")) {
+                    System.out.println("Card details were not saved to your account.");
+                    break;
+                }
+                else {
+                    System.out.println("\nWe were unable to process your request, please try again.");
+                    continue;
+                }
+            }
         }
         System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'help buy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }

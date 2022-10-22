@@ -284,7 +284,7 @@ public class VendingMachine {
             File file = new File("./src/main/resources/transactions.txt");
             Scanner scan = new Scanner(file);
             StringBuffer inputBuffer = new StringBuffer();
-        
+
             while (scan.hasNextLine()){
                 String line = scan.nextLine();
                 if (line.contains(itemCode)) {
@@ -310,7 +310,7 @@ public class VendingMachine {
         }
         catch(Exception e){
             e.printStackTrace();
-        } 
+        }
     }
 
     // Method used for testing to make cash.txt, inventory.txt, and their respective hashmaps reflect StableCash.txt and StableInventory.txt so that expected output is consistent
