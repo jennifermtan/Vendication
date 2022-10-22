@@ -30,10 +30,12 @@ public abstract class User {
         System.out.println(Card.getCardArray());
         Card.getCards().add(card);
         this.card = card;
+        // Adds card to cardArray
         JSONObject newCard = new JSONObject();
         newCard.put("name", card.getName());
         newCard.put("number", card.getNumber());
         Card.getCardArray().add(newCard);
+        // Writes card to creditCards.json
         try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
             file.write(Card.getCardArray().toJSONString());
             file.flush();
