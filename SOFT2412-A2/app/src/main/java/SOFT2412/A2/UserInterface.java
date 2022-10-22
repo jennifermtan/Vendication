@@ -4,7 +4,7 @@ import java.util.*;
 import java.lang.NumberFormatException;
 public class UserInterface {
     private Scanner scan = new Scanner(System.in);
-    VendingMachine vm = new VendingMachine();
+    public VendingMachine vm = new VendingMachine();
     // HashMap of all valid commands and their brief description
     public static final Map<String, String> allCommandBriefs = new HashMap<String, String>() {{
         put("buy", "Allows any user to buy a product from the vending machine.");
@@ -20,7 +20,7 @@ public class UserInterface {
         "Usage: buy <payment method> <amount> <product code> [currency]\n" + 
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" + 
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
-        "\nExample of usage: buy cash 4 se $5*2 $1*5\n");
+        "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
         put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows any user to create an account for the machine.");
         put("login", "Allows any user to login to their account in the machine.");
@@ -36,11 +36,6 @@ public class UserInterface {
             return;
         }
 
-        // Check that we have enough stock for the purchase
-        if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
-            System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to cancel your transaction.");
-            return;
-        }
         // Call user into a loop of buying items until they exit
         if (input.get(0).equals("cash")){
             String cashInput = "";
@@ -70,18 +65,32 @@ public class UserInterface {
                 System.out.println("\nSincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction.");
                 return;
             }
+            // If the machine doesn't have enough stock for the purchase
+            catch(NoSuchElementException ne){
+                System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
+                return;
+            }
         }
 
         if (input.get(0).equals("card")) {
+            // Check that we have enough stock for the purchase
+            if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
+                System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
+                return;
+            }
             String[] details;
             System.out.println("\nPlease input your card details in the form:\nName Number\n\nFor example: Max 40420");
 
             // check details against saved cards, prompts user again if fails
             while (true) {
-                String cardInput = App.timeOut();
+                String cardInput = null;
+                try{
+                    cardInput = App.readLine();
+                }
+                catch(InterruptedException ie){}
                 // Restart the app if this doesn't get an answer in 2 mins
-                if (cardInput.equals("never initialised")){
-                    App.start();
+                if (cardInput == null){
+                    App.menu();
                     return;
                 }
                 details = cardInput.split(" ");
@@ -99,7 +108,7 @@ public class UserInterface {
             System.out.printf("\nThank you! Here are your items.\n User received %s %s(s)!\n", input.get(1), itemPurchased.getName());
             // if (user is logged in), option to save credit card details (!)
         }
-        System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'helpbuy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
+        System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'help buy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
