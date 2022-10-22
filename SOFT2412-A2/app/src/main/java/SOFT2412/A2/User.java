@@ -43,6 +43,11 @@ public abstract class User {
         }
     }
 
+    // (!) add card to individual user
+    public void addCard(Card card) {
+        this.card = card;
+    }
+
     public String getName(){return name;}
     public String getUsername(){return username;}
     public String getPassword(){return password;}

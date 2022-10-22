@@ -1,5 +1,5 @@
 Mineral Water, Drinks, mw, 1.5, 7
-Sprite, Drinks, se, 2.5, -33
+Sprite, Drinks, se, 2.5, 7
 Coca Cola, Drinks, cc, 2.5, 7
 Pepsi, Drinks, pi, 2.5, 7
 Juice, Drinks, js, 2.5, 7

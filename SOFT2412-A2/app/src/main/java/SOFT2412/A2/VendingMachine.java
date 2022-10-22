@@ -5,8 +5,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
-// import org.json.simple.*;
-// import org.json.simple.parser.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
@@ -182,13 +180,15 @@ public class VendingMachine {
 
     public String payByCard(int quantity, String itemCode) {
         updateItem(itemCode, quantity);
+        // update transactions
         Food item = searchByItemCode(itemCode);
         return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
     }
 
     public void saveCardDetails(Card card) { // (!) include User object
         // (!) add code to save card details to specific user
-        Card.addCard(card);
+        // User.addCard();
+        Card.updateCards(card);
     }
 
     public Food searchByItemCode(String itemCode){
@@ -339,29 +339,6 @@ public class VendingMachine {
         }
         catch(FileNotFoundException fe){System.out.println(fe);}
     }
-
-    // Adds a card to saved card list and the json file
-    // @SuppressWarnings("unchecked")
-    // public void addCard(Card card) {
-    //     Card.getCards().add(card);
-    //     System.out.println(cards);
-    //     // Card.getCards().add(card);
-    //     // this.card = card;
-    //     // Adds card to cardArray
-    //     JSONObject newCard = new JSONObject();
-    //     newCard.put("name", card.getName());
-    //     newCard.put("number", card.getNumber());
-    //     Card.getCardArray().add(newCard);
-    //     // Writes card to creditCards.json
-    //     try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
-    //         file.write(Card.getCardArray().toJSONString());
-    //         file.flush();
-    //         file.close();
-    //     }
-    //     catch (Exception e) {
-    //         System.out.println(e);
-    //     }
-    // }
 
     public HashMap<String, Integer> getCash() {
         return cash;

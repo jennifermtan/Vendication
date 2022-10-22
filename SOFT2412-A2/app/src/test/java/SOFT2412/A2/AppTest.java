@@ -56,8 +56,8 @@ class AppTest {
         Card coolCard = new Card("Md", "123456");
         md.addCard(coolCard);
         assertEquals(md.getCard(), coolCard);
-
-        assertTrue(Card.getCards().contains(coolCard));
+        // (!) this was commented out, now have separate methods to add card to cards list, and attach card to specific user
+        // assertTrue(Card.getCards().contains(coolCard));
         assertTrue(Card.checkCardDetails("Md", "123456"));
     }
 

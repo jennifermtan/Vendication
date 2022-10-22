@@ -52,7 +52,7 @@ public class Card {
 
     // Adds a card to saved card list and the json file
     @SuppressWarnings("unchecked")
-    public static void addCard(Card card) {
+    public static void updateCards(Card card) {
         cards.add(card);
         // Adds card to cardArray
         JSONObject newCard = new JSONObject();
