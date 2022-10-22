@@ -5,8 +5,13 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 
 public abstract class User {
+    // Stores the current user and the type
+    public static String currentUser = "";
+    // HashMap to store the user's name, username, password and card number (optional)
     private static Map<String, String> userLogins = new HashMap<String, String>();
+    // List to store all the users
     private static List<User> users = new ArrayList<User>();
+    // Object attributes
     protected String name;
     protected String username;
     protected String password;
@@ -25,10 +30,12 @@ public abstract class User {
         System.out.println(Card.getCardArray());
         Card.getCards().add(card);
         this.card = card;
+        // Adds card to cardArray
         JSONObject newCard = new JSONObject();
         newCard.put("name", card.getName());
         newCard.put("number", card.getNumber());
         Card.getCardArray().add(newCard);
+        // Writes card to creditCards.json
         try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
             file.write(Card.getCardArray().toJSONString());
             file.flush();
@@ -39,6 +46,7 @@ public abstract class User {
         }
     }
 
+    // Untested and unused
     public static void loadUsers() {
         String[] userInfo;
         try {
@@ -57,4 +65,9 @@ public abstract class User {
             System.out.println("loadUsers: File not found exception.");
         }
     }
+    
+    public String getName(){return name;}
+    public String getUsername(){return username;}
+    public String getPassword(){return password;}
+    public Card getCard(){return card;}
 }

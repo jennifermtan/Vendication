@@ -4,15 +4,38 @@ import java.util.*;
 import java.lang.NumberFormatException;
 public class UserInterface {
     private Scanner scan = new Scanner(System.in);
-    VendingMachine vm = new VendingMachine();
+    public VendingMachine vm = new VendingMachine();
+    // HashMap of all valid commands and their brief description
+    public static final Map<String, String> allCommandBriefs = new HashMap<String, String>() {{
+        put("buy", "Allows any user to buy a product from the vending machine.");
+        put("sell", "Allows a vending machine owner to sell a product.");
+        put("signup", "Allows any user to create an account for the machine.");
+        put("login", "Allows any user to login to their account in the machine.");
+        put("help", "Gives information on how to use the application.");
+        put("exit", "Exits the application.");
+    }};
+    // HashMap of all valid commands and their usage
+    public static final Map<String, String> allCommandUsage = new HashMap<String, String>() {{
+        put("buy", "Allows any user to buy a product from the vending machine.\n" +
+        "Usage: buy <payment method> <amount> <product code> [currency]\n" +
+        "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
+        "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
+        "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
+        put("sell", "Allows a vending machine owner to sell a product.");
+        put("signup", "Allows any user to create an account for the machine.");
+        put("login", "Allows any user to login to their account in the machine.");
+        put("help", "Gives information on how to use the application.");
+        put("exit", "Exits the application.");
+    }};
 
 
     public void buy(List<String> input){
 
         if (!validateInput(input)) {
-            System.out.println("We apologise. Please check that was the correct format. Type 'exit' to quit the program.");
+            System.out.println("\nWe apologise. Please check that was the correct format. Type 'help' for help or 'exit' to quit the program.");
             return;
         }
+
         // Call user into a loop of buying items until they exit
         if (input.get(0).equals("cash")){
             String cashInput = "";
@@ -32,7 +55,7 @@ public class UserInterface {
             }
             // If the customer has not given enough money
             catch(ArithmeticException ae){
-                System.out.print("Apologies, but that is not enough for your purchase. Please check your input.");
+                System.out.print("\nApologies, but that is not enough for your purchase. Please check your input.");
                 double toPay = vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1)));
                 System.out.print(" You are to pay $" + String.format("%.2f",toPay) + ".");
 
@@ -41,32 +64,51 @@ public class UserInterface {
             }
             // If the machine can't give the right change
             catch(IllegalStateException is){
-                System.out.println("Sincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction");
+                System.out.println("\nSincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction.");
+                return;
+            }
+            // If the machine doesn't have enough stock for the purchase
+            catch(NoSuchElementException ne){
+                System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
                 return;
             }
         }
 
         if (input.get(0).equals("card")) {
+            // Check that we have enough stock for the purchase
+            if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
+                System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
+                return;
+            }
             String[] details;
-            System.out.println("Please input your card details in the form:\nName Number\n\nFor example: Max 40420");
+            System.out.println("\nPlease input your card details in the form:\nName Number\n\nFor example: Max 40420");
+
             // check details against saved cards, prompts user again if fails
             while (true) {
-                String cardInput = App.timeOut();
+                String cardInput = null;
+                try{
+                    cardInput = App.readLine();
+                }
+                catch(InterruptedException ie){}
                 // Restart the app if this doesn't get an answer in 2 mins
-                if (cardInput.equals("never initialised")){
-                    App.start();
+                if (cardInput == null){
+                    App.menu();
                     return;
                 }
                 details = cardInput.split(" ");
-                if (Card.checkCardDetails(details[0], details[1])) {
-                    break;
+                // If they haven't given a viable input then keep asking
+                if (details.length != 2 || !Card.checkCardDetails(details[0], details[1])){
+                    System.out.println("\nWe were unable to match your card, please try again.");
+                    continue;
                 }
-                System.out.println("We were unable to match your card, please try again.");
+                break;
+
             }
             System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
             System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'exit' to exit.");
             // if (user is logged in), option to save credit card details (!)
         }
+        System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'help buy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
@@ -167,6 +209,24 @@ public class UserInterface {
 
         }
         return true;
+    }
+
+    // Help command
+    public void help(List<String> arguments) {
+        if(arguments.size() == 0) {
+            System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
+            for(String command : allCommandBriefs.keySet())
+                System.out.printf("%6s:          %s%n", command, allCommandBriefs.get(command));
+        }
+        else {
+            for(int i = 0; i < arguments.size(); i++) {
+                for(String command : allCommandUsage.keySet()) {
+                    if(command.equals(arguments.get(i)))
+                        System.out.println(allCommandUsage.get(command));
+                }
+            }
+        }
 
     }
+
 }

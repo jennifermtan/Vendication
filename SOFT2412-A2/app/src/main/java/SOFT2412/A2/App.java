@@ -9,12 +9,12 @@ public class App {
     private static Scanner scan = new Scanner(System.in);
     private static UserInterface ui = new UserInterface();
 
+
     // Method takes user input as a single line
-    public static void takeInput(UserInterface ui, String command, List<String> arguments) {
+    public static void takeInput(String command, List<String> arguments) {
         // Some command examples
         switch (command) {
             case "buy":
-                // System.out.println(arguments);
                 ui.buy(arguments);
                 break;
             case "sell":
@@ -23,65 +23,77 @@ public class App {
                 break;
             case "login":
                 break;
+            case "help":
+                ui.help(arguments);
+                break;
             case "exit":
-                System.out.println("Thank you for using our vending machine! Have a good day :)");
+                System.out.println("\nYou have been sufficiently Vendicated! Have a good day :)");
+                System.out.println("--------------------------------END OF PROGRAM--------------------------------");
                 System.exit(0);
+            default:
+                System.out.printf("Command \"%s\" not found, please type \"help\" to view a list of commands and their usage.\n", command);
+                break;
         }
     }
 
-
-    public static void main(String[] args) {start();}
-
-
-    // Let's use this method as the entry point of the app since we need to be able to restart here if the user times out
-    public static void start(){
+    public static void main(String[] args) {
+        System.out.println("--------------------------------START OF PROGRAM--------------------------------");
         String command;
         ArrayList<String> arguments;
-        ui.displaySnacks(scan, ui.vm.getInventory());
+        menu();
 
-        System.out.println("\nIf you're paying with CARD today, just input your request in the form: \nbuy paymentType quantity itemCode");
-        System.out.println("\nFor example, a purchase of 4 sprites with card would be: buy card 4 se\n");
-        System.out.println("If you're paying with CASH today, just input your request in the form: \nbuy paymentType quantity itemCode $dollar*quantity centsc*quantity (and so on for the number of coins and notes you're inputting)");
-        System.out.println("\nFor example, a purchase of 4 sprites with cash would be: buy cash 4 se 50c*3 $5*3\n");
         while (true) {
-
-            String input = timeOut();
-            // If they were timed out, repeat the loop
-            if (input.equals("never initialised")) {
-                ui.displaySnacks(scan, ui.vm.getInventory());
-                continue;
+            String input = null;
+            try{
+                input = readLine();
             }
+            catch(InterruptedException ie){}
 
+            // If they were timed out and input was never initialised, repeat the loop
+            if (input == null) {
+                menu();
+                continue;
+
+            }
             String[] temp = input.split(" ");
             List<String> temp2 = Arrays.asList(temp);
             arguments = new ArrayList<String>(temp2);
             command = arguments.get(0);
             arguments.remove(0);
-            takeInput(ui, command, arguments);
-
+            takeInput(command, arguments);
         }
     }
 
-    public static String timeOut(){
-        Callable<String> k = () -> new Scanner(System.in).nextLine();
-        Long start= System.currentTimeMillis();
-        String choice="never initialised";
-        ExecutorService l = Executors.newFixedThreadPool(1);  ;
-        Future<String> g;
+    public static String readLine() throws InterruptedException {
+        System.out.println("---------------------------------- NEXT INPUT -----------------------------------");
+        ExecutorService ex = Executors.newSingleThreadExecutor();
+        String input = null;
+        System.out.printf("%s> ", User.currentUser);
 
-        g= l.submit(k);
-        // Times out after 120 seconds
-        while(System.currentTimeMillis()-start<120*1000 && !g.isDone()){}
-        if(g.isDone()){
-            try {
-                choice=g.get();
-            } catch (InterruptedException | ExecutionException e) {
-                //e.printStackTrace();
-            }
+        Future<String> result = ex.submit(new ConsoleInputReadTask());
+        try {
+            // Timeout after 120 seconds (2 mins)
+            input = result.get(120, TimeUnit.SECONDS);
+        } catch (ExecutionException e) {
+            e.getCause().printStackTrace();
+        } catch (TimeoutException e) {
+            result.cancel(true);
         }
-        g.cancel(true);
-        return choice;
+        finally {
+            ex.shutdownNow();
+        }
+        return input;
+    }
+
+    // This is the 'entry point' to the program
+    public static void menu(){
+        ui.displaySnacks(scan, ui.vm.getInventory());
+        System.out.println("\nTo be Vendicated, please read our help guidelines:");
+        ui.help(new ArrayList<String>());
     }
 
 }
+
+
+
 

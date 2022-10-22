@@ -10,6 +10,33 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'jacoco'
+    id 'java'
+}
+
+jar {
+    manifest {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        attributes(
+            'Main-Class': 'SOFT2412.app.build.classes.java.main.SOFT2412.A2.App.class'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+ }
+
+task fatJar(type: Jar) {
+  manifest {
+    attributes 'Main-Class': 'SOFT2412.app.build.classes.java.main.SOFT2412.A2.App.class'
+  }
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  baseName = 'testJar'
+  // archiveClassifier = "all"
+  from {
+    // configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+  with jar
 }
 
 repositories {
@@ -27,6 +54,7 @@ dependencies {
     // This dependency is used to process JSON-related code
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
+    build.dependsOn jacocoTestReport
 }
 
 application {
@@ -49,7 +77,8 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "**/App.class",
-                    "**/UserInterface.class"
+                    "**/UserInterface.class",
+                    "**/ConsoleInputReadTask.class"
             ])
         }))
     }

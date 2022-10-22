@@ -59,20 +59,22 @@ public class VendingMachine {
         catch(FileNotFoundException fe){}
     }
 
-    // I'm following Frank's structure that user input will be of the form:
+    // I'm following Frank's structure so user input will be of the form:
     // buyer cash 3 mw 50c*3 $5*3
     // i.e. userType paymentType quantity itemCode givenMoney
     // GivenMoney can have a variable length so it's simply all the inputs after the itemCode
     public String payByCash(int quantity, String itemCode, String givenMoney){
-
-        updateItem(itemCode, quantity);
-
+        // Check that we have enough stock for the purchase
+        if (!checkStock(searchByItemCode(itemCode), quantity)){
+            throw new NoSuchElementException();
+        }
         double toPay = calculateToPay(itemCode, quantity);
         String[] givenCash = givenMoney.split(" ");
         double paid = calculateGivenCash(givenCash);
 
         // Check that they've given enough
         if (toPay > paid && Math.abs(toPay - paid) >= 0.00001){
+            loadCash();
             throw new ArithmeticException();
         }
 
@@ -92,20 +94,28 @@ public class VendingMachine {
         if (changeBreakdown != ""){
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
+        updateItem(itemCode, quantity);
+        updateTransactions(itemCode, quantity);
+        //Now that the transaction has been confirmed, update the cash.txt file to reflect the cash hashmap
+        for (Map.Entry<String, Integer> cashItem: cash.entrySet()){
+            updateLine("./src/main/resources/cash.txt", cashItem.getKey(), String.valueOf(cashItem.getValue()), 1);
+        }
         return resultString;
     }
 
     public Map<String, Integer> calculateChange(BigDecimal change){
         Map<String, Integer> changeCash = new LinkedHashMap<String, Integer>();
-        BigDecimal changeNum = change;
         int prevChange = -1;
         int currChange = 0;
         // This is a disgusting line but basically it's giving change to the customer while there is still change to be given (change > 0)
         while (change.subtract(new BigDecimal(0.0001)).compareTo(new BigDecimal(0)) == 1){
             // If we haven't added any new change this round, then we can't figure out a way to give them change so return
             if (prevChange == currChange){
-                // if there was no possible change then we should return all the cash to the hashmap by reading in from cash.txt
-                loadCash();
+                // If there was no possible change then we should return all the change to the cash hashmap
+                for (Map.Entry<String, Integer> cha: changeCash.entrySet()){
+                    cash.put(cha.getKey(), cash.get(cha.getKey()) + cha.getValue());
+                }
+
                 throw new IllegalStateException();
             }
             prevChange = currChange;
@@ -121,19 +131,21 @@ public class VendingMachine {
                     value = BigDecimal.valueOf(Double.parseDouble(cashType.substring(0, cashType.length() - 1)) / 100);
                 }
 
-                // round to the nearest 5 cents
+                // Round to the nearest 5 cents
                 change = round(change, new BigDecimal("0.05"), RoundingMode.HALF_UP);
                 // Try to add it to the list of change as many times as you can
                 while (change.compareTo(value) >= 0 && cash.get(cashType) > 0){
+                    cash.put(cashType, cash.get(cashType) - 1);
                     change = change.subtract(value);
                     currChange++;
+                    System.out.println(change + " " + cash.get("$2"));
                     if (!changeCash.containsKey(cashType)){
                         changeCash.put(cashType, 1);
                     }
                     else{
                         changeCash.put(cashType, changeCash.get(cashType) + 1);
                     }
-                    removeCash(cashType, 1);
+
                 }
             }
         }
@@ -155,7 +167,7 @@ public class VendingMachine {
             }
 
             // Add the given cash into our list of cash
-            addCash(thisCash[0], Integer.parseInt(thisCash[1]));
+            cash.put(thisCash[0], cash.get(thisCash[0]) + 1);
             // Check if the input type given is a dollar (starts with $)
             if (Character.toString(thisCash[0].charAt(0)).equals("$")) {
                 paid += (Double.parseDouble(thisCash[0].substring(1)) * Double.parseDouble(thisCash[1]));
@@ -233,8 +245,11 @@ public class VendingMachine {
         cash.put(cashAmount, cash.get(cashAmount) + quantity);
         updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
     }
+
+
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
+    // If string is not in file, append to the file
     public void updateLine(String fileName, String findString, String replacedString, int index) {
         try{
             File file = new File(fileName);
@@ -260,6 +275,64 @@ public class VendingMachine {
         catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    // Update transactions.txt with the format "name, itemCode, quantity sold"
+    public void updateTransactions(String itemCode, int quantity) {
+        boolean hasItem = false;
+        try{
+            File file = new File("./src/main/resources/transactions.txt");
+            Scanner scan = new Scanner(file);
+            StringBuffer inputBuffer = new StringBuffer();
+        
+            while (scan.hasNextLine()){
+                String line = scan.nextLine();
+                if (line.contains(itemCode)) {
+                    hasItem = true;
+                    String[] parts =  line.split(", ");
+                    int newQuantity = Integer.parseInt(parts[2]) + quantity;
+                    parts[2] = Integer.toString(newQuantity);
+                    inputBuffer.append(String.join(", ", parts));
+                    inputBuffer.append("\n");
+                } else if (! line.equals("")) {
+                    inputBuffer.append(line);
+                    inputBuffer.append("\n");
+                }
+            }
+            if (! hasItem) {
+                inputBuffer.append(searchByItemCode(itemCode).getName() + ", " + itemCode + ", " + Integer.toString(quantity) + "\n");
+            }
+            scan.close();
+            String inputStr = inputBuffer.toString();
+            FileOutputStream output = new FileOutputStream(file);
+            output.write(inputStr.getBytes());
+            output.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        } 
+    }
+
+    // Method used for testing to make cash.txt, inventory.txt, and their respective hashmaps reflect StableCash.txt and StableInventory.txt so that expected output is consistent
+    public void defaultCashAndInventory(){
+        try{
+            File cashFile = new File("./src/main/resources/StableCash.txt");
+            Scanner scan1 = new Scanner(cashFile);
+            while (scan1.hasNextLine()){
+                String[] line = scan1.nextLine().split(", ");
+                cash.put(line[0], Integer.valueOf(line[1]));
+                updateLine("./src/main/resources/cash.txt", line[0], line[1], 1);
+            }
+
+            File invenFile = new File("./src/main/resources/StableInventory.txt");
+            Scanner scan2 = new Scanner(invenFile);
+            while (scan2.hasNextLine()) {
+                String[] line = scan2.nextLine().split(", ");
+                inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
+                updateLine("./src/main/resources/inventory.txt", line[0], line[4], 4);
+            }
+        }
+        catch(FileNotFoundException fe){System.out.println(fe);}
     }
 
     public HashMap<String, Integer> getCash() {
