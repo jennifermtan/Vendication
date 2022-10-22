@@ -36,11 +36,6 @@ public class UserInterface {
             return;
         }
 
-        // Check that we have enough stock for the purchase
-        if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
-            System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
-            return;
-        }
         // Call user into a loop of buying items until they exit
         if (input.get(0).equals("cash")){
             String cashInput = "";
@@ -70,9 +65,19 @@ public class UserInterface {
                 System.out.println("\nSincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction.");
                 return;
             }
+            // If the machine doesn't have enough stock for the purchase
+            catch(NoSuchElementException ne){
+                System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
+                return;
+            }
         }
 
         if (input.get(0).equals("card")) {
+            // Check that we have enough stock for the purchase
+            if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
+                System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
+                return;
+            }
             String[] details;
             System.out.println("\nPlease input your card details in the form:\nName Number\n\nFor example: Max 40420");
 
