@@ -5,18 +5,13 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
-import org.json.simple.*;
-import org.json.simple.parser.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
-
     // A hashmap of the form: foodType: quantity in the vending machine
     private HashMap<Food, Integer> inventory = new HashMap<Food, Integer>();
-
     // A hashmap that records all the cash in the form cashType: quantity
     private HashMap<String, Integer> cash = new LinkedHashMap<String, Integer>();
-
     // Current user
     private User currentUser;
 
@@ -177,6 +172,19 @@ public class VendingMachine {
         return paid;
     }
 
+    public String payByCard(int quantity, String itemCode) {
+        updateItem(itemCode, quantity);
+        updateTransactions(itemCode, quantity);
+        Food item = searchByItemCode(itemCode);
+        return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
+    }
+
+    public void saveCardDetails(Card card) { // (!) include User object
+        // (!) add code to save card details to specific user
+        // User.addCard();
+        Card.updateCards(card);
+    }
+
     public Food searchByItemCode(String itemCode){
         for (Food f: inventory.keySet()){
             if (f.getItemCode().equals(itemCode)){
@@ -224,19 +232,18 @@ public class VendingMachine {
     public void updateItem(String itemCode, int quantity) {
         Food foodItem = searchByItemCode(itemCode);
         inventory.put(foodItem, inventory.get(foodItem) - quantity);
-        updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);        
+        updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);
     }
 
     public void removeCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) - quantity);
-        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
     }
 
     public void addCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) + quantity);
-        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
     }
-
 
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
@@ -265,7 +272,7 @@ public class VendingMachine {
         }
         catch(Exception e){
             e.printStackTrace();
-        } 
+        }
     }
 
     // Update transactions.txt with the format "name, itemCode, quantity sold"
@@ -275,7 +282,7 @@ public class VendingMachine {
             File file = new File("./src/main/resources/transactions.txt");
             Scanner scan = new Scanner(file);
             StringBuffer inputBuffer = new StringBuffer();
-        
+
             while (scan.hasNextLine()){
                 String line = scan.nextLine();
                 if (line.contains(itemCode)) {
@@ -301,7 +308,7 @@ public class VendingMachine {
         }
         catch(Exception e){
             e.printStackTrace();
-        } 
+        }
     }
 
     // Method used for testing to make cash.txt, inventory.txt, and their respective hashmaps reflect StableCash.txt and StableInventory.txt so that expected output is consistent

@@ -16,9 +16,9 @@ public class UserInterface {
     }};
     // HashMap of all valid commands and their usage
     public static final Map<String, String> allCommandUsage = new HashMap<String, String>() {{
-        put("buy", "Allows any user to buy a product from the vending machine.\n" + 
-        "Usage: buy <payment method> <amount> <product code> [currency]\n" + 
-        "<payment method> -> card or cash\n<amount>         -> amount of the product\n" + 
+        put("buy", "Allows any user to buy a product from the vending machine.\n" +
+        "Usage: buy <payment method> <amount> <product code> [currency]\n" +
+        "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
         "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
         put("sell", "Allows a vending machine owner to sell a product.");
@@ -50,6 +50,8 @@ public class UserInterface {
             // Try to process their transaction
             try{
                 System.out.println(vm.payByCash(Integer.valueOf(input.get(1)), input.get(2), cashInput));
+                System.out.println("Enjoy! If you'd like to buy anything else, please use the previous format. Otherwise, press 'exit' to exit.");
+
             }
             // If the customer has not given enough money
             catch(ArithmeticException ae){
@@ -80,7 +82,8 @@ public class UserInterface {
             }
             String[] details;
             System.out.println("\nPlease input your card details in the form:\nName Number\n\nFor example: Max 40420");
-
+            String name;
+            String number;
             // check details against saved cards, prompts user again if fails
             while (true) {
                 String cardInput = null;
@@ -99,14 +102,37 @@ public class UserInterface {
                     System.out.println("\nWe were unable to match your card, please try again.");
                     continue;
                 }
+                name = details[0];
+                number = details[1];
                 break;
-
             }
-            Food itemPurchased = vm.searchByItemCode(input.get(2));
-            int itemQuantity = Integer.parseInt(input.get(1));
-            vm.updateItem(input.get(2), itemQuantity); // removing items from inventory (assume enough stock)
-            System.out.printf("\nThank you! Here are your items.\n User received %s %s(s)!\n", input.get(1), itemPurchased.getName());
+            System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
             // if (user is logged in), option to save credit card details (!)
+            System.out.println("Would you like to save your card details to your account? Input 'yes' or 'no' to continue.");
+            while (true) {
+                String saveCard = null;
+                try {
+                    saveCard = App.readLine();
+                }
+                catch(InterruptedException ie) { }
+                if (saveCard == null) {
+                    App.menu();
+                    return;
+                }
+                if (saveCard.equals("yes")) {
+                    vm.saveCardDetails(new Card(name, number)); // (!) include User object to save to specific one
+                    System.out.println("Card details were successfully saved to your account!");
+                    break;
+                }
+                else if (saveCard.equals("no")) {
+                    System.out.println("Card details were not saved to your account.");
+                    break;
+                }
+                else {
+                    System.out.println("\nWe were unable to process your request, please try again.");
+                    continue;
+                }
+            }
         }
         System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'help buy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }

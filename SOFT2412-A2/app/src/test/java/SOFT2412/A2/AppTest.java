@@ -8,12 +8,34 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 class AppTest {
+    UserInterface ui = new UserInterface();
     VendingMachine vm = new VendingMachine();
 
     @Test
     public void testAddItem() {
         return;
     }
+
+    @Test
+    public void testPayByCard() {
+        int quantity = 4;
+        String itemCode = "se";
+        vm.payByCard(quantity, itemCode);
+    }
+
+    // @Test
+    // public void testCardInput() {
+    //     String[] temp = {"buy", "card", "4", "se"};
+    //     List<String> input = Arrays.asList(temp);
+    //     ui.buy(input);
+    // }
+
+    // Need to find a way to update the txt file to its original inventory after testing
+    // @Test
+    // public void testUpdateItem() {
+    //     vm.updateItem("cc", 1);
+    //     assertEquals(vm.getInventory().get(vm.searchByItemCode("cc")), 6);
+    // }
 
     // This also tests updateCash(), updateItem(), updateTransactions(), and calculateChange() because the method is called in payByCash()
     @Test public void testPayByCash() {
@@ -27,8 +49,12 @@ class AppTest {
         vm.defaultCashAndInventory();
     }
 
+    // @Test
+    // public void saveCardDetails() {
+    //     Card.
+    // }
+
     @Test void testUser(){
-        UserInterface ui = new UserInterface();
         Map<String, String> holder = ui.allCommandBriefs;
         holder = ui.allCommandUsage;
 
@@ -37,8 +63,8 @@ class AppTest {
         Card coolCard = new Card("Md", "123456");
         md.addCard(coolCard);
         assertEquals(md.getCard(), coolCard);
-
-        assertTrue(Card.getCards().contains(coolCard));
+        // (!) this was commented out, now have separate methods to add card to cards list, and attach card to specific user
+        // assertTrue(Card.getCards().contains(coolCard));
         assertTrue(Card.checkCardDetails("Md", "123456"));
     }
 
@@ -89,7 +115,5 @@ class AppTest {
 
         vm.defaultCashAndInventory();
     }
-
-
 
 }

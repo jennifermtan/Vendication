@@ -1,4 +1,3 @@
-
 package SOFT2412.A2;
 import java.util.*;
 import java.awt.event.*;
@@ -9,7 +8,6 @@ public class App {
     // Scanner to use for the whole application
     private static Scanner scan = new Scanner(System.in);
     private static UserInterface ui = new UserInterface();
-
 
     // Method takes user input as a single line
     public static void takeInput(String command, List<String> arguments) {
@@ -94,7 +92,3 @@ public class App {
     }
 
 }
-
-
-
-
