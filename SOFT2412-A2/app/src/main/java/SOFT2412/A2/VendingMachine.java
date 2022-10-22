@@ -5,8 +5,8 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
-import org.json.simple.*;
-import org.json.simple.parser.*;
+// import org.json.simple.*;
+// import org.json.simple.parser.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
@@ -21,7 +21,7 @@ public class VendingMachine {
     private User currentUser;
 
     // private JSONParser = new JSONParser();
-    private JSONArray cardArray;
+    // private JSONArray cardArray;
 
     public VendingMachine(){
         // Load in the cash and the inventory from "inventory.txt" and "cash.txt" files using methods in case we need to reload them
@@ -186,6 +186,11 @@ public class VendingMachine {
         return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
     }
 
+    public void saveCardDetails(Card card) { // (!) include User object
+        // (!) add code to save card details to specific user
+        Card.addCard(card);
+    }
+
     public Food searchByItemCode(String itemCode){
         for (Food f: inventory.keySet()){
             if (f.getItemCode().equals(itemCode)){
@@ -334,6 +339,29 @@ public class VendingMachine {
         }
         catch(FileNotFoundException fe){System.out.println(fe);}
     }
+
+    // Adds a card to saved card list and the json file
+    // @SuppressWarnings("unchecked")
+    // public void addCard(Card card) {
+    //     Card.getCards().add(card);
+    //     System.out.println(cards);
+    //     // Card.getCards().add(card);
+    //     // this.card = card;
+    //     // Adds card to cardArray
+    //     JSONObject newCard = new JSONObject();
+    //     newCard.put("name", card.getName());
+    //     newCard.put("number", card.getNumber());
+    //     Card.getCardArray().add(newCard);
+    //     // Writes card to creditCards.json
+    //     try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
+    //         file.write(Card.getCardArray().toJSONString());
+    //         file.flush();
+    //         file.close();
+    //     }
+    //     catch (Exception e) {
+    //         System.out.println(e);
+    //     }
+    // }
 
     public HashMap<String, Integer> getCash() {
         return cash;

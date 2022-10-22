@@ -82,7 +82,8 @@ public class UserInterface {
             }
             String[] details;
             System.out.println("\nPlease input your card details in the form:\nName Number\n\nFor example: Max 40420");
-
+            String name;
+            String number;
             // check details against saved cards, prompts user again if fails
             while (true) {
                 String cardInput = null;
@@ -101,8 +102,9 @@ public class UserInterface {
                     System.out.println("\nWe were unable to match your card, please try again.");
                     continue;
                 }
+                name = details[0];
+                number = details[1];
                 break;
-
             }
             System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
             // if (user is logged in), option to save credit card details (!)
@@ -118,8 +120,8 @@ public class UserInterface {
                     return;
                 }
                 if (saveCard.equals("yes")) {
+                    vm.saveCardDetails(new Card(name, number)); // (!) include User object to save to specific one
                     System.out.println("Card details were successfully saved to your account!");
-                    // method to update json file and cards list
                     break;
                 }
                 else if (saveCard.equals("no")) {
