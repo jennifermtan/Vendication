@@ -35,7 +35,7 @@ public class Card extends Payment{
     public static void loadCards() {
         JSONParser parser = new JSONParser();
         try {
-            Object object = parser.parse(new FileReader("./src/main/resources/creditCards.json"));
+            Object object = parser.parse(new FileReader("./resources/creditCards.json"));
             cardArray = (JSONArray) object;
             for (Object o : cardArray) {
                 JSONObject entry = (JSONObject) o;

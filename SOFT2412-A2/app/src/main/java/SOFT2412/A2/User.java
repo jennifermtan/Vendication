@@ -34,7 +34,7 @@ public abstract class User {
         newCard.put("name", card.getName());
         newCard.put("number", card.getNumber());
         Card.getCardArray().add(newCard);
-        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
+        try (FileWriter file = new FileWriter("./resources/creditCards.json")) {
             file.write(Card.getCardArray().toJSONString());
             file.flush();
             file.close();
@@ -47,7 +47,7 @@ public abstract class User {
     public static void loadUsers() {
         String[] userInfo;
         try {
-            Scanner usersFile = new Scanner(new File("./src/main/resources/users.txt"));
+            Scanner usersFile = new Scanner(new File("./resources/users.txt"));
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");

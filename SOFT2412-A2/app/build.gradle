@@ -37,7 +37,7 @@ jar {
     manifest {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         attributes(
-            'Main-Class': 'SOFT2412.app.build.classes.java.main.SOFT2412.A2.App'
+            'Main-Class': 'SOFT2412.A2.App'
         )
     }
     from {
@@ -46,7 +46,7 @@ jar {
  }
 task fatJar(type: Jar) {
   manifest {
-    attributes 'Main-Class': 'SOFT2412.app.build.classes.java.main.SOFT2412.A2.App'
+    attributes 'Main-Class': 'SOFT2412.A2.App'
   }
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
   baseName = 'testJar'
