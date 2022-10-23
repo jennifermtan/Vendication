@@ -1,8 +1,8 @@
 package SOFT2412.A2;
 import java.util.*;
 import java.io.*;
-import org.json.simple.*;
-import org.json.simple.parser.*;
+// import org.json.simple.*;
+// import org.json.simple.parser.*;
 
 public abstract class User {
     // Stores the current user and the type
@@ -23,27 +23,7 @@ public abstract class User {
         this.password = password;
     }
 
-
-    // Adds a card to saved card list and the json file
-    @SuppressWarnings("unchecked")
-    public void addCard(Card card) {
-        System.out.println(Card.getCardArray());
-        Card.getCards().add(card);
-        this.card = card;
-        JSONObject newCard = new JSONObject();
-        newCard.put("name", card.getName());
-        newCard.put("number", card.getNumber());
-        Card.getCardArray().add(newCard);
-        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
-            file.write(Card.getCardArray().toJSONString());
-            file.flush();
-            file.close();
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
+    // Untested and unused
     public static void loadUsers() {
         String[] userInfo;
         try {
@@ -63,8 +43,18 @@ public abstract class User {
         }
     }
 
+
     // Allow admin users to edit the change and update cash.txt
     public void editChange(String cashAmount, int quantity) {
         VendingMachine.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
     }
+
+    // (!) add card to individual user
+    public void addCard(Card card) {
+        this.card = card;
+    }
+
+    public String getName(){return name;}
+    public String getUsername(){return username;}
+    public String getPassword(){return password;}
 }

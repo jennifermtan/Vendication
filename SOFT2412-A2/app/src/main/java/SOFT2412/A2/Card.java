@@ -50,6 +50,26 @@ public class Card {
         }
     }
 
+    // Adds a card to saved card list and the json file
+    @SuppressWarnings("unchecked")
+    public static void updateCards(Card card) {
+        cards.add(card);
+        // Adds card to cardArray
+        JSONObject newCard = new JSONObject();
+        newCard.put("name", card.getName());
+        newCard.put("number", card.getNumber());
+        cardArray.add(newCard);
+        // Writes card to creditCards.json
+        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
+            file.write(Card.getCardArray().toJSONString());
+            file.flush();
+            file.close();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public static boolean checkCardDetails(String name, String number) {
         for (Card c : cards) {
             if ((name.equals(c.getName())) && (number.equals(c.getNumber()))) {
@@ -57,5 +77,9 @@ public class Card {
             }
         }
         return false;
+    }
+
+    public static void defaultCards() {
+
     }
 }
