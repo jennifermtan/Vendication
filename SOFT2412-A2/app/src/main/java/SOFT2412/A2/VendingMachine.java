@@ -90,7 +90,7 @@ public class VendingMachine {
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
         updateItem(itemCode, quantity);
-        updateTransactions(itemCode, quantity);
+        updateTotalSold(itemCode, quantity);
 
         return resultString;
     }
@@ -258,7 +258,7 @@ public class VendingMachine {
     }
 
     // Update transactions.txt with the format "name, itemCode, quantity sold"
-    public void updateTransactions(String itemCode, int quantity) {
+    public void updateTotalSold(String itemCode, int quantity) {
         boolean hasItem = false;
         try{
             File file = new File("./src/main/resources/transactions.txt");

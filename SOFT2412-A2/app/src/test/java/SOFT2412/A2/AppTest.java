@@ -21,7 +21,7 @@ class AppTest {
         assertEquals(vm.getCash().get("$5"), 6);
         assertEquals(vm.getCash().get("$2"), 4);
         assertEquals(vm.getCash().get("50c"), 4);
-        vm.updateTransactions("cc", -1);
+        vm.updateTotalSold("cc", -1);
         vm.loadInventory();
         vm.loadCash();
     }

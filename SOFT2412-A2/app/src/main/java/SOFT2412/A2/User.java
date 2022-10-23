@@ -62,4 +62,9 @@ public abstract class User {
             System.out.println("loadUsers: File not found exception.");
         }
     }
+
+    // Allow admin users to edit the change and update cash.txt
+    public void editChange(String cashAmount, int quantity) {
+        VendingMachine.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
+    }
 }
