@@ -43,7 +43,6 @@ public abstract class User {
         }
     }
 
-
     // Allow admin users to edit the change and update cash.txt
     public void editChange(String cashAmount, int quantity) {
         VendingMachine.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
@@ -57,4 +56,5 @@ public abstract class User {
     public String getName(){return name;}
     public String getUsername(){return username;}
     public String getPassword(){return password;}
+    public Card getCard(){return card;}
 }

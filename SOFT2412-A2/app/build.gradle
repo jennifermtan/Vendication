@@ -9,7 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
-    id 'jacoco'
+    // id 'jacoco'
     id 'java'
 }
 
@@ -54,7 +54,7 @@ dependencies {
     // This dependency is used to process JSON-related code
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
-    build.dependsOn jacocoTestReport
+    // build.dependsOn jacocoTestReport
 }
 
 application {
@@ -70,16 +70,16 @@ run {
     standardInput = System.in
 }
 
-jacocoTestReport {
-    dependsOn test // tests are required to run before generating the report
+// jacocoTestReport {
+//     dependsOn test // tests are required to run before generating the report
 
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                    "**/App.class",
-                    "**/UserInterface.class",
-                    "**/ConsoleInputReadTask.class"
-            ])
-        }))
-    }
-}
+//     afterEvaluate {
+//         classDirectories.setFrom(files(classDirectories.files.collect {
+//             fileTree(dir: it, exclude: [
+//                     "**/App.class",
+//                     "**/UserInterface.class",
+//                     "**/ConsoleInputReadTask.class"
+//             ])
+//         }))
+//     }
+// }
