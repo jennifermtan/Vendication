@@ -15,8 +15,7 @@ class AppTest {
     public void testAddItem() {
         return;
     }
-
-    @Test
+    
     public void testPayByCard() {
         int quantity = 4;
         String itemCode = "se";
@@ -45,7 +44,7 @@ class AppTest {
         assertEquals(6, vm.getCash().get("$5"));
         assertEquals( 4, vm.getCash().get("$2"));
         assertEquals(4, vm.getCash().get("50c"));
-        vm.updateTransactions("cc", -1);
+        vm.updateTotalSold("cc", -1);
         vm.defaultCashAndInventory();
     }
 
