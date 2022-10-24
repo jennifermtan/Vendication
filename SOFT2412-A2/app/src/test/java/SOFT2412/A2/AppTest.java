@@ -8,12 +8,34 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 class AppTest {
+    UserInterface ui = new UserInterface();
     VendingMachine vm = new VendingMachine();
 
     @Test
     public void testAddItem() {
         return;
     }
+
+    // Only testing if the payByCard method works
+    public void testPayByCard() {
+        int quantity = 4;
+        String itemCode = "se";
+        vm.payByCard(quantity, itemCode);
+    }
+
+    // @Test
+    // public void testCardInput() {
+    //     String[] temp = {"buy", "card", "4", "se"};
+    //     List<String> input = Arrays.asList(temp);
+    //     ui.buy(input);
+    // }
+
+    // Need to find a way to update the txt file to its original inventory after testing
+    // @Test
+    // public void testUpdateItem() {
+    //     vm.updateItem("cc", 1);
+    //     assertEquals(vm.getInventory().get(vm.searchByItemCode("cc")), 6);
+    // }
 
     // This also tests updateCash(), updateItem(), updateTransactions(), and calculateChange() because the method is called in payByCash()
     @Test public void testPayByCash() {
@@ -23,23 +45,27 @@ class AppTest {
         assertEquals(6, vm.getCash().get("$5"));
         assertEquals( 4, vm.getCash().get("$2"));
         assertEquals(4, vm.getCash().get("50c"));
-        vm.updateTransactions("cc", -1);
+        vm.updateTotalSold("cc", -1);
         vm.defaultCashAndInventory();
     }
 
+    // Check if card details were saved in internal card list
+    @Test
+    public void saveCardDetails() {
+        Card.defaultCards();
+        Card testCard = new Card("Test", "123456");
+        Card.updateCards(testCard);
+        assertTrue(Card.getCards().contains(testCard));
+    }
+
+    // Check that we've saved this card for the user ONLY
     @Test void testUser(){
-        UserInterface ui = new UserInterface();
         Map<String, String> holder = ui.allCommandBriefs;
         holder = ui.allCommandUsage;
-
         User md = new Customer("Md", "Emmder", "password124");
-        // Check that we've saved this card for the user and for the overall card JSON array
         Card coolCard = new Card("Md", "123456");
         md.addCard(coolCard);
         assertEquals(md.getCard(), coolCard);
-
-        assertTrue(Card.getCards().contains(coolCard));
-        assertTrue(Card.checkCardDetails("Md", "123456"));
     }
 
     @Test public void testVendingMachineValidation(){
@@ -89,7 +115,5 @@ class AppTest {
 
         vm.defaultCashAndInventory();
     }
-
-
 
 }
