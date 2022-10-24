@@ -1,2 +1,2 @@
 Coca Cola, cc, 7
-Sprite, se, 21
+Sprite, se, 41

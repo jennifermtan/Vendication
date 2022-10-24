@@ -48,6 +48,7 @@ public class Card {
         catch (Exception e) {
             System.out.println(e);
         }
+        System.out.println(cards);
     }
 
     // Adds a card to saved card list and the json file
@@ -80,6 +81,20 @@ public class Card {
     }
 
     public static void defaultCards() {
-
+        JSONParser parser = new JSONParser();
+        try {
+            Object object = parser.parse(new FileReader("./src/main/resources/stableCards.json"));
+            cardArray = (JSONArray) object;
+            for (Object o : cardArray) {
+                JSONObject entry = (JSONObject) o;
+                String name = (String) entry.get("name");
+                String number = (String) entry.get("number");
+                Card card = new Card(name, number);
+                cards.add(card);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
