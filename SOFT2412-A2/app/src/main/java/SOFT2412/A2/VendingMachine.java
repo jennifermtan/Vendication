@@ -23,6 +23,7 @@ public class VendingMachine {
         Card.loadCards();
         // load in the inventory from "inventory.txt"
         loadInventory();
+        Transaction.loadTransactions(this);
         // Set default user null
         this.currentUser = null;
     }
@@ -35,6 +36,7 @@ public class VendingMachine {
                 String[] line = scan1.nextLine().split(", ");
                 cash.put(line[0], Integer.valueOf(line[1]));
             }
+            scan1.close();
         }
         catch(FileNotFoundException fe){}
     }
@@ -47,6 +49,7 @@ public class VendingMachine {
                 String[] line = scan2.nextLine().split(", ");
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
             }
+            scan2.close();
         }
         catch(FileNotFoundException fe){}
     }
@@ -132,7 +135,7 @@ public class VendingMachine {
                     cash.put(cashType, cash.get(cashType) - 1);
                     change = change.subtract(value);
                     currChange++;
-                    System.out.println(change + " " + cash.get("$2"));
+
                     if (!changeCash.containsKey(cashType)){
                         changeCash.put(cashType, 1);
                     }
@@ -277,11 +280,13 @@ public class VendingMachine {
         }
     }
 
+
     // Update transactions.txt with the format "name, itemCode, quantity sold"
     public void updateTotalSold(String itemCode, int quantity) {
+
         boolean hasItem = false;
         try{
-            File file = new File("./src/main/resources/transactions.txt");
+            File file = new File("./src/main/resources/quantities.txt");
             Scanner scan = new Scanner(file);
             StringBuffer inputBuffer = new StringBuffer();
 
@@ -323,6 +328,7 @@ public class VendingMachine {
                 cash.put(line[0], Integer.valueOf(line[1]));
                 updateLine("./src/main/resources/cash.txt", line[0], line[1], 1);
             }
+            scan1.close();
 
             File invenFile = new File("./src/main/resources/StableInventory.txt");
             Scanner scan2 = new Scanner(invenFile);
@@ -331,6 +337,7 @@ public class VendingMachine {
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
                 updateLine("./src/main/resources/inventory.txt", line[0], line[4], 4);
             }
+            scan2.close();
         }
         catch(FileNotFoundException fe){System.out.println(fe);}
     }

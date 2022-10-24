@@ -43,6 +43,16 @@ public abstract class User {
         }
     }
 
+    // Method for finding a user by their name
+    public static User getUserByName(String name){
+        for (User u: users){
+            if (u.getName().equals(name)){
+                return u;
+            }
+        }
+        return null;
+    }
+
     // Allow admin users to edit the change and update cash.txt
     public void editChange(String cashAmount, int quantity) {
         VendingMachine.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);

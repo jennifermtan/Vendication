@@ -48,7 +48,7 @@ public class Card {
         catch (Exception e) {
             System.out.println(e);
         }
-        System.out.println(cards);
+
     }
 
     // Adds a card to saved card list and the json file
