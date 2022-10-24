@@ -10,7 +10,6 @@ public class Card {
     private static List<Card> cards = new ArrayList<Card>();
     // A JSONArray to store card details for reading and writing to JSON file
     private static JSONArray cardArray;
-    private static JSONParser parser;
 
     public Card(String name, String number) {
         this.name = name;
@@ -34,7 +33,7 @@ public class Card {
     }
 
     public static void loadCards() {
-        // JSONParser parser = new JSONParser();
+        JSONParser parser = new JSONParser();
         try {
             Object object = parser.parse(new FileReader("./src/main/resources/creditCards.json"));
             cardArray = (JSONArray) object;
@@ -49,6 +48,7 @@ public class Card {
         catch (Exception e) {
             System.out.println(e);
         }
+        System.out.println(cards);
     }
 
     // Adds a card to saved card list and the json file
@@ -81,6 +81,7 @@ public class Card {
     }
 
     public static void defaultCards() {
+        JSONParser parser = new JSONParser();
         try {
             Object object = parser.parse(new FileReader("./src/main/resources/stableCards.json"));
             cardArray = (JSONArray) object;

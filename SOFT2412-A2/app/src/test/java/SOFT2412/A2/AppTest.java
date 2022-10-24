@@ -15,7 +15,8 @@ class AppTest {
     public void testAddItem() {
         return;
     }
-    
+
+    // Only testing if the payByCard method works
     public void testPayByCard() {
         int quantity = 4;
         String itemCode = "se";
@@ -48,25 +49,23 @@ class AppTest {
         vm.defaultCashAndInventory();
     }
 
-    // @Test
-    // public void saveCardDetails() {
-    //     Card.
-    // }
+    // Check if card details were saved in internal card list
+    @Test
+    public void saveCardDetails() {
+        Card.defaultCards();
+        Card testCard = new Card("Test", "123456");
+        Card.updateCards(testCard);
+        assertTrue(Card.getCards().contains(testCard));
+    }
 
+    // Check that we've saved this card for the user ONLY
     @Test void testUser(){
         Map<String, String> holder = ui.allCommandBriefs;
         holder = ui.allCommandUsage;
-
         User md = new Customer("Md", "Emmder", "password124");
-        // Check that we've saved this card for the user and for the overall card JSON array
         Card coolCard = new Card("Md", "123456");
-        // vm.saveCardDetails(coolCard);
-        // coolCard.updateCards(coolCard);
         md.addCard(coolCard);
         assertEquals(md.getCard(), coolCard);
-        // (!) this was commented out, now have separate methods to add card to cards list, and attach card to specific user
-        // assertTrue(Card.getCards().contains(coolCard));
-        // assertTrue(Card.checkCardDetails("Md", "123456"));
     }
 
     @Test public void testVendingMachineValidation(){
