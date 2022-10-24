@@ -65,6 +65,16 @@ public abstract class User {
             System.out.println("loadUsers: File not found exception.");
         }
     }
+
+    // Method for finding a user by their name
+    public static User getUserByName(String name){
+        for (User u: users){
+            if (u.getName().equals(name)){
+                return u;
+            }
+        }
+        return null;
+    }
     
     public String getName(){return name;}
     public String getUsername(){return username;}
