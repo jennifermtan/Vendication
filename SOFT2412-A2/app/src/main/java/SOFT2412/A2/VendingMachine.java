@@ -87,11 +87,13 @@ public class VendingMachine {
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
         updateItem(itemCode, quantity);
-        updateTransactions(itemCode, quantity);
+
+        updateTotalSold(itemCode, quantity);
         //Now that the transaction has been confirmed, update the cash.txt file to reflect the cash hashmap
         for (Map.Entry<String, Integer> cashItem: cash.entrySet()){
             updateLine("./src/main/resources/cash.txt", cashItem.getKey(), String.valueOf(cashItem.getValue()), 1);
         }
+
         return resultString;
     }
 
@@ -174,7 +176,7 @@ public class VendingMachine {
 
     public String payByCard(int quantity, String itemCode) {
         updateItem(itemCode, quantity);
-        updateTransactions(itemCode, quantity);
+        updateTotalSold(itemCode, quantity);
         Food item = searchByItemCode(itemCode);
         return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
     }
@@ -248,7 +250,7 @@ public class VendingMachine {
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
     // If string is not in file, append to the file
-    public void updateLine(String fileName, String findString, String replacedString, int index) {
+    public static void updateLine(String fileName, String findString, String replacedString, int index) {
         try{
             File file = new File(fileName);
             Scanner scan = new Scanner(file);
@@ -276,7 +278,7 @@ public class VendingMachine {
     }
 
     // Update transactions.txt with the format "name, itemCode, quantity sold"
-    public void updateTransactions(String itemCode, int quantity) {
+    public void updateTotalSold(String itemCode, int quantity) {
         boolean hasItem = false;
         try{
             File file = new File("./src/main/resources/transactions.txt");
