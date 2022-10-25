@@ -87,6 +87,7 @@ public class App {
     // This is the 'entry point' to the program
     public static void menu(){
         ui.displaySnacks(scan, ui.vm.getInventory());
+        ui.anonymousPage();
         System.out.println("\nTo be Vendicated, please read our help guidelines:");
         ui.help(new ArrayList<String>());
     }
