@@ -266,6 +266,29 @@ public class UserInterface {
         return true;
     }
 
+    // Displays by default, before user chooses to log in
+    public void anonymousPage() {
+        System.out.println("\nThese were the last 5 items bought by anonymous users:");
+        List<Transaction> transactions = Transaction.anonTransactions;
+        int index = 1;
+        for (int initial = transactions.size() - 1; initial >= transactions.size() - 5; initial -= 1) {
+            System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+            index++;
+        }
+    }
+
+    // (!) Displays after user logs in
+    // public void loggedInPage(User user) {
+    //     System.out.println("\nThese were the last 5 items bought by you:");
+    //     Map<User, List<Transaction>> users = Transaction.userTransactions;
+    //     List<Transaction> transactions = users.get(user);
+    //     int index = 1;
+    //     for (int initial = transactions.size() - 1; initial >= transactions.size() - 5; initial -= 1) {
+    //         System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+    //         index++;
+    //     }
+    // }
+
     // Help command
     public void help(List<String> arguments) {
         if(arguments.size() == 0) {

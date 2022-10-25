@@ -19,3 +19,4 @@ anonymous, sk, 2022-10-24T19:47:07.676749600, $15.0, cash, Successful
 anonymous, 2022-10-24T19:48:31.442714900, Cancelled due to incorrect user input
 anonymous, sn, 2022-10-24T19:48:34.549875900, $20.0, cash, Successful
 anonymous, 2022-10-24T19:48:57.886192, Cancelled due to insufficient change in vending machine
+anonymous, 2022-10-25T12:05:57.480920900, Cancelled due to insufficient change in vending machine
