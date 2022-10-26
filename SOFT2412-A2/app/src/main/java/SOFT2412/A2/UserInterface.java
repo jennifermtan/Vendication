@@ -165,7 +165,6 @@ public class UserInterface {
                 }
                 else {
                     System.out.println("\nWe were unable to process your request, please try again.");
-                    continue;
                 }
             }
         }
