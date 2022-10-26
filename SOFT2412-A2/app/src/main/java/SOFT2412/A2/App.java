@@ -62,6 +62,7 @@ public class App {
 
             // If they were timed out and input was never initialised, repeat the loop
             if (input == null) {
+                System.out.println("Apologies, you have been timed out after 2 minutes of inactivity.");
                 menu();
                 continue;
 
