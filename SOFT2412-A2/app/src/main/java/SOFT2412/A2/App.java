@@ -9,6 +9,7 @@ public class App {
     // Scanner to use for the whole application
     private static Scanner scan = new Scanner(System.in);
     private static UserInterface ui = new UserInterface();
+    private static String userIdentifier = "";
 
 
     // Method takes user input as a single line
@@ -21,8 +22,19 @@ public class App {
             case "sell":
                 break;
             case "signup":
+                if(arguments.size() == 4)
+                    User.signup(arguments.get(0), arguments.get(1), arguments.get(2), arguments.get(3));
+                else
+                    System.out.println("Incorrect Format. For more help on the signup command, type \"help signup\".");
                 break;
             case "login":
+                if(arguments.size() == 2)
+                    User.login(arguments.get(0), arguments.get(1));
+                else
+                    System.out.println("Incorrect Format. For more help on the login command, type \"help login\".");
+                break;
+            case "logout":
+                User.logout();
                 break;
             case "help":
                 ui.help(arguments);
@@ -69,7 +81,21 @@ public class App {
         System.out.println("---------------------------------- NEXT INPUT -----------------------------------");
         ExecutorService ex = Executors.newSingleThreadExecutor();
         String input = null;
-        System.out.printf("%s> ", User.currentUser);
+        
+        if (UserInterface.currentUser instanceof Cashier)
+            userIdentifier = "Cashier";
+        else if (UserInterface.currentUser instanceof Customer)
+            userIdentifier = "Customer";
+        else if (UserInterface.currentUser instanceof Owner)
+            userIdentifier = "Owner";
+        else if (UserInterface.currentUser instanceof Seller)
+            userIdentifier = "Seller";
+        else
+            userIdentifier = "";
+        if(UserInterface.currentUser != null)
+            System.out.printf("%s> ", userIdentifier + " " + UserInterface.currentUser.getName() + " ");
+        else
+            System.out.printf("> ");
 
         Future<String> result = ex.submit(new ConsoleInputReadTask());
         try {

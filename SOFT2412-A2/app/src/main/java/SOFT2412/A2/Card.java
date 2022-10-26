@@ -58,4 +58,12 @@ public class Card {
         }
         return false;
     }
+
+    public static Card getCard(String cardNumber) {
+        for (Card c : cards) {
+            if (c.number.equals(cardNumber))
+                return c;
+        }
+        return null;
+    }
 }

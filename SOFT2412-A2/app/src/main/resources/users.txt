@@ -1,1 +1,1 @@
-name, username, password, card_number
+type, name, username, password, card_number
