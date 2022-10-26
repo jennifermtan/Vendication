@@ -22,3 +22,4 @@ anonymous, 2022-10-24T19:48:57.886192, Cancelled due to insufficient change in v
 anonymous, 2022-10-25T12:05:57.480920900, Cancelled due to insufficient change in vending machine
 anonymous, 2022-10-26T15:50:41.708, Cancelled due to insufficient change in vending machine
 anonymous, se, 2022-10-26T15:52:38.488, $5.0, cash, Successful
+anonymous, 2022-10-26T16:14:38.395, Cancelled due to insufficient change in vending machine

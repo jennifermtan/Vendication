@@ -25,7 +25,12 @@ public class UserInterface {
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
         "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
         put("sell", "Allows a vending machine owner to sell a product.");
-        put("signup", "Allows any user to create an account for the machine.");
+        put("signup", "Allows a vending machine owner to sell a product.\n" + 
+        "Usage: signup <type> <name> <username> <password>\n" +
+        "<type>     -> type of user (cashier, customer, owner, seller)\n" + 
+        "<name>     -> name of the user\n" +
+        "<username> -> username of the user, has to be unique\n" +
+        "<password> -> password of the user\n");
         put("login", "Allows any user to login to their account in the machine.");
         put("help", "Gives information on how to use the application.");
         put("exit", "Exits the application.");
