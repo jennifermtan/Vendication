@@ -93,7 +93,7 @@ public class App {
         if(UserInterface.currentUser != null)
             System.out.printf("%s> ", userIdentifier + " " + UserInterface.currentUser.getName() + " ");
         else
-            System.out.printf("> ");
+            System.out.printf("Customer > ");
 
         Future<String> result = ex.submit(new ConsoleInputReadTask());
         try {
