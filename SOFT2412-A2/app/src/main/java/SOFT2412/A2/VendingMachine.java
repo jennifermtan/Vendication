@@ -26,6 +26,7 @@ public class VendingMachine {
         Transaction.loadTransactions(this);
         // Set default user null
         this.currentUser = null;
+        // User.loadUsers();
     }
 
     public void loadCash(){
@@ -224,10 +225,10 @@ public class VendingMachine {
             // Append a line in the txt file
         } else if (inventory.get(item) + quantity <= 15) {
             inventory.put(item, inventory.get(item) + quantity);
-            updateLine("./src/main/resources/inventory.txt", item.getName(), Integer.toString(quantity), 4);
+            updateLine("../src/main/resources/inventory.txt", item.getName(), Integer.toString(quantity), 4);
         } else {
             inventory.put(item, 15);
-            updateLine("./src/main/resources/inventory.txt", item.getName(), "15", 4);
+            updateLine("../src/main/resources/inventory.txt", item.getName(), "15", 4);
             System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
             System.out.println();
         }

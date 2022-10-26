@@ -6,6 +6,8 @@ import java.lang.NumberFormatException;
 public class UserInterface {
     private Scanner scan = new Scanner(System.in);
     public VendingMachine vm = new VendingMachine();
+    // Current User (null if guest user)
+    public static User currentUser = null;
     // HashMap of all valid commands and their brief description
     public static final Map<String, String> allCommandBriefs = new HashMap<String, String>() {{
         put("buy", "Allows any user to buy a product from the vending machine.");
