@@ -1,17 +1,12 @@
 package SOFT2412.A2;
 import java.util.*;
 import java.io.*;
-<<<<<<< HEAD
 import org.json.simple.*;
 import org.json.simple.parser.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-=======
-// import org.json.simple.*;
-// import org.json.simple.parser.*;
->>>>>>> 8d1ef2375b562a23b9c6792469806c5311faaa67
 
 public abstract class User {
     // Stores the current user and the type
