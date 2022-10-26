@@ -33,6 +33,7 @@ public abstract class User {
         User tempUser = null;
         try {
             Scanner usersFile = new Scanner(new File("./src/main/resources/users.txt"));
+            usersFile.nextLine();
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");
@@ -47,12 +48,13 @@ public abstract class User {
                 else if(userInfo[0].equals("customer"))
                     tempUser = new Customer(userInfo[1], userInfo[2], userInfo[3]);
                 else if(userInfo[0].equals("owner"))
-                    new Owner(userInfo[0], userInfo[1], userInfo[2]);
+                    tempUser = new Owner(userInfo[1], userInfo[2], userInfo[3]);
                 else if(userInfo[0].equals("seller"))
-                    new Seller(userInfo[0], userInfo[1], userInfo[2]);
+                    tempUser = new Seller(userInfo[1], userInfo[2], userInfo[3]);
 
-                if (!userInfo[3].equals(""))
+                if (userInfo.length == 5) {
                     tempUser.card = Card.getCard(userInfo[4]);
+                }
                 users.add(tempUser);
             }
             usersFile.close();
@@ -63,7 +65,9 @@ public abstract class User {
     }
 
     public static void login(String username, String password) {
+        loadUsers();
         for(User u: users) {
+
             if (u.username.equals(username)) {
                 if(u.password.equals(password)) {
                     UserInterface.currentUser = u;
