@@ -83,6 +83,7 @@ public abstract class User {
     }
 
     public static void signup(String type, String name, String username, String password) {
+        loadUsers();
         // Error checking
         if(!type.equals("cashier") && !type.equals("customer") && !type.equals("owner") && !type.equals("seller")) {
             System.out.println("Incorrect Format. For more help on the signup command, type \"help signup\".");
