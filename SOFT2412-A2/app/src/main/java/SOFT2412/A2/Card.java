@@ -48,6 +48,27 @@ public class Card {
         catch (Exception e) {
             System.out.println(e);
         }
+
+    }
+
+    // Adds a card to saved card list and the json file
+    @SuppressWarnings("unchecked")
+    public static void updateCards(Card card) {
+        cards.add(card);
+        // Adds card to cardArray
+        JSONObject newCard = new JSONObject();
+        newCard.put("name", card.getName());
+        newCard.put("number", card.getNumber());
+        cardArray.add(newCard);
+        // Writes card to creditCards.json
+        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
+            file.write(Card.getCardArray().toJSONString());
+            file.flush();
+            file.close();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static boolean checkCardDetails(String name, String number) {
@@ -59,11 +80,30 @@ public class Card {
         return false;
     }
 
+
     public static Card getCard(String cardNumber) {
         for (Card c : cards) {
             if (c.number.equals(cardNumber))
                 return c;
         }
         return null;
+
+    public static void defaultCards() {
+        JSONParser parser = new JSONParser();
+        try {
+            Object object = parser.parse(new FileReader("./src/main/resources/stableCards.json"));
+            cardArray = (JSONArray) object;
+            for (Object o : cardArray) {
+                JSONObject entry = (JSONObject) o;
+                String name = (String) entry.get("name");
+                String number = (String) entry.get("number");
+                Card card = new Card(name, number);
+                cards.add(card);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+
     }
 }

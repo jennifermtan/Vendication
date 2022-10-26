@@ -5,18 +5,13 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
-import org.json.simple.*;
-import org.json.simple.parser.*;
 public class VendingMachine {
 
     private List<Customer> customers = new ArrayList<Customer>();
-
     // A hashmap of the form: foodType: quantity in the vending machine
     private HashMap<Food, Integer> inventory = new HashMap<Food, Integer>();
-
     // A hashmap that records all the cash in the form cashType: quantity
     private HashMap<String, Integer> cash = new LinkedHashMap<String, Integer>();
-
     // Current user
     private User currentUser;
 
@@ -28,6 +23,7 @@ public class VendingMachine {
         Card.loadCards();
         // load in the inventory from "inventory.txt"
         loadInventory();
+        Transaction.loadTransactions(this);
         // Set default user null
         this.currentUser = null;
     }
@@ -40,6 +36,7 @@ public class VendingMachine {
                 String[] line = scan1.nextLine().split(", ");
                 cash.put(line[0], Integer.valueOf(line[1]));
             }
+            scan1.close();
         }
         catch(FileNotFoundException fe){}
     }
@@ -52,6 +49,7 @@ public class VendingMachine {
                 String[] line = scan2.nextLine().split(", ");
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
             }
+            scan2.close();
         }
         catch(FileNotFoundException fe){}
     }
@@ -92,11 +90,13 @@ public class VendingMachine {
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
         updateItem(itemCode, quantity);
-        updateTransactions(itemCode, quantity);
+
+        updateTotalSold(itemCode, quantity);
         //Now that the transaction has been confirmed, update the cash.txt file to reflect the cash hashmap
         for (Map.Entry<String, Integer> cashItem: cash.entrySet()){
             updateLine("./src/main/resources/cash.txt", cashItem.getKey(), String.valueOf(cashItem.getValue()), 1);
         }
+
         return resultString;
     }
 
@@ -135,7 +135,7 @@ public class VendingMachine {
                     cash.put(cashType, cash.get(cashType) - 1);
                     change = change.subtract(value);
                     currChange++;
-                    System.out.println(change + " " + cash.get("$2"));
+
                     if (!changeCash.containsKey(cashType)){
                         changeCash.put(cashType, 1);
                     }
@@ -175,6 +175,19 @@ public class VendingMachine {
             }
         }
         return paid;
+    }
+
+    public String payByCard(int quantity, String itemCode) {
+        updateItem(itemCode, quantity);
+        updateTotalSold(itemCode, quantity);
+        Food item = searchByItemCode(itemCode);
+        return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
+    }
+
+    public void saveCardDetails(Card card) { // (!) include User object
+        // (!) add code to save card details to specific user
+        // User.addCard();
+        Card.updateCards(card);
     }
 
     public Food searchByItemCode(String itemCode){
@@ -224,24 +237,23 @@ public class VendingMachine {
     public void updateItem(String itemCode, int quantity) {
         Food foodItem = searchByItemCode(itemCode);
         inventory.put(foodItem, inventory.get(foodItem) - quantity);
-        updateLine("../src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);        
+        updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);
     }
 
     public void removeCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) - quantity);
-        updateLine("../src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
     }
 
     public void addCash(String cashAmount, int quantity) {
         cash.put(cashAmount, cash.get(cashAmount) + quantity);
-        updateLine("../src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);  
+        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
     }
-
 
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
     // If string is not in file, append to the file
-    public void updateLine(String fileName, String findString, String replacedString, int index) {
+    public static void updateLine(String fileName, String findString, String replacedString, int index) {
         try{
             File file = new File(fileName);
             Scanner scan = new Scanner(file);
@@ -265,17 +277,18 @@ public class VendingMachine {
         }
         catch(Exception e){
             e.printStackTrace();
-        } 
+        }
     }
 
     // Update transactions.txt with the format "name, itemCode, quantity sold"
-    public void updateTransactions(String itemCode, int quantity) {
+    public void updateTotalSold(String itemCode, int quantity) {
+
         boolean hasItem = false;
         try{
-            File file = new File("./src/main/resources/transactions.txt");
+            File file = new File("./src/main/resources/quantities.txt");
             Scanner scan = new Scanner(file);
             StringBuffer inputBuffer = new StringBuffer();
-        
+
             while (scan.hasNextLine()){
                 String line = scan.nextLine();
                 if (line.contains(itemCode)) {
@@ -301,7 +314,7 @@ public class VendingMachine {
         }
         catch(Exception e){
             e.printStackTrace();
-        } 
+        }
     }
 
     // Method used for testing to make cash.txt, inventory.txt, and their respective hashmaps reflect StableCash.txt and StableInventory.txt so that expected output is consistent
@@ -314,6 +327,7 @@ public class VendingMachine {
                 cash.put(line[0], Integer.valueOf(line[1]));
                 updateLine("./src/main/resources/cash.txt", line[0], line[1], 1);
             }
+            scan1.close();
 
             File invenFile = new File("./src/main/resources/StableInventory.txt");
             Scanner scan2 = new Scanner(invenFile);
@@ -322,6 +336,7 @@ public class VendingMachine {
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
                 updateLine("./src/main/resources/inventory.txt", line[0], line[4], 4);
             }
+            scan2.close();
         }
         catch(FileNotFoundException fe){System.out.println(fe);}
     }

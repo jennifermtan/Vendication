@@ -1,7 +1,6 @@
-
 package SOFT2412.A2;
+
 import java.util.*;
-import java.awt.event.*;
 import java.io.*;
 import java.util.concurrent.*;
 
@@ -10,7 +9,6 @@ public class App {
     private static Scanner scan = new Scanner(System.in);
     private static UserInterface ui = new UserInterface();
     private static String userIdentifier = "";
-
 
     // Method takes user input as a single line
     public static void takeInput(String command, List<String> arguments) {
@@ -115,12 +113,9 @@ public class App {
     // This is the 'entry point' to the program
     public static void menu(){
         ui.displaySnacks(scan, ui.vm.getInventory());
+        ui.anonymousPage();
         System.out.println("\nTo be Vendicated, please read our help guidelines:");
         ui.help(new ArrayList<String>());
     }
 
 }
-
-
-
-

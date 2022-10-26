@@ -1,12 +1,17 @@
 package SOFT2412.A2;
 import java.util.*;
 import java.io.*;
+<<<<<<< HEAD
 import org.json.simple.*;
 import org.json.simple.parser.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+=======
+// import org.json.simple.*;
+// import org.json.simple.parser.*;
+>>>>>>> 8d1ef2375b562a23b9c6792469806c5311faaa67
 
 public abstract class User {
     // Stores the current user and the type
@@ -25,29 +30,6 @@ public abstract class User {
         this.name = name;
         this.username = username;
         this.password = password;
-    }
-
-
-    // Adds a card to saved card list and the json file
-    @SuppressWarnings("unchecked")
-    public void addCard(Card card) {
-        System.out.println(Card.getCardArray());
-        Card.getCards().add(card);
-        this.card = card;
-        // Adds card to cardArray
-        JSONObject newCard = new JSONObject();
-        newCard.put("name", card.getName());
-        newCard.put("number", card.getNumber());
-        Card.getCardArray().add(newCard);
-        // Writes card to creditCards.json
-        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
-            file.write(Card.getCardArray().toJSONString());
-            file.flush();
-            file.close();
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     // Untested and unused
@@ -154,6 +136,26 @@ public abstract class User {
         System.out.println("Logged out successfully!");
     }
     
+    // Method for finding a user by their name
+    public static User getUserByName(String name){
+        for (User u: users){
+            if (u.getName().equals(name)){
+                return u;
+            }
+        }
+        return null;
+    }
+
+    // Allow admin users to edit the change and update cash.txt
+    public void editChange(String cashAmount, int quantity) {
+        VendingMachine.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
+    }
+
+    // (!) add card to individual user
+    public void addCard(Card card) {
+        this.card = card;
+    }
+
     public String getName(){return name;}
     public String getUsername(){return username;}
     public String getPassword(){return password;}
