@@ -1,4 +1,4 @@
-Sprite, se, 4
+Sprite, se, 5
 Sour Patch, sp, 5
 Bounty, by, 3
 M&M, mm, 2

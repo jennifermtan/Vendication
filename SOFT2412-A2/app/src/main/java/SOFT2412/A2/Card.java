@@ -87,6 +87,7 @@ public class Card {
                 return c;
         }
         return null;
+    }
 
     public static void defaultCards() {
         JSONParser parser = new JSONParser();
