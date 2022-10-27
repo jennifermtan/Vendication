@@ -5,6 +5,8 @@ package SOFT2412.A2;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 class AppTest {
@@ -39,14 +41,14 @@ class AppTest {
 
     // This also tests updateCash(), updateItem(), updateTransactions(), and calculateChange() because the method is called in payByCash()
     @Test public void testPayByCash() {
-        vm.defaultCashAndInventory();
+        vm.defaulting();
         vm.payByCash(1, "cc", "$5*1 $2*1");
         System.out.println();
         assertEquals(6, vm.getCash().get("$5"));
         assertEquals( 4, vm.getCash().get("$2"));
         assertEquals(4, vm.getCash().get("50c"));
         vm.updateTotalSold("cc", -1);
-        vm.defaultCashAndInventory();
+        vm.defaulting();
     }
 
     // Check if card details were saved in internal card list
@@ -71,7 +73,7 @@ class AppTest {
     @Test public void testVendingMachineValidation(){
 
         // Test that we don't let user buy something if they haven't paid enough for it
-        vm.defaultCashAndInventory();
+        vm.defaulting();
         try{
             vm.payByCash(1, "mm", "");
             vm.payByCash(1, "mm", "$1*1");
@@ -84,7 +86,7 @@ class AppTest {
             assertEquals(vm.getInventory().get(vm.searchByItemCode("mm")), 7);
         }
 
-        vm.defaultCashAndInventory();
+        vm.defaulting();
         // Test that we don't let user buy something if it's over our stock
         try{
             vm.payByCash(8, "cc", "$100*2");
@@ -96,7 +98,7 @@ class AppTest {
             // Check that we didn't lose stock
             assertEquals(7, vm.getInventory().get(vm.searchByItemCode("cc")));
         }
-        vm.defaultCashAndInventory();
+        vm.defaulting();
 
         // Test that we don't let user buy something if we don't have enough change by first removing all our change
         vm.updateLine("./src/main/resources/cash.txt", "5c", "0", 1);
@@ -113,7 +115,47 @@ class AppTest {
         // Check that we didn't lose stock
         assertEquals(vm.getInventory().get(vm.searchByItemCode("sp")), 7);
 
-        vm.defaultCashAndInventory();
+        vm.defaulting();
+    }
+
+    @Test void testTransactions(){
+        vm.defaulting();
+        Transaction.loadTransactions(vm);
+        assertEquals(5, Transaction.cancelTransactions.size());
+
+        LocalDateTime timeNow = LocalDateTime.now();
+        Transaction successfulAnon = new Transaction("", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, "imagination", "SuccessfulTest");
+        assertTrue(Transaction.anonTransactions.contains(successfulAnon));
+
+        Transaction cancelled = new Transaction("", timeNow, "buildingTest");
+        assertTrue(Transaction.cancelTransactions.contains(cancelled));
+
+        User.signup("customer", "Tester", "test", "password1234");
+        Transaction successfulUser = new Transaction("Tester", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, "imagination", "SuccessfulTest");
+        assertTrue(successfulUser.getPaymentMethod().equals("imagination"));
+
+        assertTrue(Math.abs(successfulUser.getPaid() - 20.0) < 0.00001);
+        assertTrue(Transaction.userTransactions.get(User.getUserByName("Tester")).contains(successfulUser));
+        Transaction repeatSuccess = new Transaction("Tester", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, "imagination", "SuccessfulTest");
+        assertTrue(Transaction.userTransactions.get(User.getUserByName("Tester")).contains(repeatSuccess));
+        vm.defaulting();
+    }
+
+    @Test void callingFood(){
+        Food f = new Food("new food", "just new", "jn", 100000);
+        assertTrue(f.getCategory().equals("just new"));
+        assertTrue(f.getName().equals("new food"));
+        f.setCategory("actually old");
+        assertTrue(f.getCategory().equals("actually old"));
+        f.setName("dust");
+        assertTrue(f.getName().equals("dust"));
+        f.setItemCode("du");
+        assertTrue(f.getItemCode().equals("du"));
+        f.setCost(2000);
+        assertTrue(Math.abs(f.getCost() - 2000) < 0.0001);
+
+
+
     }
 
 }
