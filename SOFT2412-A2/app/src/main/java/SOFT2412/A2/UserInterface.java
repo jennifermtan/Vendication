@@ -175,6 +175,7 @@ public class UserInterface {
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
+        System.out.println("----------------------------------------------------------");
         System.out.println("\n|  Snack Name  | Category | Item Code | Quantity |  Price |");
         System.out.println("----------------------------------------------------------");
         for (Map.Entry<Food, Integer> food : inventory.entrySet()) {
