@@ -175,14 +175,14 @@ public class UserInterface {
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
-        System.out.println("\n  Snack Name  | Category | Item Code | Quantity |  Price |");
+        System.out.println("\n|  Snack Name  | Category | Item Code | Quantity |  Price |");
         System.out.println("----------------------------------------------------------");
         for (Map.Entry<Food, Integer> food : inventory.entrySet()) {
             // Don't display the item if we don't have any left of it
             if (food.getValue() == 0){continue;}
             Food item = food.getKey();
 
-            System.out.println(printFoodDetail(14, item.getName()) + printFoodDetail(10, item.getCategory()) + printFoodDetail(11, item.getItemCode())
+            System.out.println("|" + printFoodDetail(14, item.getName()) + printFoodDetail(10, item.getCategory()) + printFoodDetail(11, item.getItemCode())
                     + printFoodDetail(10, String.valueOf(food.getValue()))  + printFoodDetail(8, "$" + item.getCost()));
         }
         System.out.println("----------------------------------------------------------");
@@ -243,6 +243,7 @@ public class UserInterface {
 
     // Displays by default, before user chooses to log in
     public void anonymousPage() {
+        if (Transaction.anonTransactions.size() < 5){return;}
         System.out.println("\nThese were the last 5 items bought by anonymous users:");
         List<Transaction> transactions = Transaction.anonTransactions;
         int index = 1;
