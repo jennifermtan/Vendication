@@ -49,7 +49,13 @@ public class Transaction {
 
     // Constructor for cancelled transactions
     public Transaction(String userName, LocalDateTime timeCancelled, String reasonCancelled){
-        this.userName = "anonymous";
+        if (userName.equals("")){
+            this.userName = "anonymous";
+        }
+        else{
+            this.userName = userName;
+        }
+
         this.time = timeCancelled;
         this.state = reasonCancelled;
 
