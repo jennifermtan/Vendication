@@ -17,6 +17,9 @@ public class App {
             case "buy":
                 ui.buy(arguments);
                 break;
+            case "menu":
+                menu();
+                break;
             case "sell":
                 break;
             case "signup":
@@ -48,10 +51,19 @@ public class App {
     }
 
     public static void main(String[] args) {
-        System.out.println("--------------------------------START OF PROGRAM--------------------------------");
+        System.out.println("        _______  _        ______  _________ _______  _______ __________________ _________       \n" +
+                "|\\     /|(  ____ \\( (    /|(  __  \\ \\__   __/(  ____ \\(  ___  )\\__   __/\\__   __/(  ___  )( (    /|\n" +
+                "| )   ( || (    \\/|  \\  ( || (  \\  )   ) (   | (    \\/| (   ) |   ) (      ) (   | (   ) ||  \\  ( |\n" +
+                "| |   | || (__    |   \\ | || |   ) |   | |   | |      | (___) |   | |      | |   | |   | ||   \\ | |\n" +
+                "( (   ) )|  __)   | (\\ \\) || |   | |   | |   | |      |  ___  |   | |      | |   | |   | || (\\ \\) |\n" +
+                " \\ \\_/ / | (      | | \\   || |   ) |   | |   | |      | (   ) |   | |      | |   | |   | || | \\   |\n" +
+                "  \\   /  | (____/\\| )  \\  || (__/  )___) (___| (____/\\| )   ( |   | |   ___) (___| (___) || )  \\  |\n" +
+                "   \\_/   (_______/|/    )_)(______/ \\_______/(_______/|/     \\|   )_(   \\_______/(_______)|/    )_)\n" +
+                "                                                                                                   ");
         String command;
         ArrayList<String> arguments;
         menu();
+        ui.help(new ArrayList<String>());
 
         while (true) {
             String input = null;
@@ -115,8 +127,7 @@ public class App {
     public static void menu(){
         ui.displaySnacks(scan, ui.vm.getInventory());
         ui.anonymousPage();
-        System.out.println("\nTo be Vendicated, please read our help guidelines:");
-        ui.help(new ArrayList<String>());
+
     }
 
 }

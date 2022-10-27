@@ -15,6 +15,7 @@ public class UserInterface {
         put("signup", "Allows any user to create an account for the machine.");
         put("login", "Allows any user to login to their account in the machine.");
         put("help", "Gives information on how to use the application.");
+        put("menu", "Shows you everything you can buy in the vending machine.");
         put("exit", "Exits the application.");
     }};
     // HashMap of all valid commands and their usage
@@ -31,6 +32,7 @@ public class UserInterface {
         "<name>     -> name of the user\n" +
         "<username> -> username of the user, has to be unique\n" +
         "<password> -> password of the user\n");
+        put("menu", "Shows you everything you can buy in the vending machine.");
         put("login", "Allows any user to login to their account in the machine.");
         put("help", "Gives information on how to use the application.");
         put("exit", "Exits the application.");
@@ -173,66 +175,33 @@ public class UserInterface {
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
-        List<Food> drinks = new ArrayList<>();
-        List<Food> chocolates = new ArrayList<>();
-        List<Food> chips = new ArrayList<>();
-        List<Food> candies = new ArrayList<>();
+        System.out.println("\n  Snack Name  | Category | Item Code | Quantity |  Price |");
+        System.out.println("----------------------------------------------------------");
+        for (Map.Entry<Food, Integer> food : inventory.entrySet()) {
+            // Don't display the item if we don't have any left of it
+            if (food.getValue() == 0){continue;}
+            Food item = food.getKey();
 
-        System.out.println("Snacks available:");
-        for (Food key : inventory.keySet()) {
-            if (inventory.get(key) != 0) {
-                // Drinks
-                if (key.getCategory().equals("Drinks")) {
-                    drinks.add(key);
-                } else if (key.getCategory().equals("Chocolates")) {
-                    chocolates.add(key);
-                } else if (key.getCategory().equals("Chips")) {
-                    chips.add(key);
-                } else if (key.getCategory().equals("Candies")) {
-                    candies.add(key);
-                }
-            }
+            System.out.println(printFoodDetail(14, item.getName()) + printFoodDetail(10, item.getCategory()) + printFoodDetail(11, item.getItemCode())
+                    + printFoodDetail(10, String.valueOf(food.getValue()))  + printFoodDetail(8, "$" + item.getCost()));
         }
+        System.out.println("----------------------------------------------------------");
 
-        System.out.print("Drinks: ");
-        for (int i = 0; i < drinks.size(); i++) {
-            if (i != drinks.size() - 1) {
-                System.out.printf("%s ($%.2f) (%s), ", drinks.get(i).getName(), drinks.get(i).getCost(), drinks.get(i).getItemCode());
-            } else {
-                System.out.printf("%s ($%.2f) (%s)", drinks.get(i).getName(), drinks.get(i).getCost(), drinks.get(i).getItemCode());
-            }
-        }
-        System.out.println();
+    }
 
-        System.out.print("Chocolates: ");
-        for (int i = 0; i < chocolates.size(); i++) {
-            if (i != chocolates.size() - 1) {
-                System.out.printf("%s ($%.2f) (%s), ", chocolates.get(i).getName(), chocolates.get(i).getCost(), chocolates.get(i).getItemCode());
-            } else {
-                System.out.printf("%s ($%.2f) (%s)", chocolates.get(i).getName(), chocolates.get(i).getCost(), chocolates.get(i).getItemCode());
+    public static String printFoodDetail(int maxLength, String toDisplay){
+        // Calculate how many spaces should be around the current output
+        int n = maxLength - toDisplay.length();
+        String repeated = "";
+        if (n > 0){
+            repeated = new String(new char[n/2]).replace("\0", " ");
+            if (n % 2 == 0) {
+                return repeated + toDisplay + repeated + "|";
             }
+            String odd = new String(new char[n/2 + 1]).replace("\0", " ");
+            return repeated + toDisplay + odd + "|";
         }
-        System.out.println();
-
-        System.out.print("Chips: ");
-        for (int i = 0; i < chips.size(); i++) {
-            if (i != chips.size() - 1) {
-                System.out.printf("%s ($%.2f) (%s), ", chips.get(i).getName(), chips.get(i).getCost(), chips.get(i).getItemCode());
-            } else {
-                System.out.printf("%s ($%.2f) (%s)", chips.get(i).getName(), chips.get(i).getCost(), chips.get(i).getItemCode());
-            }
-        }
-        System.out.println();
-
-        System.out.print("Candies: ");
-        for (int i = 0; i < candies.size(); i++) {
-            if (i != candies.size() - 1) {
-                System.out.printf("%s ($%.2f) (%s), ", candies.get(i).getName(), candies.get(i).getCost(), candies.get(i).getItemCode());
-            } else {
-                System.out.printf("%s ($%.2f) (%s)", candies.get(i).getName(), candies.get(i).getCost(), candies.get(i).getItemCode());
-            }
-        }
-        System.out.println();
+        return toDisplay + "|";
     }
 
     public boolean validateInput(List<String> input){
