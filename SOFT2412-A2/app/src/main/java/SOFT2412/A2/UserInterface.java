@@ -14,6 +14,7 @@ public class UserInterface {
         put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows any user to create an account for the machine.");
         put("login", "Allows any user to login to their account in the machine.");
+        put("logout", "Allows any user to log out of their account.");
         put("help", "Gives information on how to use the application.");
         put("exit", "Exits the application.");
     }};
@@ -32,6 +33,7 @@ public class UserInterface {
         "<username> -> username of the user, has to be unique\n" +
         "<password> -> password of the user\n");
         put("login", "Allows any user to login to their account in the machine.");
+        put("logout", "Allows any user to log out of their account.");
         put("help", "Gives information on how to use the application.");
         put("exit", "Exits the application.");
     }};
