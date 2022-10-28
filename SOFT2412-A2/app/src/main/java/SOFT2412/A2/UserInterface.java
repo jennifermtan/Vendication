@@ -16,6 +16,7 @@ public class UserInterface {
         put("login", "Allows any user to login to their account in the machine.");
         put("logout", "Allows any user to log out of their account.");
         put("help", "Gives information on how to use the application.");
+        put("menu", "Shows you everything you can buy in the vending machine.");
         put("exit", "Exits the application.");
     }};
     // HashMap of all valid commands and their usage
@@ -75,8 +76,9 @@ public class UserInterface {
 
                 String[] result = successful.split("\n");
                 String paid = result[1].split(": \\$")[1];
+                String change = result[3].split(": \\$")[1];
                 // Record the successful transaction:
-                Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), Double.parseDouble(paid), input.get(0), "Successful");
+                Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), Double.parseDouble(paid), Double.parseDouble(change), "cash", "Successful");
                 Transaction.writeTransaction(t);
 
             }
@@ -149,7 +151,7 @@ public class UserInterface {
             System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
 
             // Record the successful transaction:
-            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), input.get(0), "Successful");
+            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), 0.0, "Card", "Successful");
             Transaction.writeTransaction(t);
 
             // if (user is logged in), option to save credit card details (!)
@@ -183,72 +185,40 @@ public class UserInterface {
     }
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
-        List<Food> drinks = new ArrayList<>();
-        List<Food> chocolates = new ArrayList<>();
-        List<Food> chips = new ArrayList<>();
-        List<Food> candies = new ArrayList<>();
+        System.out.println("----------------------------------------------------------");
+        System.out.println("|  Snack Name  | Category | Item Code | Quantity |  Price |");
+        System.out.println("----------------------------------------------------------");
+        for (Map.Entry<Food, Integer> food : inventory.entrySet()) {
+            // Don't display the item if we don't have any left of it
+            if (food.getValue() == 0){continue;}
+            Food item = food.getKey();
 
-        System.out.println("Snacks available:");
-        for (Food key : inventory.keySet()) {
-            if (inventory.get(key) != 0) {
-                // Drinks
-                if (key.getCategory().equals("Drinks")) {
-                    drinks.add(key);
-                } else if (key.getCategory().equals("Chocolates")) {
-                    chocolates.add(key);
-                } else if (key.getCategory().equals("Chips")) {
-                    chips.add(key);
-                } else if (key.getCategory().equals("Candies")) {
-                    candies.add(key);
-                }
-            }
+            System.out.println("|" + foodDetailString(14, item.getName()) + foodDetailString(10, item.getCategory()) + foodDetailString(11, item.getItemCode())
+                    + foodDetailString(10, String.valueOf(food.getValue()))  + foodDetailString(8, "$" + item.getCost()));
         }
+        System.out.println("----------------------------------------------------------");
 
-        System.out.print("Drinks: ");
-        for (int i = 0; i < drinks.size(); i++) {
-            if (i != drinks.size() - 1) {
-                System.out.printf("%s ($%.2f) (%s), ", drinks.get(i).getName(), drinks.get(i).getCost(), drinks.get(i).getItemCode());
-            } else {
-                System.out.printf("%s ($%.2f) (%s)", drinks.get(i).getName(), drinks.get(i).getCost(), drinks.get(i).getItemCode());
-            }
-        }
-        System.out.println();
+    }
 
-        System.out.print("Chocolates: ");
-        for (int i = 0; i < chocolates.size(); i++) {
-            if (i != chocolates.size() - 1) {
-                System.out.printf("%s ($%.2f) (%s), ", chocolates.get(i).getName(), chocolates.get(i).getCost(), chocolates.get(i).getItemCode());
-            } else {
-                System.out.printf("%s ($%.2f) (%s)", chocolates.get(i).getName(), chocolates.get(i).getCost(), chocolates.get(i).getItemCode());
+    public static String foodDetailString(int maxLength, String toDisplay){
+        // Calculate how many spaces should be around the current output
+        int n = maxLength - toDisplay.length();
+        String repeated = "";
+        if (n > 0){
+            repeated = new String(new char[n/2]).replace("\0", " ");
+            if (n % 2 == 0) {
+                return repeated + toDisplay + repeated + "|";
             }
+            String odd = new String(new char[n/2 + 1]).replace("\0", " ");
+            return repeated + toDisplay + odd + "|";
         }
-        System.out.println();
-
-        System.out.print("Chips: ");
-        for (int i = 0; i < chips.size(); i++) {
-            if (i != chips.size() - 1) {
-                System.out.printf("%s ($%.2f) (%s), ", chips.get(i).getName(), chips.get(i).getCost(), chips.get(i).getItemCode());
-            } else {
-                System.out.printf("%s ($%.2f) (%s)", chips.get(i).getName(), chips.get(i).getCost(), chips.get(i).getItemCode());
-            }
-        }
-        System.out.println();
-
-        System.out.print("Candies: ");
-        for (int i = 0; i < candies.size(); i++) {
-            if (i != candies.size() - 1) {
-                System.out.printf("%s ($%.2f) (%s), ", candies.get(i).getName(), candies.get(i).getCost(), candies.get(i).getItemCode());
-            } else {
-                System.out.printf("%s ($%.2f) (%s)", candies.get(i).getName(), candies.get(i).getCost(), candies.get(i).getItemCode());
-            }
-        }
-        System.out.println();
+        return toDisplay + "|";
     }
 
     public boolean validateInput(List<String> input){
 
         // Stop asking for info if their info is correct
-        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("cash"))){
+        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("Cash"))){
             return false;
         }
         else {
@@ -284,6 +254,7 @@ public class UserInterface {
 
     // Displays by default, before user chooses to log in
     public void anonymousPage() {
+        if (Transaction.anonTransactions.size() < 5){return;}
         System.out.println("\nThese were the last 5 items bought by anonymous users:");
         List<Transaction> transactions = Transaction.anonTransactions;
         int index = 1;

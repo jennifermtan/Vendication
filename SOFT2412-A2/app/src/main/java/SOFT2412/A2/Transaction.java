@@ -10,6 +10,7 @@ public class Transaction {
     private Food itemSold;
     private LocalDateTime time;
     private double paid;
+    private double change;
     private String paymentMethod;
     private String userName; // this can be 'anonymous' or the user's name
     private String state; // this is whether the transaction was successful or cancelled (and for what reason)
@@ -17,7 +18,7 @@ public class Transaction {
     public static Map<User, List<Transaction>> userTransactions = new HashMap<>();
     public static List<Transaction> cancelTransactions = new ArrayList<>();
 
-    public Transaction(String userName, Food itemSold, LocalDateTime timeSold, double paid, String paymentMethod, String state){
+    public Transaction(String userName, Food itemSold, LocalDateTime timeSold, double paid, double change, String paymentMethod, String state){
         if (userName.equals("")){
             this.userName = "anonymous";
         }
@@ -29,6 +30,7 @@ public class Transaction {
         this.paid = paid;
         this.paymentMethod = paymentMethod;
         this.state = state;
+        this.change = change;
 
         if (this.userName.equals("anonymous")){
             anonTransactions.add(this);
@@ -49,7 +51,13 @@ public class Transaction {
 
     // Constructor for cancelled transactions
     public Transaction(String userName, LocalDateTime timeCancelled, String reasonCancelled){
-        this.userName = "anonymous";
+        if (userName.equals("")){
+            this.userName = "anonymous";
+        }
+        else{
+            this.userName = userName;
+        }
+
         this.time = timeCancelled;
         this.state = reasonCancelled;
 
@@ -65,13 +73,13 @@ public class Transaction {
             Scanner scan = new Scanner(f);
 
             while (scan.hasNextLine()) {
-                // Each line in transactions is of the form userName, itemSold, timeSold, paid, paymentMethod
+                // Each line in transactions is of the form userName, itemSold, timeSold, paid, change, paymentMethod, state
                 String[] line = scan.nextLine().split(", ");
 
                 // Make a new transaction which will then put itself into the correct transactions list (see constructors)
                 // Check whether you're dealing with a cancelled transaction or a normal transaction
-                if (line.length == 6) {
-                    new Transaction(line[0], vm.searchByItemCode(line[1]), LocalDateTime.parse(line[2]), Double.parseDouble(line[3].split("\\$")[1]), line[4], line[5]);
+                if (line.length == 7) {
+                    new Transaction(line[0], vm.searchByItemCode(line[1]), LocalDateTime.parse(line[2]), Double.parseDouble(line[3].split("\\$")[1]), Double.parseDouble(line[4].split("\\$")[1]), line[5], line[6]);
                 }
                 else if (line.length == 3){
                     new Transaction("", LocalDateTime.parse(line[1]), line[2]);
@@ -89,7 +97,7 @@ public class Transaction {
             String transactionLine = "";
             // If the given transaction was successful then write this line normally:
             if (newT.getItemSold() != null) {
-                transactionLine = newT.getUserName() + ", " + newT.getItemSold().getItemCode() + ", " + newT.getTimeSold() + ", $" + newT.getPaid() + ", " + newT.getPaymentMethod() + ", " + newT.getState() + "\n";
+                transactionLine = newT.getUserName() + ", " + newT.getItemSold().getItemCode() + ", " + newT.getTimeSold() + ", $" + newT.getPaid() + ", $" + newT.getChange() + ", " + newT.getPaymentMethod() + ", " + newT.getState() + "\n";
             }
             // Otherwise we're dealing with a cancelled transaction and we don't have as much info
             else{
@@ -107,4 +115,5 @@ public class Transaction {
     public String getPaymentMethod(){return paymentMethod;}
     public String getUserName(){return userName;}
     public String getState(){return state;}
+    public double getChange(){return change;}
 }
