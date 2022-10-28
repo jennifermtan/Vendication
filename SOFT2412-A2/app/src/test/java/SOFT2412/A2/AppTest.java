@@ -12,6 +12,7 @@ import java.util.*;
 class AppTest {
     UserInterface ui = new UserInterface();
     VendingMachine vm = new VendingMachine();
+    Seller john = new Seller("john", "john123", "pass");
 
     @Test
     public void testAddItem() {
@@ -154,34 +155,33 @@ class AppTest {
         assertTrue(Math.abs(f.getCost() - 2000) < 0.0001);
     }
 
-    // @Test void sellerTestEditItemName() {
-    //     Seller john = new Seller("john", "john123", "pass");
-    //     john.editItemName("Coca Cola", "Coke");
-    //     assertEquals(vm.searchByItemCode("cc").getName(), "Coke");
-    //     vm.defaulting();
-    // }
+    @Test void sellerTestEditItemName() {
+        john.editItemName("Coca Cola", "Coke");
+        assertEquals(ui.vm.searchByItemCode("cc").getName(), "Coke");
+        ui.vm.defaulting();
+    }
 
-    // @Test void sellerTestEditItemCode() {
-    //     Seller john = new Seller("john", "john123", "pass");
-    //     john.editItemCode("pi", "ps");
-    //     john.editItemCode("ps", "pi");
-    //     assertEquals(vm.searchByItemCode("pi").getName(), "Pepsi");
-    //     vm.defaulting();
-    // }
+    @Test void sellerTestEditItemCode() {
+        john.editItemCode("cc", "ccc");
+        assertEquals(ui.vm.searchByItemCode("ccc").getName(), "Coca Cola");
+        ui.vm.defaulting();
+    }
 
-    // @Test void sellerTestEditItemCategory() {
-    //     Seller john = new Seller("john", "john123", "pass");
-    //     john.editItemCategory("pi", "Candy");
-    //     assertEquals(vm.searchByItemCode("pi").getCategory(), "Drinks");
-    //     // john.editItemCategory("pi", "Drinks");
-    //     // vm.defaulting();
-    // }
+    @Test void sellerTestEditItemCategory() {
+        john.editItemCategory("pi", "Candy");
+        assertEquals(ui.vm.searchByItemCode("pi").getCategory(), "Candy");
+        ui.vm.defaulting();
+    }
 
-    // @Test void sellerTestEditItemPrice() {
-    //     Seller john = new Seller("john", "john123", "pass");
-    //     john.editItemCategory("pi", "Candy");
-    //     john.editItemCategory("pi", "Drinks");
-    //     assertEquals(vm.searchByItemCode("pi").getCategory(), "Drinks");
-    //     vm.defaulting();
-    // }
+    @Test void sellerTestEditItemPrice() {
+        john.editItemPrice("pi", 1.5);
+        assertEquals(ui.vm.searchByItemCode("pi").getCost(), 1.5);
+        ui.vm.defaulting();
+    }
+
+    @Test void sellerTestEditItemQuantity() {
+        john.editItemQuantity("pi", 15);
+        assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("pi")), 15);
+        ui.vm.defaulting();
+    }
 }

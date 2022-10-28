@@ -345,8 +345,10 @@ public class VendingMachine {
                 String[] line = scan2.nextLine().split(", ");
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
                 updateLine("./src/main/resources/inventory.txt", line[2], line[0], 0);
+                updateLine("./src/main/resources/inventory.txt", line[0], line[1], 1);
+                updateLine("./src/main/resources/inventory.txt", line[0], line[2], 2);
+                updateLine("./src/main/resources/inventory.txt", line[0], line[3], 3);
                 updateLine("./src/main/resources/inventory.txt", line[0], line[4], 4);
-                // updateLine("./src/main/resources/inventory.txt", line[0], line[1], 1);
             }
             scan2.close();
 
