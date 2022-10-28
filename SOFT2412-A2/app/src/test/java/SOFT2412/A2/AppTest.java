@@ -152,9 +152,36 @@ class AppTest {
         assertTrue(f.getItemCode().equals("du"));
         f.setCost(2000);
         assertTrue(Math.abs(f.getCost() - 2000) < 0.0001);
-
-
-
     }
 
+    // @Test void sellerTestEditItemName() {
+    //     Seller john = new Seller("john", "john123", "pass");
+    //     john.editItemName("Coca Cola", "Coke");
+    //     assertEquals(vm.searchByItemCode("cc").getName(), "Coke");
+    //     vm.defaulting();
+    // }
+
+    // @Test void sellerTestEditItemCode() {
+    //     Seller john = new Seller("john", "john123", "pass");
+    //     john.editItemCode("pi", "ps");
+    //     john.editItemCode("ps", "pi");
+    //     assertEquals(vm.searchByItemCode("pi").getName(), "Pepsi");
+    //     vm.defaulting();
+    // }
+
+    // @Test void sellerTestEditItemCategory() {
+    //     Seller john = new Seller("john", "john123", "pass");
+    //     john.editItemCategory("pi", "Candy");
+    //     assertEquals(vm.searchByItemCode("pi").getCategory(), "Drinks");
+    //     // john.editItemCategory("pi", "Drinks");
+    //     // vm.defaulting();
+    // }
+
+    // @Test void sellerTestEditItemPrice() {
+    //     Seller john = new Seller("john", "john123", "pass");
+    //     john.editItemCategory("pi", "Candy");
+    //     john.editItemCategory("pi", "Drinks");
+    //     assertEquals(vm.searchByItemCode("pi").getCategory(), "Drinks");
+    //     vm.defaulting();
+    // }
 }
