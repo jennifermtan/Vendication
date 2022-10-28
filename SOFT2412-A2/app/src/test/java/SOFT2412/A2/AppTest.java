@@ -121,22 +121,21 @@ class AppTest {
     @Test void testTransactions(){
         vm.defaulting();
         Transaction.loadTransactions(vm);
-        assertEquals(5, Transaction.cancelTransactions.size());
 
         LocalDateTime timeNow = LocalDateTime.now();
-        Transaction successfulAnon = new Transaction("", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, "imagination", "SuccessfulTest");
+        Transaction successfulAnon = new Transaction("", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, 3, "imagination", "SuccessfulTest");
         assertTrue(Transaction.anonTransactions.contains(successfulAnon));
 
         Transaction cancelled = new Transaction("", timeNow, "buildingTest");
         assertTrue(Transaction.cancelTransactions.contains(cancelled));
 
         User.signup("customer", "Tester", "test", "password1234");
-        Transaction successfulUser = new Transaction("Tester", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, "imagination", "SuccessfulTest");
+        Transaction successfulUser = new Transaction("Tester", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, 0, "imagination", "SuccessfulTest");
         assertTrue(successfulUser.getPaymentMethod().equals("imagination"));
 
         assertTrue(Math.abs(successfulUser.getPaid() - 20.0) < 0.00001);
         assertTrue(Transaction.userTransactions.get(User.getUserByName("Tester")).contains(successfulUser));
-        Transaction repeatSuccess = new Transaction("Tester", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, "imagination", "SuccessfulTest");
+        Transaction repeatSuccess = new Transaction("Tester", new Food("sample", "imaginary", "md", 0.0), timeNow, 20.0, 0, "imagination", "SuccessfulTest");
         assertTrue(Transaction.userTransactions.get(User.getUserByName("Tester")).contains(repeatSuccess));
         vm.defaulting();
     }

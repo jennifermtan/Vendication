@@ -27,7 +27,6 @@ public abstract class User {
         this.password = password;
     }
 
-    // Untested and unused
     public static void loadUsers() {
         String[] userInfo;
         User tempUser = null;

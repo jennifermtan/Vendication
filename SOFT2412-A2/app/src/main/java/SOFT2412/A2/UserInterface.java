@@ -67,8 +67,9 @@ public class UserInterface {
 
                 String[] result = successful.split("\n");
                 String paid = result[1].split(": \\$")[1];
+                String change = result[3].split(": \\$")[1];
                 // Record the successful transaction:
-                Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), Double.parseDouble(paid), input.get(0), "Successful");
+                Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), Double.parseDouble(paid), Double.parseDouble(change), "cash", "Successful");
                 Transaction.writeTransaction(t);
 
             }
@@ -141,7 +142,7 @@ public class UserInterface {
             System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
 
             // Record the successful transaction:
-            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), input.get(0), "Successful");
+            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), 0.0, "Card", "Successful");
             Transaction.writeTransaction(t);
 
             // if (user is logged in), option to save credit card details (!)
@@ -176,21 +177,21 @@ public class UserInterface {
 
     public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
         System.out.println("----------------------------------------------------------");
-        System.out.println("\n|  Snack Name  | Category | Item Code | Quantity |  Price |");
+        System.out.println("|  Snack Name  | Category | Item Code | Quantity |  Price |");
         System.out.println("----------------------------------------------------------");
         for (Map.Entry<Food, Integer> food : inventory.entrySet()) {
             // Don't display the item if we don't have any left of it
             if (food.getValue() == 0){continue;}
             Food item = food.getKey();
 
-            System.out.println("|" + printFoodDetail(14, item.getName()) + printFoodDetail(10, item.getCategory()) + printFoodDetail(11, item.getItemCode())
-                    + printFoodDetail(10, String.valueOf(food.getValue()))  + printFoodDetail(8, "$" + item.getCost()));
+            System.out.println("|" + foodDetailString(14, item.getName()) + foodDetailString(10, item.getCategory()) + foodDetailString(11, item.getItemCode())
+                    + foodDetailString(10, String.valueOf(food.getValue()))  + foodDetailString(8, "$" + item.getCost()));
         }
         System.out.println("----------------------------------------------------------");
 
     }
 
-    public static String printFoodDetail(int maxLength, String toDisplay){
+    public static String foodDetailString(int maxLength, String toDisplay){
         // Calculate how many spaces should be around the current output
         int n = maxLength - toDisplay.length();
         String repeated = "";
@@ -208,7 +209,7 @@ public class UserInterface {
     public boolean validateInput(List<String> input){
 
         // Stop asking for info if their info is correct
-        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("cash"))){
+        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("Cash"))){
             return false;
         }
         else {

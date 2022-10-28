@@ -341,7 +341,7 @@ public class VendingMachine {
 
             File transactionFile = new File("./src/main/resources/transactions.txt");
             FileOutputStream o = new FileOutputStream(transactionFile, false);
-            o.write("anonymous, se, 2022-10-27T21:59:18.128234400, $2.5, card, Successful\nanonymous, 2022-10-27T21:59:26.125755100, Cancelled due to incorrect user input\n".getBytes());
+            o.write("anonymous, se, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful\nanonymous, 2022-10-27T21:59:26.125755100, Cancelled due to incorrect user input\n".getBytes());
             o.close();
 
         }
