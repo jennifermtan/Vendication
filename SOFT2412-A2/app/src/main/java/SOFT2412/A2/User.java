@@ -19,7 +19,7 @@ public abstract class User {
     protected String name;
     protected String username;
     protected String password;
-    protected Card card;
+    protected static Card card;
 
     public User(String name, String username, String password) {
         this.name = name;
@@ -71,6 +71,9 @@ public abstract class User {
                 if(u.password.equals(password)) {
                     UserInterface.currentUser = u;
                     System.out.println("Login Successful!");
+                    if (card == null) {
+                        System.out.println("You do not have any card details saved to this account.");
+                    }
                     return;
                 }
                 else {
@@ -152,9 +155,32 @@ public abstract class User {
     }
 
     // (!) add card to individual user
-    public void addCard(Card card) {
-        this.card = card;
-        
+    public static void addCard(Card userCard) {
+        card = userCard;
+        // try {
+        //     File file = new File("./src/main/resources/users.txt");
+        //     Scanner scan = new Scanner(file);
+        //     StringBuffer inputBuffer = new StringBuffer();
+        //     while (scan.hasNextLine()) {
+        //         String line = scan.nextLine();
+        //         String[] parts =  line.split(", ");
+        //         for (int i = 0; i < parts.length; i++) {
+        //             if (parts[i].equals(UserInterface.currentUser)) {
+        //                 line += (", " + card.getNumber());
+        //             }
+        //         }
+        //         inputBuffer.append(line);
+        //         inputBuffer.append("\n");
+        //     }
+        //     scan.close();
+        //     String inputStr = inputBuffer.toString();
+        //     FileOutputStream output = new FileOutputStream("./src/main/resources/users.txt");
+        //     output.write(inputStr.getBytes());
+        //     output.close();
+        // }
+        // catch(Exception e) {
+        //     e.printStackTrace();
+        // }
     }
 
     public String getName(){return name;}

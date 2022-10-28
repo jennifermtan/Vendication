@@ -25,6 +25,7 @@ public class UserInterface {
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
         "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
+        // add in help for paying by card
         put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows a vending machine owner to sell a product.\n" +
         "Usage: signup <type> <name> <username> <password>\n" +
@@ -104,73 +105,61 @@ public class UserInterface {
         }
 
         if (input.get(0).equals("card")) {
+            String itemQuantity = input.get(1);
+            String itemCode = input.get(2);
+            // Checking if card details match for anonymous users
+            if (currentUser == null) {
+                String cardName = input.get(3);
+                String cardNumber = input.get(4);
+                if (!Card.checkCardDetails(cardName, cardNumber)) {
+                    System.out.println("\nWe were unable to match your card, please try again.");
+                    Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to unmatched card details");
+                    Transaction.writeTransaction(t);
+                    return;
+                }
+            }
             // Check that we have enough stock for the purchase
-            if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
+            if (!vm.checkStock(vm.searchByItemCode(itemCode), Integer.parseInt(itemQuantity))) {
                 // Record the cancelled transaction
                 Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient stock");
                 System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
                 return;
             }
-            String[] details;
-            System.out.println("\nPlease input your card details in the form:\nName Number\n\nFor example: Max 40420");
-            String name;
-            String number;
-            // check details against saved cards, prompts user again if fails
-            while (true) {
-                String cardInput = null;
-                try{
-                    cardInput = App.readLine();
-                }
-                catch(InterruptedException ie){}
-                // Restart the app if this doesn't get an answer in 2 mins
-                if (cardInput == null){
-                    App.menu();
-                    return;
-                }
-                details = cardInput.split(" ");
-                // If they haven't given a viable input then keep asking
-                if (details.length != 2 || !Card.checkCardDetails(details[0], details[1])){
-                    System.out.println("\nWe were unable to match your card, please try again.");
-                    continue;
-                }
-                name = details[0];
-                number = details[1];
-                break;
-            }
-
-            System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
-
+            System.out.println(vm.payByCard(Integer.parseInt(itemQuantity), itemCode));
             // Record the successful transaction:
-            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), 0.0, "Card", "Successful");
+            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(itemCode), LocalDateTime.now(), vm.calculateToPay(itemCode, Integer.parseInt(itemQuantity)), 0.0, "Card", "Successful");
             Transaction.writeTransaction(t);
-
-            // if (user is logged in), option to save credit card details (!)
-            System.out.println("Would you like to save your card details to your account? Input 'yes' or 'no' to continue.");
-            while (true) {
-                String saveCard = null;
-                try {
-                    saveCard = App.readLine();
-                }
-                catch(InterruptedException ie) { }
-                if (saveCard == null) {
-                    App.menu();
-                    return;
-                }
-                if (saveCard.equals("yes")) {
-                    vm.saveCardDetails(new Card(name, number)); // (!) include User object to save to specific one
-                    System.out.println("Card details were successfully saved to your account!");
-                    break;
-                }
-                else if (saveCard.equals("no")) {
-                    System.out.println("Card details were not saved to your account.");
-                    break;
-                }
-                else {
-                    System.out.println("\nWe were unable to process your request, please try again.");
+            if ((currentUser != null) && (currentUser.getCard() == null)) {
+                String cardName = input.get(3);
+                String cardNumber = input.get(4);
+                System.out.println("Would you like to save these card details to your account? Input 'yes' or 'no' to continue.");
+                while (true) {
+                    String saveCard = null;
+                    try {
+                        saveCard = App.readLine();
+                    }
+                    catch(InterruptedException ie) { }
+                    if (saveCard == null) {
+                        App.menu();
+                        return;
+                    }
+                    if (saveCard.equals("yes")) {
+                        Card userCard = new Card(cardName, cardNumber);
+                        vm.saveCardDetails(userCard);
+                        User.addCard(userCard);
+                        System.out.println("Card details were successfully saved to your account! You no longer have to input card details for your purchases!");
+                        break;
+                    }
+                    else if (saveCard.equals("no")) {
+                        System.out.println("Card details were not saved to your account.");
+                        break;
+                    }
+                    else {
+                        System.out.println("\nWe were unable to process your request, please try again.");
+                    }
                 }
             }
         }
-
         System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'help buy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }
 
@@ -208,7 +197,7 @@ public class UserInterface {
     public boolean validateInput(List<String> input){
 
         // Stop asking for info if their info is correct
-        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("Cash"))){
+        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("cash"))){
             return false;
         }
         else {
@@ -232,6 +221,12 @@ public class UserInterface {
                         int numGiven = Integer.parseInt(cashGiven[1]);
                     }
 
+                }
+                // Check if a user that has no saved card details (anonymous or first time signup) has inputted card details
+                if ((input.get(0).equals("card")) && (currentUser.getCard() == null)) {
+                    if (input.size() < 5) {
+                        return false;
+                    }
                 }
 
             }catch(NumberFormatException F) { return false; }
