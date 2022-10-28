@@ -1,7 +1,7 @@
-Sprite, se, 7
+Sprite, se, 8
 Sour Patch, sp, 5
 Bounty, by, 3
-M&M, mm, 2
+M&M, mm, 4
 Kettle, ke, 3
 Coca Cola, cc, 0
 Juice, js, 1
