@@ -5,7 +5,7 @@ import java.util.*;
 import java.lang.NumberFormatException;
 public class UserInterface {
     private Scanner scan = new Scanner(System.in);
-    public VendingMachine vm = new VendingMachine();
+    public static VendingMachine vm = new VendingMachine();
     // Current User (null if guest user)
     public static User currentUser = null;
     // HashMap of all valid commands and their brief description
