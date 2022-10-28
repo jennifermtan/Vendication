@@ -26,9 +26,9 @@ public class UserInterface {
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
         "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
         put("sell", "Allows a vending machine owner to sell a product.");
-        put("signup", "Allows a vending machine owner to sell a product.\n" + 
+        put("signup", "Allows a vending machine owner to sell a product.\n" +
         "Usage: signup <type> <name> <username> <password>\n" +
-        "<type>     -> type of user (cashier, customer, owner, seller)\n" + 
+        "<type>     -> type of user (cashier, customer, owner, seller)\n" +
         "<name>     -> name of the user\n" +
         "<username> -> username of the user, has to be unique\n" +
         "<password> -> password of the user\n");
@@ -37,7 +37,6 @@ public class UserInterface {
         put("help", "Gives information on how to use the application.");
         put("exit", "Exits the application.");
     }};
-
 
     public void buy(List<String> input){
 
@@ -245,26 +244,48 @@ public class UserInterface {
 
     // Displays by default, before user chooses to log in
     public void anonymousPage() {
-        if (Transaction.anonTransactions.size() < 5){return;}
-        System.out.println("\nThese were the last 5 items bought by anonymous users:");
         List<Transaction> transactions = Transaction.anonTransactions;
+        int size = transactions.size();
         int index = 1;
-        for (int initial = transactions.size() - 1; initial >= transactions.size() - 5; initial -= 1) {
-            System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
-            index++;
+        System.out.println("\nThese were the last few items bought by anonymous customers:");
+        if (size < 5) {
+            for (int initial = size - 1; initial >= 0; initial -= 1) {
+                System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+                index++;
+            }
         }
+        else if (size >= 5) {
+            for (int initial = size - 1; initial >= size - 5; initial -= 1) {
+                System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+                index++;
+            }
+        }
+        System.out.println();
     }
 
     // (!) Displays after user logs in
-    // public void loggedInPage(User user) {
-    //     System.out.println("\nThese were the last 5 items bought by you:");
+    // public void loggedInPage() {
+    //     System.out.println("\nThese were the last few items bought by you:");
     //     Map<User, List<Transaction>> users = Transaction.userTransactions;
-    //     List<Transaction> transactions = users.get(user);
-    //     int index = 1;
-    //     for (int initial = transactions.size() - 1; initial >= transactions.size() - 5; initial -= 1) {
-    //         System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
-    //         index++;
+    //     List<Transaction> transactions = users.get(currentUser);
+    //     for (User u : users.keySet()) {
+    //         System.out.println(u.getName());
     //     }
+    //     int size = transactions.size();
+    //     int index = 1;
+    //     if (size < 5) {
+    //         for (int initial = size - 1; initial >= 0; initial -= 1) {
+    //             System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+    //             index++;
+    //         }
+    //     }
+    //     else if (size >= 5) {
+    //         for (int initial = size - 1; initial >= size - 5; initial -= 1) {
+    //             System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+    //             index++;
+    //         }
+    //     }
+    //     System.out.println();
     // }
 
     // Help command
