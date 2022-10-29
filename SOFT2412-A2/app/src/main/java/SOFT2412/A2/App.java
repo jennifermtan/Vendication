@@ -20,7 +20,22 @@ public class App {
             case "menu":
                 menu();
                 break;
-            case "sell":
+            case "summary":
+                if(arguments.size() == 1) {
+                    if (arguments.get(0).equals("cancelled")) {
+                        if(UserInterface.currentUser instanceof Owner)
+                            UserInterface.currentUser.getCancelledSummary();
+                        else
+                            System.out.println("Sorry, you do not have permission to perform this action.");
+                    }
+                    else if (arguments.get(0).equals("successful"))
+                        if((UserInterface.currentUser instanceof Customer) || (UserInterface.currentUser == null))
+                            System.out.println("Sorry, you do not have permission to perform this action.");
+                        else
+                            UserInterface.currentUser.getTransactionSummary();
+                }
+                else
+                    System.out.println("Incorrect Format. For more help on the summary command, type \"help summary\".");
                 break;
             case "signup":
                 if(arguments.size() == 4)

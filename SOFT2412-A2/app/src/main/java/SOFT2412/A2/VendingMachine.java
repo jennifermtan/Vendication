@@ -26,7 +26,7 @@ public class VendingMachine {
         Transaction.loadTransactions(this);
         // Set default user null
         this.currentUser = null;
-        // User.loadUsers();
+        User.loadUsers();
     }
 
     public void loadCash(){

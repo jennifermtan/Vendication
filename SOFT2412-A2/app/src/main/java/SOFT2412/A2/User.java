@@ -7,6 +7,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public abstract class User {
     // Stores the current user and the type
@@ -153,6 +155,45 @@ public abstract class User {
     // (!) add card to individual user
     public void addCard(Card card) {
         this.card = card;
+    }
+
+    // Was in cashier
+    public String getTransactionSummary(){
+        String allTransactions="";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        allTransactions += "--------------------------------------------------------------------\n";
+        allTransactions += "|  Snack Name  |  Paid  | Change | Payment Method |       Time      \n";
+        allTransactions += "--------------------------------------------------------------------\n";
+        for (List<Transaction> tList: Transaction.userTransactions.values()){
+            for (Transaction t: tList) {
+
+                allTransactions += ("|" + UserInterface.foodDetailString(14, t.getItemSold().getName()) +  UserInterface.foodDetailString(8, "$" + String.valueOf(t.getPaid())) + UserInterface.foodDetailString(8, "$" + String.valueOf(t.getChange()))
+                        + UserInterface.foodDetailString(16, t.getPaymentMethod()) + UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) + "\n");
+            }
+        }
+
+        for (Transaction t: Transaction.anonTransactions){
+            allTransactions += ("|" + UserInterface.foodDetailString(14, t.getItemSold().getName()) +  UserInterface.foodDetailString(8, "$" + String.valueOf(t.getPaid())) + UserInterface.foodDetailString(8, "$" + String.valueOf(t.getChange()))
+                    + UserInterface.foodDetailString(16, t.getPaymentMethod()) + UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) + "\n");
+        }
+        allTransactions += "--------------------------------------------------------------------";
+        return allTransactions;
+    }
+
+    // Was in owner
+    public String getCancelledSummary(){
+        String cancelTransactions="";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        cancelTransactions += "------------------------------------------------------------------------------\n";
+        cancelTransactions += "|    User    |      Time      |                    Reason                    |\n";
+        cancelTransactions += "------------------------------------------------------------------------------\n";
+
+        for (Transaction t: Transaction.cancelTransactions){
+            cancelTransactions += ("|" + UserInterface.foodDetailString(12, t.getUserName()) +  UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) +
+                    UserInterface.foodDetailString(46,  t.getState())  + "\n");
+        }
+        cancelTransactions += "------------------------------------------------------------------------------\n";
+        return cancelTransactions;
     }
 
     public String getName(){return name;}
