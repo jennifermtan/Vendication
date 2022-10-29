@@ -36,6 +36,7 @@ public abstract class User {
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");
+                System.out.println(userInfo);
                 // if(!userLogins.containsKey(userInfo[1]))
                 //     userLogins.put(userInfo[1], userInfo[2]);
                 // else
@@ -74,6 +75,10 @@ public abstract class User {
                     if (card == null) {
                         System.out.println("You do not have any card details saved to this account.");
                     }
+                    else {
+                        System.out.printf("You have a card (Name: %s, Number; %s) saved to this account.\n",
+                        UserInterface.currentUser.getCard().getName(), UserInterface.currentUser.getCard().getNumber());
+                    }
                     return;
                 }
                 else {
@@ -107,8 +112,7 @@ public abstract class User {
             fw = new FileWriter("./src/main/resources/users.txt", true);
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw);
-
-            pw.printf("%s, %s, %s, %s, \n", type, name, username, password);
+            pw.printf("%s, %s, %s, %s\n", type, name, username, password);
             pw.flush();
         } catch (IOException e) { System.out.println("signup: Error while writing to file."); }
         finally {
@@ -157,30 +161,28 @@ public abstract class User {
     // (!) add card to individual user
     public static void addCard(Card userCard) {
         card = userCard;
-        // try {
-        //     File file = new File("./src/main/resources/users.txt");
-        //     Scanner scan = new Scanner(file);
-        //     StringBuffer inputBuffer = new StringBuffer();
-        //     while (scan.hasNextLine()) {
-        //         String line = scan.nextLine();
-        //         String[] parts =  line.split(", ");
-        //         for (int i = 0; i < parts.length; i++) {
-        //             if (parts[i].equals(UserInterface.currentUser)) {
-        //                 line += (", " + card.getNumber());
-        //             }
-        //         }
-        //         inputBuffer.append(line);
-        //         inputBuffer.append("\n");
-        //     }
-        //     scan.close();
-        //     String inputStr = inputBuffer.toString();
-        //     FileOutputStream output = new FileOutputStream("./src/main/resources/users.txt");
-        //     output.write(inputStr.getBytes());
-        //     output.close();
-        // }
-        // catch(Exception e) {
-        //     e.printStackTrace();
-        // }
+        try {
+            File file = new File("./src/main/resources/users.txt");
+            Scanner scan = new Scanner(file);
+            StringBuffer inputBuffer = new StringBuffer();
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                String[] parts =  line.split(", ");
+                if (parts[2].equals(UserInterface.currentUser.getUsername())) {
+                    line += (", " + card.getName() + ", " + card.getNumber());
+                }
+                inputBuffer.append(line);
+                inputBuffer.append("\n");
+            }
+            scan.close();
+            String inputStr = inputBuffer.toString();
+            FileOutputStream output = new FileOutputStream("./src/main/resources/users.txt");
+            output.write(inputStr.getBytes());
+            output.close();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName(){return name;}

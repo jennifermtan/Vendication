@@ -3,6 +3,7 @@ package SOFT2412.A2;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.lang.NumberFormatException;
+
 public class UserInterface {
     private Scanner scan = new Scanner(System.in);
     public VendingMachine vm = new VendingMachine();
@@ -145,7 +146,7 @@ public class UserInterface {
                     }
                     if (saveCard.equals("yes")) {
                         Card userCard = new Card(cardName, cardNumber);
-                        vm.saveCardDetails(userCard);
+                        Card.updateCards(userCard);
                         User.addCard(userCard);
                         System.out.println("Card details were successfully saved to your account! You no longer have to input card details for your purchases!");
                         break;

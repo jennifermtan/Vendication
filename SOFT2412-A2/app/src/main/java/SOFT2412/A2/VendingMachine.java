@@ -26,7 +26,6 @@ public class VendingMachine {
         Transaction.loadTransactions(this);
         // Set default user null
         this.currentUser = null;
-        // User.loadUsers();
     }
 
     public void loadCash(){
@@ -183,12 +182,6 @@ public class VendingMachine {
         updateTotalSold(itemCode, quantity);
         Food item = searchByItemCode(itemCode);
         return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
-    }
-
-    public void saveCardDetails(Card card) { // (!) include User object
-        // (!) add code to save card details to specific user
-        // User.addCard();
-        Card.updateCards(card);
     }
 
     public Food searchByItemCode(String itemCode){
