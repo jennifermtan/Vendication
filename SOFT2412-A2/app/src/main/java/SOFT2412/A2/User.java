@@ -90,6 +90,23 @@ public abstract class User {
             System.out.println("Incorrect Format. For more help on the signup command, type \"help signup\".");
             return;
         }
+        // Restricting signup
+        if(type.equals("owner")) {
+            if(UserInterface.currentUser instanceof Owner)
+                System.out.println("Sorry, there can only be one owner account.");
+            else
+                System.out.println("Sorry, you do not have permission to perform this action.");
+            return;
+        }
+        else if(type.equals("seller") && !(UserInterface.currentUser instanceof Seller) && !(UserInterface.currentUser instanceof Owner)) {
+            System.out.println("Sorry, you do not have permission to perform this action.");
+            return;
+        }
+        else if(type.equals("cashier") && !(UserInterface.currentUser instanceof Cashier) && !(UserInterface.currentUser instanceof Owner)) {
+            System.out.println("Sorry, you do not have permission to perform this action.");
+            return;
+        }
+
         // Checking if username already exists in the system
         for(User u: users) {
             if (u.username.equals(username)) {

@@ -24,7 +24,7 @@ public class App {
                 if(arguments.size() == 1) {
                     if (arguments.get(0).equals("cancelled")) {
                         if(UserInterface.currentUser instanceof Owner)
-                            UserInterface.currentUser.getCancelledSummary();
+                            System.out.println(UserInterface.currentUser.getCancelledSummary());
                         else
                             System.out.println("Sorry, you do not have permission to perform this action.");
                     }
