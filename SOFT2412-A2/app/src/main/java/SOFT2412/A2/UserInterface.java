@@ -7,7 +7,7 @@ public class UserInterface {
     private Scanner scan = new Scanner(System.in);
     public static VendingMachine vm = new VendingMachine();
     // Current User (null if guest user)
-    public static User currentUser = null;
+    public static User currentUser = new Customer("", "", "");
     // HashMap of all valid commands and their brief description
     public static final Map<String, String> allCommandBriefs = new HashMap<String, String>() {{
         put("buy", "Allows any user to buy a product from the vending machine.");
@@ -33,7 +33,10 @@ public class UserInterface {
         "<username> -> username of the user, has to be unique\n" +
         "<password> -> password of the user\n");
         put("menu", "Shows you everything you can buy in the vending machine.");
-        put("login", "Allows any user to login to their account in the machine.");
+        put("login", "Allows any user to login to their account in the machine.\n"
+        + "Usage: login <username> <password>\n +" +
+                "<username>   -> the username you used when you signed up for your account" +
+                "<password>   -> the password for your account");
         put("help", "Gives information on how to use the application.");
         put("exit", "Exits the application.");
     }};
@@ -43,7 +46,7 @@ public class UserInterface {
 
         if (!validateInput(input)) {
             // Record the cancelled transaction
-            Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to incorrect user input");
+            Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to incorrect user input");
             Transaction.writeTransaction(t);
             System.out.println("\nWe apologise. Please check that was the correct format. Type 'help buy' for help or 'exit' to quit the program.");
             return;
@@ -69,7 +72,7 @@ public class UserInterface {
                 String paid = result[1].split(": \\$")[1];
                 String change = result[3].split(": \\$")[1];
                 // Record the successful transaction:
-                Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), Double.parseDouble(paid), Double.parseDouble(change), "cash", "Successful");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), vm.searchByItemCode(input.get(2)), LocalDateTime.now(), Double.parseDouble(paid), Double.parseDouble(change), "cash", "Successful");
                 Transaction.writeTransaction(t);
 
             }
@@ -80,7 +83,7 @@ public class UserInterface {
                 System.out.print(" You are to pay $" + String.format("%.2f",toPay) + ".");
 
                 // Record the cancelled transaction
-                Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient payment");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient payment");
                 Transaction.writeTransaction(t);
 
                 System.out.println("\nReinput your payment type, item code, quantity, and cash input in that order to continue payment. Otherwise input 'exit' to cancel your transaction.");
@@ -90,7 +93,7 @@ public class UserInterface {
             catch(IllegalStateException is){
                 System.out.println("\nSincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction.");
                 // Record the cancelled transaction
-                Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient change in vending machine");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient change in vending machine");
                 Transaction.writeTransaction(t);
                 return;
             }
@@ -98,7 +101,7 @@ public class UserInterface {
             catch(NoSuchElementException ne){
                 System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
                 // Record the cancelled transaction
-                Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient stock");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient stock");
                 Transaction.writeTransaction(t);
                 return;
             }
@@ -108,7 +111,7 @@ public class UserInterface {
             // Check that we have enough stock for the purchase
             if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
                 // Record the cancelled transaction
-                Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient stock");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient stock");
                 System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
                 return;
             }
@@ -142,7 +145,7 @@ public class UserInterface {
             System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
 
             // Record the successful transaction:
-            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), 0.0, "Card", "Successful");
+            Transaction t = new Transaction(UserInterface.currentUser.getName(), vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), 0.0, "Card", "Successful");
             Transaction.writeTransaction(t);
 
             // if (user is logged in), option to save credit card details (!)
@@ -245,12 +248,17 @@ public class UserInterface {
 
     // Displays by default, before user chooses to log in
     public void anonymousPage() {
-        if (Transaction.anonTransactions.size() < 5){return;}
-        System.out.println("\nThese were the last 5 items bought by anonymous users:");
         List<Transaction> transactions = Transaction.anonTransactions;
+        if (transactions.size() == 0){return;}
+
+        // Print a maximum of 5 items
+        System.out.println("\nThese were the last few items bought by anonymous users:");
         int index = 1;
-        for (int initial = transactions.size() - 1; initial >= transactions.size() - 5; initial -= 1) {
-            System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+        for (int i = transactions.size() - 1; i > 0; i++) {
+            if (index > 5){
+                break;
+            }
+            System.out.println(index + ") " + transactions.get(i).getItemSold().getName());
             index++;
         }
     }

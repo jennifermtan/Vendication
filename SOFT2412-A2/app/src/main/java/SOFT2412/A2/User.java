@@ -9,8 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public abstract class User {
-    // Stores the current user and the type
-    public static String currentUser = "";
+
     // HashMap to store the user's name, username, password and card number (optional)
     private static Map<String, String> userLogins = new HashMap<String, String>();
     // List to store all the users

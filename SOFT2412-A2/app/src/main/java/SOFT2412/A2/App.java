@@ -103,7 +103,7 @@ public class App {
             userIdentifier = "Seller";
         else
             userIdentifier = "";
-        if(UserInterface.currentUser != null)
+        if(!UserInterface.currentUser.getName().equals(""))
             System.out.printf("%s> ", userIdentifier + " " + UserInterface.currentUser.getName() + " ");
         else
             System.out.printf("Customer > ");
