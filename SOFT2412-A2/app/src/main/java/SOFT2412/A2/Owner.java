@@ -22,4 +22,9 @@ public class Owner extends User{
     //     cancelTransactions += "------------------------------------------------------------------------------\n";
     //     return cancelTransactions;
     // }
+
+    // Edit the change and update cash.txt
+    public void editChange(String cashAmount, int quantity) {
+        UserInterface.vm.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 0);
+    }
 }

@@ -254,8 +254,9 @@ public class VendingMachine {
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
     // If string is not in file, append to the file
-    public static void updateLine(String fileName, String findString, String replacedString, int index) {
+    public void updateLine(String fileName, String findString, String replacedString, int index) {
         try{
+            boolean found = false;
             File file = new File(fileName);
             Scanner scan = new Scanner(file);
             StringBuffer inputBuffer = new StringBuffer();
@@ -264,6 +265,7 @@ public class VendingMachine {
                 String[] parts =  line.split(", ");
                 for (int i = 0; i < parts.length; i++) {
                     if (parts[i].equals(findString)) {
+                        found = true;
                         parts[index] = replacedString;
                     }
                 }
@@ -275,9 +277,16 @@ public class VendingMachine {
             FileOutputStream output = new FileOutputStream(fileName);
             output.write(inputStr.getBytes());
             output.close();
-        }
-        catch(Exception e){
-            e.printStackTrace();
+
+            // Error message if string is not in the file
+            if (! found) {
+                System.out.printf("Error: %s is not found in the records.", findString);
+                System.out.println();
+            }
+        } catch(FileNotFoundException fe){
+            fe.printStackTrace();
+        } catch (IOException io) {
+            io.printStackTrace();
         }
     }
 
@@ -335,6 +344,10 @@ public class VendingMachine {
             while (scan2.hasNextLine()) {
                 String[] line = scan2.nextLine().split(", ");
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
+                updateLine("./src/main/resources/inventory.txt", line[2], line[0], 0);
+                updateLine("./src/main/resources/inventory.txt", line[0], line[1], 1);
+                updateLine("./src/main/resources/inventory.txt", line[0], line[2], 2);
+                updateLine("./src/main/resources/inventory.txt", line[0], line[3], 3);
                 updateLine("./src/main/resources/inventory.txt", line[0], line[4], 4);
             }
             scan2.close();

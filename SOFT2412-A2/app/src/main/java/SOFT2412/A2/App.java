@@ -32,7 +32,7 @@ public class App {
                         if((UserInterface.currentUser instanceof Customer) || (UserInterface.currentUser == null))
                             System.out.println("Sorry, you do not have permission to perform this action.");
                         else
-                            UserInterface.currentUser.getTransactionSummary();
+                            System.out.println(UserInterface.currentUser.getTransactionSummary());
                 }
                 else
                     System.out.println("Incorrect Format. For more help on the summary command, type \"help summary\".");
@@ -66,7 +66,6 @@ public class App {
     }
 
     public static void main(String[] args) {
-
         System.out.println("        _______  _        ______  _________ _______  _______ __________________ _________       \n" +
                 "|\\     /|(  ____ \\( (    /|(  __  \\ \\__   __/(  ____ \\(  ___  )\\__   __/\\__   __/(  ___  )( (    /|\n" +
                 "| )   ( || (    \\/|  \\  ( || (  \\  )   ) (   | (    \\/| (   ) |   ) (      ) (   | (   ) ||  \\  ( |\n" +
