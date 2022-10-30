@@ -14,31 +14,37 @@ public class UserInterface {
         put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows any user to create an account for the machine.");
         put("login", "Allows any user to login to their account in the machine.");
+        put("logout", "Allows any user to log out of their account.");
         put("help", "Gives information on how to use the application.");
         put("menu", "Shows you everything you can buy in the vending machine.");
         put("exit", "Exits the application.");
     }};
     // HashMap of all valid commands and their usage
     public static final Map<String, String> allCommandUsage = new HashMap<String, String>() {{
-        put("buy", "Allows any user to buy a product from the vending machine.\n" +
-        "Usage: buy <payment method> <amount> <product code> [currency]\n" +
+        put("buy", "\nAllows any user to buy a product from the vending machine.\n" +
+        "\nUsage: buy <payment method> <amount> <product code> [currency]\n" +
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
         "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
-        put("sell", "Allows a vending machine owner to sell a product.");
-        put("signup", "Allows a vending machine owner to sell a product.\n" + 
-        "Usage: signup <type> <name> <username> <password>\n" +
+        put("sell", "\nAllows a vending machine owner to sell a product.");
+        put("signup", "\nAllows any user to create an account for the machine.\n" + 
+        "\nUsage: signup <type> <name> <username> <password>\n" +
         "<type>     -> type of user (cashier, customer, owner, seller)\n" + 
         "<name>     -> name of the user\n" +
         "<username> -> username of the user, has to be unique\n" +
-        "<password> -> password of the user\n");
-        put("menu", "Shows you everything you can buy in the vending machine.");
-        put("login", "Allows any user to login to their account in the machine.\n"
-        + "Usage: login <username> <password>\n +" +
-                "<username>   -> the username you used when you signed up for your account" +
-                "<password>   -> the password for your account");
-        put("help", "Gives information on how to use the application.");
-        put("exit", "Exits the application.");
+        "<password> -> password of the user\n" + 
+        "\nExample of usage: signup customer John myusername mypassword\n");
+        put("login", "\nAllows any user to login to their account in the machine.\n" +
+        "\nUsage: login <username> <password>\n" +
+        "<username> -> username registered upon signup\n" +
+        "<password> -> password registered upon signup\n" +
+        "\nExample of usage: login myusername mypassword\n");
+        put("logout", "\nAllows any user to log out of their account.\n" +
+        "\nUsage: logout\n");
+        put("help", "\nIf you got this far, you already know how to use the help command!\n" +
+        "\nUsage: help <command>\n" + "\nExample of usage: help buy\n");
+        put("exit", "\nExits the application.\n" +
+        "\nUsage: exit\n");
     }};
 
 

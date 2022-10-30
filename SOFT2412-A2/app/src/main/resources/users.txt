@@ -1,4 +1,7 @@
 type, name, username, password, card_number
-seller, John, john123, mypassword, 
+owner, Freddy, genericusername, freddyisthebest,
+seller, John, john123, mypassword,
 customer, Tester, test, password1234,
-owner, group5, group5, password
+customer, Mark, mark234, mypassword,
+customer, Tester, test, password1234, 
+
