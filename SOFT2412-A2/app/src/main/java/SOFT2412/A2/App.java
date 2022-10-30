@@ -17,14 +17,16 @@ public class App {
             case "buy":
                 ui.buy(arguments);
                 break;
+
             case "menu":
                 menu();
                 break;
+
             case "summary":
                 if(arguments.size() == 1) {
                     if (arguments.get(0).equals("cancelled")) {
                         if(UserInterface.currentUser instanceof Owner)
-                            System.out.println(UserInterface.currentUser.getCancelledSummary());
+                            System.out.println(Owner.getCancelledSummary());
                         else
                             System.out.println("Sorry, you do not have permission to perform this action.");
                     }
@@ -32,33 +34,71 @@ public class App {
                         if((UserInterface.currentUser instanceof Customer) || (UserInterface.currentUser == null))
                             System.out.println("Sorry, you do not have permission to perform this action.");
                         else
-                            System.out.println(UserInterface.currentUser.getTransactionSummary());
+                            System.out.println(Cashier.getTransactionSummary());
                 }
                 else
                     System.out.println("Incorrect Format. For more help on the summary command, type \"help summary\".");
                 break;
+
+            case "addEmployee":
+                if (UserInterface.currentUser instanceof Owner){
+                    if(arguments.size() == 4)
+                        Owner.addUser(arguments.get(0), arguments.get(1), arguments.get(2), arguments.get(3));
+                    else{System.out.println("Incorrect Format. For more help on the addEmployee command, type \"help addEmployee\".");}
+                }
+                else{
+                    System.out.println("Sorry, you do not have permission to perform this action.");
+                }
+                break;
+
+            case "removeEmployee":
+                if (UserInterface.currentUser instanceof Owner){
+                    try{
+                        if (arguments.size() == 1){
+                            Owner.removeUser(arguments.get(0));
+                            System.out.println("Successfully removed!");
+                        }
+                        else{
+                            System.out.println("Incorrect Format. For more help on the removeEmployee command, type \"help removeEmployee\".");
+                        }
+                    }
+                    catch(NoSuchElementException ne){
+                        System.out.println("Apologies, we could not find a user with that username.");
+                    }
+                    catch(IllegalStateException ie){
+                        System.out.println("You just tried to remove yourself :o");
+                    }
+                }
+                else{System.out.println("Sorry, you do not have permission to perform this action.");}
+                break;
+
             case "signup":
                 if(arguments.size() == 4)
                     User.signup(arguments.get(0), arguments.get(1), arguments.get(2), arguments.get(3));
                 else
                     System.out.println("Incorrect Format. For more help on the signup command, type \"help signup\".");
                 break;
+
             case "login":
                 if(arguments.size() == 2)
                     User.login(arguments.get(0), arguments.get(1));
                 else
                     System.out.println("Incorrect Format. For more help on the login command, type \"help login\".");
                 break;
+
             case "logout":
                 User.logout();
                 break;
+
             case "help":
                 ui.help(arguments);
                 break;
+
             case "exit":
                 System.out.println("\nYou have been sufficiently Vendicated! Have a good day :)");
                 System.out.println("--------------------------------END OF PROGRAM--------------------------------");
                 System.exit(0);
+
             default:
                 System.out.printf("Command \"%s\" not found, please type \"help\" to view a list of commands and their usage.\n", command);
                 break;
@@ -67,8 +107,6 @@ public class App {
 
     public static void main(String[] args) {
 
-        Cashier c = new Cashier("md", "md", "password");
-        System.out.println(c.getTransactionSummary());
         System.out.println("        _______  _        ______  _________ _______  _______ __________________ _________       \n" +
                 "|\\     /|(  ____ \\( (    /|(  __  \\ \\__   __/(  ____ \\(  ___  )\\__   __/\\__   __/(  ___  )( (    /|\n" +
                 "| )   ( || (    \\/|  \\  ( || (  \\  )   ) (   | (    \\/| (   ) |   ) (      ) (   | (   ) ||  \\  ( |\n" +
@@ -81,6 +119,7 @@ public class App {
         String command;
         ArrayList<String> arguments;
         menu();
+        ui.anonymousPage();
         ui.help(new ArrayList<String>());
 
         while (true) {
@@ -144,8 +183,6 @@ public class App {
     // This is the 'entry point' to the program
     public static void menu(){
         ui.displaySnacks(scan, ui.vm.getInventory());
-        ui.anonymousPage();
-
     }
 
 }

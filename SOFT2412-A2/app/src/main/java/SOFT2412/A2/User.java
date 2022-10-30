@@ -73,6 +73,7 @@ public abstract class User {
                 }
                 else {
                     System.out.println("Login Failed! Wrong password.");
+                    return;
                 }
             }
         }
@@ -146,7 +147,7 @@ public abstract class User {
     }
 
     public static void logout() {
-        UserInterface.currentUser = null;
+        UserInterface.currentUser = new Customer("", "", "");
         System.out.println("Logged out successfully!");
     }
     
@@ -165,48 +166,10 @@ public abstract class User {
         this.card = card;
     }
 
-    // Power of cashier and owner
-    public String getTransactionSummary(){
-        String allTransactions="";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        allTransactions += "--------------------------------------------------------------------\n";
-        allTransactions += "|  Snack Name  |  Paid  | Change | Payment Method |       Time      |\n";
-        allTransactions += "--------------------------------------------------------------------\n";
-        for (List<Transaction> tList: Transaction.userTransactions.values()){
-            for (Transaction t: tList) {
-
-                allTransactions += ("|" + UserInterface.foodDetailString(14, t.getItemSold().getName()) +  UserInterface.foodDetailString(8, "$" + String.valueOf(t.getPaid())) + UserInterface.foodDetailString(8, "$" + String.valueOf(t.getChange()))
-                        + UserInterface.foodDetailString(16, t.getPaymentMethod()) + UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) + "\n");
-            }
-        }
-
-        for (Transaction t: Transaction.anonTransactions){
-            allTransactions += ("|" + UserInterface.foodDetailString(14, t.getItemSold().getName()) +  UserInterface.foodDetailString(8, "$" + String.valueOf(t.getPaid())) + UserInterface.foodDetailString(8, "$" + String.valueOf(t.getChange()))
-                    + UserInterface.foodDetailString(16, t.getPaymentMethod()) + UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) + "\n");
-        }
-        allTransactions += "--------------------------------------------------------------------";
-        return allTransactions;
-    }
-
-    // Power of owner
-    public String getCancelledSummary(){
-        String cancelTransactions="";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        cancelTransactions += "------------------------------------------------------------------------------\n";
-        cancelTransactions += "|    User    |      Time      |                    Reason                    |\n";
-        cancelTransactions += "------------------------------------------------------------------------------\n";
-
-        for (Transaction t: Transaction.cancelTransactions){
-            cancelTransactions += ("|" + UserInterface.foodDetailString(12, t.getUserName()) +  UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) +
-                    UserInterface.foodDetailString(46,  t.getState())  + "\n");
-        }
-        cancelTransactions += "------------------------------------------------------------------------------\n";
-        return cancelTransactions;
-    }
-
     public String getName(){return name;}
     public String getUsername(){return username;}
     public String getPassword(){return password;}
     public Card getCard(){return card;}
     public static List<User> getUsers(){return users;}
+    public static void removeUser(User u){users.remove(u);}
 }

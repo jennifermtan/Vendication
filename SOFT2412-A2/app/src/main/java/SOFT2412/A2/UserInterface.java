@@ -19,6 +19,27 @@ public class UserInterface {
         put("menu", "Shows you everything you can buy in the vending machine.");
         put("exit", "Exits the application.");
     }};
+    public static final Map<String, String> cashierCommandBriefs = new HashMap<String, String>(){{
+        put("fill", "Allows you to modify the number of notes/coins in the vending machine. Don't steal! ;) TBD");
+        put("changeSummary", "A summary of all the money inside the vending machine. TBD");
+        put("summary", "A summary of all the transactions made, with the time that they were made.");
+    }};
+
+    public static final Map<String, String> sellerCommandBriefs = new HashMap<String, String>(){{
+        put("editItems", "Allows you to edit any quality of any item in the vending machine.TBD");
+        put("itemsSummary", "A list of the current available items.TBD");
+        put("saleSummary", "A summary of the item codes, names, and quantities of all sold items.TBD");
+    }};
+
+    public static final Map<String, String> ownerCommandBriefs = new HashMap<String, String>(){{
+        putAll(cashierCommandBriefs);
+        putAll(sellerCommandBriefs);
+        put("addEmployee", "Allows you to add a seller or cashier account for your employee.");
+        put("removeEmployee", "Allows you to remove a seller or cashier. Also saves you an awkward conversation.");
+        put("usersSummary", "Shows you a list of all the users in the vending machine.TBD");
+        put("cancelledSummary", "Shows you a list of all the cancelled transactions.");
+    }};
+
     // HashMap of all valid commands and their usage
     public static final Map<String, String> allCommandUsage = new HashMap<String, String>() {{
         put("buy", "\nAllows any user to buy a product from the vending machine.\n" +
@@ -45,6 +66,36 @@ public class UserInterface {
         "\nUsage: help <command>\n" + "\nExample of usage: help buy\n");
         put("exit", "\nExits the application.\n" +
         "\nUsage: exit\n");
+    }};
+
+    public static final Map<String, String> cashierCommandUsage = new HashMap<String, String>(){{
+        put("fill", "\nAllows you to modify the number of notes/coins in the vending machine. Don't steal! ;)\n" +
+                "Usage: edit cash <cashAmount> <quantity>\n" +
+                "\n<cashAmount>  -> australian cash amounts, with dollars represented as $num and cents as numc e.g $20 and 20c" +
+                "\n<quantity>    -> number of this cash value that you want there to be" +"\nExample of usage: edit cash $50 10 TBD");
+        put("changeSummary", "\nA summary of all the money inside the vending machine.\nUsage: summary change TBD\n");
+        put("summary", "\nA summary of all the transactions made, with the time that they were made.\nUsage: summary successful");
+    }};
+    public static final Map<String, String> sellerCommandUsage = new HashMap<String, String>(){{
+        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: edit items TBD");
+        put("itemsSummary", "\nA list of the current available items.\nUsage: summary items TBD");
+        put("saleSummary", "\nA summary of the item codes, names, and quantities of all sold items.\n Usage: summary quantities TBD");
+    }};
+    public static final Map<String, String> ownerCommandUsage = new HashMap<String, String>(){{
+        putAll(sellerCommandUsage);
+        putAll(cashierCommandUsage);
+        put("userSummary", "\nShows you a list of all the users in the vending machine.\nUsage: summary users\nTBD");
+        put("cancelledSummary", "\nShows you a list of all the cancelled transactions.\nUsage: summary cancelled\n");
+        put("addEmployee", "\nAllows you to add a seller or cashier account for your employee." +
+                "\nUsage: addEmployee <type> <name> <username> <password>\n" +
+                "<type>     -> type of user (cashier, seller)\n" +
+                "<name>     -> name of the user\n" +
+                "<username> -> your employee's username to be registered upon signup\n" +
+                "<password> -> your employee's password to be registered upon signup\n" +
+                "\nExample of usage: addEmployee cashier Namie sampleusername samplepassword\n");
+        put("removeEmployee", "\n\"Allows you to remove a seller or cashier. Also saves you an awkward conversation.\nUsage: removeEmployee <username>" +
+                "\n<username>  -> the username of the cashier or seller you want to remove\n" + "Example of usage: removeEmployee FrankieFlew\n");
+
     }};
 
 
@@ -260,7 +311,7 @@ public class UserInterface {
         // Print a maximum of 5 items
         System.out.println("\nThese were the last few items bought by anonymous users:");
         int index = 1;
-        for (int i = transactions.size() - 1; i > 0; i++) {
+        for (int i = transactions.size() - 1; i >= 0; i--) {
             if (index > 5){
                 break;
             }
@@ -284,15 +335,44 @@ public class UserInterface {
     // Help command
     public void help(List<String> arguments) {
         if(arguments.size() == 0) {
+            // Print out the help commands corresponding to the current user type
             System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
-            for(String command : allCommandBriefs.keySet())
-                System.out.printf("%6s:          %s%n", command, allCommandBriefs.get(command));
+            Map<String, String> toPrint = new HashMap<>();
+            if (UserInterface.currentUser instanceof Customer){
+                toPrint = allCommandBriefs;
+            }
+            if (UserInterface.currentUser instanceof Cashier){
+                toPrint = cashierCommandBriefs;
+            }
+            if (UserInterface.currentUser instanceof Seller){
+                toPrint = sellerCommandBriefs;
+            }
+            if (UserInterface.currentUser instanceof Owner){
+                toPrint = ownerCommandBriefs;
+            }
+
+            for(String command : toPrint.keySet()){
+                System.out.printf("%15s:          %s%n", command, toPrint.get(command));}
         }
         else {
+            Map<String, String> toPrint = new HashMap<>();
+            if (UserInterface.currentUser instanceof Customer){
+                toPrint = allCommandUsage;
+            }
+            if (UserInterface.currentUser instanceof Cashier){
+                toPrint = cashierCommandUsage;
+            }
+            if (UserInterface.currentUser instanceof Seller){
+                toPrint = sellerCommandUsage;
+            }
+            if (UserInterface.currentUser instanceof Owner){
+                toPrint = ownerCommandUsage;
+            }
+
             for(int i = 0; i < arguments.size(); i++) {
-                for(String command : allCommandUsage.keySet()) {
+                for(String command : toPrint.keySet()) {
                     if(command.equals(arguments.get(i)))
-                        System.out.println(allCommandUsage.get(command));
+                        System.out.println(toPrint.get(command));
                 }
             }
         }

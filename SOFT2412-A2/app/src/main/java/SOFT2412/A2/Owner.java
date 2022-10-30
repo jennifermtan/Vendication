@@ -1,6 +1,7 @@
 package SOFT2412.A2;
 
 import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -9,18 +10,45 @@ public class Owner extends User{
         super(name, username, password);
     }
 
+    // Power of owner
+    public static String getCancelledSummary(){
+        String cancelTransactions="";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        cancelTransactions += "------------------------------------------------------------------------------\n";
+        cancelTransactions += "|    User    |      Time      |                    Reason                    |\n";
+        cancelTransactions += "------------------------------------------------------------------------------\n";
+
+        for (Transaction t: Transaction.cancelTransactions){
+            cancelTransactions += ("|" + UserInterface.foodDetailString(12, t.getUserName()) +  UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) +
+                    UserInterface.foodDetailString(46,  t.getState())  + "\n");
+        }
+        cancelTransactions += "------------------------------------------------------------------------------\n";
+        return cancelTransactions;
+    }
+
+    // Owner can also add a user for them
+    public static void addUser(String type, String name, String username, String password){
+        if (type.equals("seller") || type.equals("cashier")){
+            User.signup(type, name, username, password);}
+        else if (type.equals("customer")){
+            System.out.println("I think we can let the customers sign themselves up");
+        }
+        else if (type.equals("owner")){
+            System.out.println("I don't think you want to assign another owner who can usurp you...");
+        }
+    }
     // Let the owner remove any user they like
-    public void removeUser(String username){
+    public static void removeUser(String username){
+        // Don't allow the owner to remove themselves
+        if (username.equals("generic")){
+            throw new IllegalStateException();
+        }
+
         List<User> allUsers = User.getUsers();
-        User toRemove = null;
+        User toRemove = User.getUserByName(username);
         for (User u: allUsers){
             if (u.getUsername().equals(username)){
-                if (u.getClass().equals("cashier") || u.getClass().equals("seller")){
-                    toRemove = u;
-                }
-                // Don't allow the owner to remove a customer user
-                else{throw new IllegalStateException();}
-            }
+                toRemove = u;}
         }
 
         // Check if this user even exists
@@ -64,7 +92,7 @@ public class Owner extends User{
     }
 
     // Edit the change and update cash.txt
-    public void editChange(String cashAmount, int quantity) {
+    public static void editChange(String cashAmount, int quantity) {
         UserInterface.vm.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 0);
     }
 }
