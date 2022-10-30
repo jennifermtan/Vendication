@@ -1,8 +1,5 @@
-type, name, username, password, card_number
 owner, Freddy, generic, freddyisthebest
 customer, Mark, mark234, mypassword
-customer, Tester, test, password1234
-cashier, Name, sampleusername, samplepassword
-customer, name, username, password
-cashier, Naomi, naomi<3, name, 
-seller, bob, bob, bob,
+cashier, Edith, sampleusername, samplepassword
+customer, name, realName, password
+seller, Naomi, naomi<3, name
