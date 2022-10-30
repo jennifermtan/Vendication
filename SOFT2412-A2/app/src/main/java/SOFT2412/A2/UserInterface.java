@@ -49,7 +49,6 @@ public class UserInterface {
 
 
     public void buy(List<String> input){
-
         if (!validateInput(input)) {
             // Record the cancelled transaction
             Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to incorrect user input");
@@ -218,7 +217,7 @@ public class UserInterface {
     public boolean validateInput(List<String> input){
 
         // Stop asking for info if their info is correct
-        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("Cash"))){
+        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("cash"))){
             return false;
         }
         else {
