@@ -269,17 +269,16 @@ public class UserInterface {
     public boolean validateInput(List<String> input){
 
         // Stop asking for info if their info is correct
-        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("Cash"))){
+        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("cash"))){
             return false;
         }
         else {
             try{
                 // Check that the second input is a quantity
                 Integer.valueOf(input.get(1));
-
                 // Check that the third input is a viable item code
                 if (vm.searchByItemCode(input.get(2)) == null){
-                    throw new NoSuchFieldException();
+                    return false;
                 }
 
                 // Check that their given cash was in the correct format
@@ -288,16 +287,16 @@ public class UserInterface {
                     for (int i = 3; i < input.size(); i++){
                         String[] cashGiven = input.get(i).split("\\*");
                         if (!vm.getCash().containsKey(cashGiven[0])) {
-                            throw new NumberFormatException();
+                            return false;
                         }
                         int numGiven = Integer.parseInt(cashGiven[1]);
                     }
 
                 }
 
-            }catch(NumberFormatException F) { return false; }
-            catch(NoSuchFieldException nf) { return false; }
-            catch(ArrayIndexOutOfBoundsException a) { return false; }
+            }
+            catch(NumberFormatException ne){return false;}
+            catch(ArrayIndexOutOfBoundsException a) {return false;}
 
         }
         return true;
