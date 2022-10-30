@@ -1,9 +1,9 @@
-Sprite, se, 8
-Sour Patch, sp, 5
+Sprite, se, 9
+Sour Patch, sp, 20
 Bounty, by, 3
-M&M, mm, 4
+M&M, mm, 5
 Kettle, ke, 3
-Coca Cola, cc, 0
+Coca Cola, cc, 1
 Juice, js, 1
 Skittles, sk, 2
 Snickers, sn, 2
