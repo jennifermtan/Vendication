@@ -51,6 +51,9 @@ public class App {
     }
 
     public static void main(String[] args) {
+
+        Cashier c = new Cashier("md", "md", "password");
+        System.out.println(c.getTransactionSummary());
         System.out.println("        _______  _        ______  _________ _______  _______ __________________ _________       \n" +
                 "|\\     /|(  ____ \\( (    /|(  __  \\ \\__   __/(  ____ \\(  ___  )\\__   __/\\__   __/(  ___  )( (    /|\n" +
                 "| )   ( || (    \\/|  \\  ( || (  \\  )   ) (   | (    \\/| (   ) |   ) (      ) (   | (   ) ||  \\  ( |\n" +

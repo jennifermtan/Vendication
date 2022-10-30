@@ -153,4 +153,5 @@ public abstract class User {
     public String getUsername(){return username;}
     public String getPassword(){return password;}
     public Card getCard(){return card;}
+    public static List<User> getUsers(){return users;}
 }
