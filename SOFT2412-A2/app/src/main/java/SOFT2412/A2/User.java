@@ -26,11 +26,12 @@ public abstract class User {
     }
 
     public static void loadUsers() {
+        List<User> zeroUsers = new ArrayList<User>();
+        users = zeroUsers;
         String[] userInfo;
         User tempUser = null;
         try {
             Scanner usersFile = new Scanner(new File("./src/main/resources/users.txt"));
-            usersFile.nextLine();
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");
