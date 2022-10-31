@@ -218,7 +218,7 @@ class AppTest {
         User.loadUsers();
         // Test adding
         Owner.addUser("cashier", "test", "newname", "password");
-        //assertTrue(User.getUsers().contains(User.getUserByName("test")));
+        assertTrue(User.getUsers().contains(User.getUserByName("test")));
         assertEquals(6, User.getUsers().size());
         // Cannot add invalid user type
         Owner.addUser("sca", "test", "test1", "p");
