@@ -7,43 +7,105 @@ public class UserInterface {
     private Scanner scan = new Scanner(System.in);
     public static VendingMachine vm = new VendingMachine();
     // Current User (null if guest user)
-    public static User currentUser = null;
+    public static User currentUser = new Customer("", "", "");
     // HashMap of all valid commands and their brief description
     public static final Map<String, String> allCommandBriefs = new HashMap<String, String>() {{
         put("buy", "Allows any user to buy a product from the vending machine.");
-        put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows any user to create an account for the machine.");
+        put("summary", "Allows admin type accounts to generate summary of transactions. Type of summary depends on priveledge.");
         put("login", "Allows any user to login to their account in the machine.");
+        put("logout", "Allows any user to log out of their account.");
         put("help", "Gives information on how to use the application.");
         put("menu", "Shows you everything you can buy in the vending machine.");
         put("exit", "Exits the application.");
     }};
+    public static final Map<String, String> cashierCommandBriefs = new HashMap<String, String>(){{
+        put("fill", "Allows you to modify the number of notes/coins in the vending machine. Don't steal! ;) TBD");
+        put("changeSummary", "A summary of all the money inside the vending machine. TBD");
+        put("summary", "A summary of all the transactions made, with the time that they were made.");
+    }};
+
+    public static final Map<String, String> sellerCommandBriefs = new HashMap<String, String>(){{
+        put("editItems", "Allows you to edit any quality of any item in the vending machine.TBD");
+        put("itemsSummary", "A list of the current available items.TBD");
+        put("saleSummary", "A summary of the item codes, names, and quantities of all sold items.TBD");
+    }};
+
+    public static final Map<String, String> ownerCommandBriefs = new HashMap<String, String>(){{
+        putAll(cashierCommandBriefs);
+        putAll(sellerCommandBriefs);
+        put("addEmployee", "Allows you to add a seller or cashier account for your employee.");
+        put("removeEmployee", "Allows you to remove a seller or cashier. Also saves you an awkward conversation.");
+        put("usersSummary", "Shows you a list of all the users in the vending machine.TBD");
+        put("cancelledSummary", "Shows you a list of all the cancelled transactions.");
+    }};
+
     // HashMap of all valid commands and their usage
     public static final Map<String, String> allCommandUsage = new HashMap<String, String>() {{
-        put("buy", "Allows any user to buy a product from the vending machine.\n" +
-        "Usage: buy <payment method> <amount> <product code> [currency]\n" +
+        put("buy", "\nAllows any user to buy a product from the vending machine.\n" +
+        "\nUsage: buy <payment method> <amount> <product code> [currency]\n" +
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
         "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
-        put("sell", "Allows a vending machine owner to sell a product.");
-        put("signup", "Allows a vending machine owner to sell a product.\n" + 
-        "Usage: signup <type> <name> <username> <password>\n" +
+        put("signup", "\nAllows any user to create an account for the machine.\n" + 
+        "\nUsage: signup <type> <name> <username> <password>\n" +
         "<type>     -> type of user (cashier, customer, owner, seller)\n" + 
         "<name>     -> name of the user\n" +
         "<username> -> username of the user, has to be unique\n" +
-        "<password> -> password of the user\n");
-        put("menu", "Shows you everything you can buy in the vending machine.");
-        put("login", "Allows any user to login to their account in the machine.");
-        put("help", "Gives information on how to use the application.");
-        put("exit", "Exits the application.");
+        "<password> -> password of the user\n" + 
+        "\nExample of usage: signup customer John myusername mypassword\n");
+        put("summary", "Allows admin type accounts to generate summary of transactions. Type of summary depends on priveledge.\n" +
+        "\nUsage: summary <type>\n" + 
+        "<type> -> Type of transaction summary wanted (successful, cancelled)\n" +
+        "\nExample of usage: summary cancelled\n");
+        put("login", "\nAllows any user to login to their account in the machine.\n" +
+        "\nUsage: login <username> <password>\n" +
+        "<username> -> username registered upon signup\n" +
+        "<password> -> password registered upon signup\n" +
+        "\nExample of usage: login myusername mypassword\n");
+        put("logout", "\nAllows any user to log out of their account.\n" +
+        "\nUsage: logout\n");
+        put("help", "\nIf you got this far, you already know how to use the help command!\n" +
+        "\nUsage: help <command>\n" + "\nExample of usage: help buy\n");
+        put("exit", "\nExits the application.\n" +
+        "\nUsage: exit\n");
+    }};
+
+    public static final Map<String, String> cashierCommandUsage = new HashMap<String, String>(){{
+        put("fill", "\nAllows you to modify the number of notes/coins in the vending machine. Don't steal! ;)\n" +
+                "Usage: edit cash <cashAmount> <quantity>\n" +
+                "\n<cashAmount>  -> australian cash amounts, with dollars represented as $num and cents as numc e.g $20 and 20c" +
+                "\n<quantity>    -> number of this cash value that you want there to be" +"\nExample of usage: edit cash $50 10 TBD");
+        put("changeSummary", "\nA summary of all the money inside the vending machine.\nUsage: summary change TBD\n");
+        put("summary", "\nA summary of all the transactions made, with the time that they were made.\nUsage: summary successful");
+    }};
+    public static final Map<String, String> sellerCommandUsage = new HashMap<String, String>(){{
+        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: edit items TBD");
+        put("itemsSummary", "\nA list of the current available items.\nUsage: summary items TBD");
+        put("saleSummary", "\nA summary of the item codes, names, and quantities of all sold items.\n Usage: summary quantities TBD");
+    }};
+    public static final Map<String, String> ownerCommandUsage = new HashMap<String, String>(){{
+        putAll(sellerCommandUsage);
+        putAll(cashierCommandUsage);
+        put("userSummary", "\nShows you a list of all the users in the vending machine.\nUsage: summary users\nTBD");
+        put("cancelledSummary", "\nShows you a list of all the cancelled transactions.\nUsage: summary cancelled\n");
+        put("addEmployee", "\nAllows you to add a seller or cashier account for your employee." +
+                "\nUsage: addEmployee <type> <name> <username> <password>\n" +
+                "<type>     -> type of user (cashier, seller)\n" +
+                "<name>     -> name of the user\n" +
+                "<username> -> your employee's username to be registered upon signup\n" +
+                "<password> -> your employee's password to be registered upon signup\n" +
+                "\nExample of usage: addEmployee cashier Namie sampleusername samplepassword\n");
+        put("removeEmployee", "\n\"Allows you to remove a seller or cashier. Also saves you an awkward conversation.\nUsage: removeEmployee <username>" +
+                "\n<username>  -> the username of the cashier or seller you want to remove\n" + "Example of usage: removeEmployee FrankieFlew\n");
+
     }};
 
 
     public void buy(List<String> input){
-
         if (!validateInput(input)) {
             // Record the cancelled transaction
-            Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to incorrect user input");
+            Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to incorrect user input");
             Transaction.writeTransaction(t);
             System.out.println("\nWe apologise. Please check that was the correct format. Type 'help buy' for help or 'exit' to quit the program.");
             return;
@@ -69,7 +131,7 @@ public class UserInterface {
                 String paid = result[1].split(": \\$")[1];
                 String change = result[3].split(": \\$")[1];
                 // Record the successful transaction:
-                Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), Double.parseDouble(paid), Double.parseDouble(change), "cash", "Successful");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), vm.searchByItemCode(input.get(2)), LocalDateTime.now(), Double.parseDouble(paid), Double.parseDouble(change), "cash", "Successful");
                 Transaction.writeTransaction(t);
 
             }
@@ -80,7 +142,7 @@ public class UserInterface {
                 System.out.print(" You are to pay $" + String.format("%.2f",toPay) + ".");
 
                 // Record the cancelled transaction
-                Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient payment");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient payment");
                 Transaction.writeTransaction(t);
 
                 System.out.println("\nReinput your payment type, item code, quantity, and cash input in that order to continue payment. Otherwise input 'exit' to cancel your transaction.");
@@ -90,7 +152,7 @@ public class UserInterface {
             catch(IllegalStateException is){
                 System.out.println("\nSincere apologies. We do not have enough change to pay you back your change at this time. Please either reinput your payment or press 'exit' to cancel your transaction.");
                 // Record the cancelled transaction
-                Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient change in vending machine");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient change in vending machine");
                 Transaction.writeTransaction(t);
                 return;
             }
@@ -98,7 +160,7 @@ public class UserInterface {
             catch(NoSuchElementException ne){
                 System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
                 // Record the cancelled transaction
-                Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient stock");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient stock");
                 Transaction.writeTransaction(t);
                 return;
             }
@@ -108,7 +170,7 @@ public class UserInterface {
             // Check that we have enough stock for the purchase
             if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
                 // Record the cancelled transaction
-                Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to insufficient stock");
+                Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient stock");
                 System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
                 return;
             }
@@ -142,7 +204,7 @@ public class UserInterface {
             System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
 
             // Record the successful transaction:
-            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), 0.0, "Card", "Successful");
+            Transaction t = new Transaction(UserInterface.currentUser.getName(), vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), 0.0, "Card", "Successful");
             Transaction.writeTransaction(t);
 
             // if (user is logged in), option to save credit card details (!)
@@ -209,17 +271,16 @@ public class UserInterface {
     public boolean validateInput(List<String> input){
 
         // Stop asking for info if their info is correct
-        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("Cash"))){
+        if (input.size() <= 2 || (!input.get(0).equals("card") && !input.get(0).equals("cash"))){
             return false;
         }
         else {
             try{
                 // Check that the second input is a quantity
                 Integer.valueOf(input.get(1));
-
                 // Check that the third input is a viable item code
                 if (vm.searchByItemCode(input.get(2)) == null){
-                    throw new NoSuchFieldException();
+                    return false;
                 }
 
                 // Check that their given cash was in the correct format
@@ -228,16 +289,16 @@ public class UserInterface {
                     for (int i = 3; i < input.size(); i++){
                         String[] cashGiven = input.get(i).split("\\*");
                         if (!vm.getCash().containsKey(cashGiven[0])) {
-                            throw new NumberFormatException();
+                            return false;
                         }
                         int numGiven = Integer.parseInt(cashGiven[1]);
                     }
 
                 }
 
-            }catch(NumberFormatException F) { return false; }
-            catch(NoSuchFieldException nf) { return false; }
-            catch(ArrayIndexOutOfBoundsException a) { return false; }
+            }
+            catch(NumberFormatException ne){return false;}
+            catch(ArrayIndexOutOfBoundsException a) {return false;}
 
         }
         return true;
@@ -245,12 +306,17 @@ public class UserInterface {
 
     // Displays by default, before user chooses to log in
     public void anonymousPage() {
-        if (Transaction.anonTransactions.size() < 5){return;}
-        System.out.println("\nThese were the last 5 items bought by anonymous users:");
         List<Transaction> transactions = Transaction.anonTransactions;
+        if (transactions.size() == 0){return;}
+
+        // Print a maximum of 5 items
+        System.out.println("\nThese were the last few items bought by anonymous users:");
         int index = 1;
-        for (int initial = transactions.size() - 1; initial >= transactions.size() - 5; initial -= 1) {
-            System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            if (index > 5){
+                break;
+            }
+            System.out.println(index + ") " + transactions.get(i).getItemSold().getName());
             index++;
         }
     }
@@ -270,15 +336,44 @@ public class UserInterface {
     // Help command
     public void help(List<String> arguments) {
         if(arguments.size() == 0) {
+            // Print out the help commands corresponding to the current user type
             System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
-            for(String command : allCommandBriefs.keySet())
-                System.out.printf("%6s:          %s%n", command, allCommandBriefs.get(command));
+            Map<String, String> toPrint = new HashMap<>();
+            if (UserInterface.currentUser instanceof Customer){
+                toPrint = allCommandBriefs;
+            }
+            if (UserInterface.currentUser instanceof Cashier){
+                toPrint = cashierCommandBriefs;
+            }
+            if (UserInterface.currentUser instanceof Seller){
+                toPrint = sellerCommandBriefs;
+            }
+            if (UserInterface.currentUser instanceof Owner){
+                toPrint = ownerCommandBriefs;
+            }
+
+            for(String command : toPrint.keySet()){
+                System.out.printf("%15s:          %s%n", command, toPrint.get(command));}
         }
         else {
+            Map<String, String> toPrint = new HashMap<>();
+            if (UserInterface.currentUser instanceof Customer){
+                toPrint = allCommandUsage;
+            }
+            if (UserInterface.currentUser instanceof Cashier){
+                toPrint = cashierCommandUsage;
+            }
+            if (UserInterface.currentUser instanceof Seller){
+                toPrint = sellerCommandUsage;
+            }
+            if (UserInterface.currentUser instanceof Owner){
+                toPrint = ownerCommandUsage;
+            }
+
             for(int i = 0; i < arguments.size(); i++) {
-                for(String command : allCommandUsage.keySet()) {
+                for(String command : toPrint.keySet()) {
                     if(command.equals(arguments.get(i)))
-                        System.out.println(allCommandUsage.get(command));
+                        System.out.println(toPrint.get(command));
                 }
             }
         }

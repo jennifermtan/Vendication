@@ -8,11 +8,12 @@ public class Cashier extends User{
         super(name, username, password);
     }
 
-    public String getTransactionSummary(){
+    // Power of cashier and owner
+    public static String getTransactionSummary(){
         String allTransactions="";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         allTransactions += "--------------------------------------------------------------------\n";
-        allTransactions += "|  Snack Name  |  Paid  | Change | Payment Method |       Time      \n";
+        allTransactions += "|  Snack Name  |  Paid  | Change | Payment Method |       Time     |\n";
         allTransactions += "--------------------------------------------------------------------\n";
         for (List<Transaction> tList: Transaction.userTransactions.values()){
             for (Transaction t: tList) {
