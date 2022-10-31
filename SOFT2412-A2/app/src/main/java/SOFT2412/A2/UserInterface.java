@@ -11,8 +11,8 @@ public class UserInterface {
     // HashMap of all valid commands and their brief description
     public static final Map<String, String> allCommandBriefs = new HashMap<String, String>() {{
         put("buy", "Allows any user to buy a product from the vending machine.");
-        put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows any user to create an account for the machine.");
+        put("summary", "Allows admin type accounts to generate summary of transactions. Type of summary depends on priveledge.");
         put("login", "Allows any user to login to their account in the machine.");
         put("logout", "Allows any user to log out of their account.");
         put("help", "Gives information on how to use the application.");
@@ -47,7 +47,6 @@ public class UserInterface {
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
         "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
-        put("sell", "\nAllows a vending machine owner to sell a product.");
         put("signup", "\nAllows any user to create an account for the machine.\n" + 
         "\nUsage: signup <type> <name> <username> <password>\n" +
         "<type>     -> type of user (cashier, customer, owner, seller)\n" + 
@@ -55,6 +54,10 @@ public class UserInterface {
         "<username> -> username of the user, has to be unique\n" +
         "<password> -> password of the user\n" + 
         "\nExample of usage: signup customer John myusername mypassword\n");
+        put("summary", "Allows admin type accounts to generate summary of transactions. Type of summary depends on priveledge.\n" +
+        "\nUsage: summary <type>\n" + 
+        "<type> -> Type of transaction summary wanted (successful, cancelled)\n" +
+        "\nExample of usage: summary cancelled\n");
         put("login", "\nAllows any user to login to their account in the machine.\n" +
         "\nUsage: login <username> <password>\n" +
         "<username> -> username registered upon signup\n" +
@@ -100,7 +103,6 @@ public class UserInterface {
 
 
     public void buy(List<String> input){
-
         if (!validateInput(input)) {
             // Record the cancelled transaction
             Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to incorrect user input");
