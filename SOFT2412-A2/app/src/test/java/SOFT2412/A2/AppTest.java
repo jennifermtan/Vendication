@@ -194,9 +194,10 @@ class AppTest {
         vm.defaulting();
     }
 
-    /*@Test void ownerAddRemove(){
+    @Test void ownerAddRemove(){
         // Test removing
         vm.defaulting();
+        User.loadUsers();
         assertEquals(5, User.getUsers().size()); //It fails even here when vm.defaulting makes users.txt have 5 users. Test stack trace says that there are 49 users :0
         // test removing the owner- should not be able to
         try {
@@ -208,13 +209,13 @@ class AppTest {
         catch(IllegalStateException ie){assertTrue(true);}
         catch(NoSuchElementException ne){assertTrue(true);}
 
-
+        ui.currentUser = new Owner("Own", "ownzer", "o123");
         // test removing someone who's there
         Owner.removeUser("mark234");
         assertEquals(4, User.getUsers().size());
 
         vm.defaulting();
-
+        User.loadUsers();
         // Test adding
         Owner.addUser("cashier", "test", "newname", "password");
         //assertTrue(User.getUsers().contains(User.getUserByName("test")));
@@ -229,5 +230,5 @@ class AppTest {
         Owner.addUser("owner", "test", "test3", "p");
         assertEquals(6, User.getUsers().size());
         vm.defaulting();
-    }*/
+    }
 }
