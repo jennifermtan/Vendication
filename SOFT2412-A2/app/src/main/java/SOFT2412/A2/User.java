@@ -162,11 +162,6 @@ public abstract class User {
         return null;
     }
 
-    // Allow admin users to edit the change and update cash.txt
-    public void editChange(String cashAmount, int quantity) {
-        VendingMachine.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
-    }
-
     // Saving card details to users in the users.txt file
     public static void addCard(User user, Card userCard) {
         user.card = userCard;
