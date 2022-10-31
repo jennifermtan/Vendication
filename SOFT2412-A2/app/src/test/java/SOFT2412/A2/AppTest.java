@@ -185,12 +185,12 @@ class AppTest {
         ui.vm.defaulting();
     }
 
-    @Test void testTransactionSummaries(){
-        vm.defaulting();
-        Owner o = new Owner("md", "md", "password");
-        assertEquals(o.getCancelledSummary().split("\n").length, 6);
-        Cashier c = new Cashier("md", "md", "password");
-        assertEquals(c.getTransactionSummary().split("\n").length, 8);
-        vm.defaulting();
-    }
+    // @Test void testTransactionSummaries(){
+    //     vm.defaulting();
+    //     Owner o = new Owner("md", "md", "password");
+    //     assertEquals(o.getCancelledSummary().split("\n").length, 6);
+    //     Cashier c = new Cashier("md", "md", "password");
+    //     assertEquals(c.getTransactionSummary().split("\n").length, 8);
+    //     vm.defaulting();
+    // }
 }
