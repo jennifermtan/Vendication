@@ -247,7 +247,7 @@ public class VendingMachine {
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
     // If string is not in file, append to the file
-    public void updateLine(String fileName, String findString, String replacedString, int index) {
+    public static void updateLine(String fileName, String findString, String replacedString, int index) {
         try{
             boolean found = false;
             File file = new File(fileName);

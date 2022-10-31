@@ -177,7 +177,7 @@ public class UserInterface {
                 String cardNumber = input.get(4);
                 if (!Card.checkCardDetails(cardName, cardNumber)) {
                     System.out.println("\nWe were unable to match your card, please try again.");
-                    Transaction t = new Transaction(User.currentUser, LocalDateTime.now(), "Cancelled due to unmatched card details");
+                    Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to unmatched card details");
                     Transaction.writeTransaction(t);
                     return;
                 }
@@ -191,7 +191,7 @@ public class UserInterface {
             }
             System.out.println(vm.payByCard(Integer.parseInt(itemQuantity), itemCode));
             // Record the successful transaction:
-            Transaction t = new Transaction(User.currentUser, vm.searchByItemCode(itemCode), LocalDateTime.now(), vm.calculateToPay(itemCode, Integer.parseInt(itemQuantity)), 0.0, "Card", "Successful");
+            Transaction t = new Transaction(UserInterface.currentUser.getName(), vm.searchByItemCode(itemCode), LocalDateTime.now(), vm.calculateToPay(itemCode, Integer.parseInt(itemQuantity)), 0.0, "Card", "Successful");
             Transaction.writeTransaction(t);
             if ((currentUser != null) && (currentUser.getCard() == null)) {
                 String cardName = input.get(3);
