@@ -26,11 +26,12 @@ public abstract class User {
     }
 
     public static void loadUsers() {
+        List<User> zeroUsers = new ArrayList<User>();
+        users = zeroUsers;
         String[] userInfo;
         User tempUser = null;
         try {
             Scanner usersFile = new Scanner(new File("./src/main/resources/users.txt"));
-            usersFile.nextLine();
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");
@@ -119,7 +120,7 @@ public abstract class User {
             fw = new FileWriter("./src/main/resources/users.txt", true);
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw);
-            
+
             pw.printf("%s, %s, %s, %s, \n", type, name, username, password);
             pw.flush();
         } catch (IOException e) { System.out.println("signup: Error while writing to file."); }
@@ -141,7 +142,7 @@ public abstract class User {
         else if(type.equals("seller"))
             tempUser = new Seller(name, username, password);
         users.add(tempUser);
-        
+
         System.out.println("Account created successfully!");
         UserInterface.currentUser = tempUser;
     }
@@ -150,7 +151,7 @@ public abstract class User {
         UserInterface.currentUser = new Customer("", "", "");
         System.out.println("Logged out successfully!");
     }
-    
+
     // Method for finding a user by their name
     public static User getUserByName(String name){
         for (User u: users){
