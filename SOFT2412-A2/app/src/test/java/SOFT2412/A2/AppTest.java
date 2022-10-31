@@ -66,7 +66,7 @@ class AppTest {
         holder = ui.allCommandUsage;
         User md = new Customer("Md", "Emmder", "password124");
         Card coolCard = new Card("Md", "123456");
-        md.addCard(coolCard);
+        md.addCard(md, coolCard);
         assertEquals(md.getCard(), coolCard);
     }
 

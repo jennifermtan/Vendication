@@ -2,5 +2,5 @@ type, name, username, password, card_name, card_number
 seller, John, john123, mypassword
 customer, Tester, test, password1234, Test, 123456
 customer, Isaac, isaac123, mypass, Ike, 654321
-cashier, Doug, doug420, blazeit
+cashier, Doug, doug420, blazeit, Douggie, 424242
 seller, Monk, monkey, banana, Ape, 123321

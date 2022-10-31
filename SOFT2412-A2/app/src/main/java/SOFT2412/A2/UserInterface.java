@@ -147,7 +147,7 @@ public class UserInterface {
                     if (saveCard.equals("yes")) {
                         Card userCard = new Card(cardName, cardNumber);
                         Card.updateCards(userCard);
-                        User.addCard(userCard);
+                        User.addCard(UserInterface.currentUser, userCard);
                         System.out.println("Card details were successfully saved to your account! You no longer have to input card details for your purchases!");
                         break;
                     }

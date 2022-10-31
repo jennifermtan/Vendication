@@ -19,7 +19,7 @@ public abstract class User {
     protected String name;
     protected String username;
     protected String password;
-    protected static Card card;
+    protected Card card;
 
     public User(String name, String username, String password) {
         this.name = name;
@@ -36,11 +36,6 @@ public abstract class User {
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");
-                System.out.println(userInfo);
-                // if(!userLogins.containsKey(userInfo[1]))
-                //     userLogins.put(userInfo[1], userInfo[2]);
-                // else
-                //     System.out.println("That username already exists.");
                 userLogins.put(userInfo[2], userInfo[3]);
                 // Checking which type of user it is
                 if(userInfo[0].equals("cashier"))
@@ -51,9 +46,9 @@ public abstract class User {
                     tempUser = new Owner(userInfo[1], userInfo[2], userInfo[3]);
                 else if(userInfo[0].equals("seller"))
                     tempUser = new Seller(userInfo[1], userInfo[2], userInfo[3]);
-
-                if (userInfo.length == 5) {
-                    tempUser.card = Card.getCard(userInfo[4]);
+                // Check if user has card details in file
+                if (userInfo.length == 6) {
+                    tempUser.card = new Card(userInfo[4], userInfo[5]);
                 }
                 users.add(tempUser);
             }
@@ -67,12 +62,11 @@ public abstract class User {
     public static void login(String username, String password) {
         loadUsers();
         for(User u: users) {
-
             if (u.username.equals(username)) {
                 if(u.password.equals(password)) {
                     UserInterface.currentUser = u;
                     System.out.println("Login Successful!");
-                    if (card == null) {
+                    if (u.getCard() == null) {
                         System.out.println("You do not have any card details saved to this account.");
                     }
                     else {
@@ -158,9 +152,9 @@ public abstract class User {
         VendingMachine.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
     }
 
-    // (!) add card to individual user
-    public static void addCard(Card userCard) {
-        card = userCard;
+    // Saving card details to users in the users.txt file
+    public static void addCard(User user, Card userCard) {
+        user.card = userCard;
         try {
             File file = new File("./src/main/resources/users.txt");
             Scanner scan = new Scanner(file);
@@ -169,7 +163,7 @@ public abstract class User {
                 String line = scan.nextLine();
                 String[] parts =  line.split(", ");
                 if (parts[2].equals(UserInterface.currentUser.getUsername())) {
-                    line += (", " + card.getName() + ", " + card.getNumber());
+                    line += (", " + user.card.getName() + ", " + user.card.getNumber());
                 }
                 inputBuffer.append(line);
                 inputBuffer.append("\n");

@@ -1,10 +1,10 @@
-Sprite, se, 13
+Sprite, se, 14
 Sour Patch, sp, 5
 Bounty, by, 3
 M&M, mm, 4
 Kettle, ke, 3
-Coca Cola, cc, 5
+Coca Cola, cc, 6
 Juice, js, 1
 Skittles, sk, 2
 Snickers, sn, 2
-Mineral Water, mw, 7
+Mineral Water, mw, 8
