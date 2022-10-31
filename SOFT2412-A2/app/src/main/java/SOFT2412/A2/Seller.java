@@ -1,4 +1,6 @@
 package SOFT2412.A2;
+import java.io.*;
+import java.util.*;
 
 public class Seller extends User{
 
@@ -56,5 +58,30 @@ public class Seller extends User{
             Food food = UserInterface.vm.searchByItemCode(itemCode);
             UserInterface.vm.addItem(food, 15 - UserInterface.vm.getInventory().get(food));
         }
+    }
+
+    public String getSummary() {
+        String summary = "";
+        summary += "--------------------------------------------\n";
+        summary += "|  Snack Name  | Item Code | Quantity Sold |\n";
+        summary += "--------------------------------------------\n";
+        try{
+            File file = new File("./src/main/resources/quantities.txt");
+            Scanner scan = new Scanner(file);
+
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                String[] parts =  line.split(", ");
+                String name = parts[0];
+                String code = parts[1];
+                String quantitySold = parts[2];
+                summary += ("|" + UserInterface.foodDetailString(14, name)) +  UserInterface.foodDetailString(11, code) +
+                    (UserInterface.foodDetailString(15,  quantitySold)  + "\n");
+            }
+        } catch (FileNotFoundException fe) {
+            fe.printStackTrace();
+        }
+        summary += "--------------------------------------------\n";
+        return summary;
     }
 }

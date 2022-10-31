@@ -1,2 +1,4 @@
 anonymous, se, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful
 anonymous, 2022-10-27T21:59:26.125755100, Cancelled due to incorrect user input
+anonymous, 2022-10-30T13:54:11.241869, Cancelled due to incorrect user input
+anonymous, 2022-10-30T13:54:28.340480, Cancelled due to incorrect user input
