@@ -1,16 +1,14 @@
 package SOFT2412.A2;
 import java.util.*;
 import java.io.*;
-import org.json.simple.*;
-import org.json.simple.parser.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.format.DateTimeFormatter;
 
 public abstract class User {
-    // Stores the current user and the type
-    public static String currentUser = "";
+
     // HashMap to store the user's name, username, password and card number (optional)
     private static Map<String, String> userLogins = new HashMap<String, String>();
     // List to store all the users
@@ -91,6 +89,23 @@ public abstract class User {
             System.out.println("Incorrect Format. For more help on the signup command, type \"help signup\".");
             return;
         }
+        // Restricting signup
+        if(type.equals("owner")) {
+            if(UserInterface.currentUser instanceof Owner)
+                System.out.println("Sorry, there can only be one owner account.");
+            else
+                System.out.println("Sorry, you do not have permission to perform this action.");
+            return;
+        }
+        else if(type.equals("seller") && !(UserInterface.currentUser instanceof Seller) && !(UserInterface.currentUser instanceof Owner)) {
+            System.out.println("Sorry, you do not have permission to perform this action.");
+            return;
+        }
+        else if(type.equals("cashier") && !(UserInterface.currentUser instanceof Cashier) && !(UserInterface.currentUser instanceof Owner)) {
+            System.out.println("Sorry, you do not have permission to perform this action.");
+            return;
+        }
+
         // Checking if username already exists in the system
         for(User u: users) {
             if (u.username.equals(username)) {
@@ -133,7 +148,7 @@ public abstract class User {
     }
 
     public static void logout() {
-        UserInterface.currentUser = null;
+        UserInterface.currentUser = new Customer("", "", "");
         System.out.println("Logged out successfully!");
     }
 
@@ -183,4 +198,7 @@ public abstract class User {
     public String getUsername(){return username;}
     public String getPassword(){return password;}
     public Card getCard(){return card;}
+    public static List<User> getUsers(){return users;}
+    public static void removeUser(User u){users.remove(u);}
+
 }

@@ -12,6 +12,7 @@ import java.util.*;
 class AppTest {
     UserInterface ui = new UserInterface();
     VendingMachine vm = new VendingMachine();
+    Seller john = new Seller("john", "john123", "pass");
 
     @Test
     public void testAddItem() {
@@ -152,9 +153,44 @@ class AppTest {
         assertTrue(f.getItemCode().equals("du"));
         f.setCost(2000);
         assertTrue(Math.abs(f.getCost() - 2000) < 0.0001);
-
-
-
     }
 
+    @Test void sellerTestEditItemName() {
+        john.editItemName("Coca Cola", "Coke");
+        assertEquals(ui.vm.searchByItemCode("cc").getName(), "Coke");
+        ui.vm.defaulting();
+    }
+
+    @Test void sellerTestEditItemCode() {
+        john.editItemCode("cc", "ccc");
+        assertEquals(ui.vm.searchByItemCode("ccc").getName(), "Coca Cola");
+        ui.vm.defaulting();
+    }
+
+    @Test void sellerTestEditItemCategory() {
+        john.editItemCategory("pi", "Candy");
+        assertEquals(ui.vm.searchByItemCode("pi").getCategory(), "Candy");
+        ui.vm.defaulting();
+    }
+
+    @Test void sellerTestEditItemPrice() {
+        john.editItemPrice("pi", 1.5);
+        assertEquals(ui.vm.searchByItemCode("pi").getCost(), 1.5);
+        ui.vm.defaulting();
+    }
+
+    @Test void sellerTestEditItemQuantity() {
+        john.editItemQuantity("pi", 15);
+        assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("pi")), 15);
+        ui.vm.defaulting();
+    }
+
+    @Test void testTransactionSummaries(){
+        vm.defaulting();
+        Owner o = new Owner("md", "md", "password");
+        assertEquals(o.getCancelledSummary().split("\n").length, 6);
+        Cashier c = new Cashier("md", "md", "password");
+        assertEquals(c.getTransactionSummary().split("\n").length, 8);
+        vm.defaulting();
+    }
 }
