@@ -283,7 +283,7 @@ public class VendingMachine {
         }
     }
 
-    // Update transactions.txt with the format "name, itemCode, quantity sold"
+    // Update quantities.txt with the format "name, itemCode, quantity sold"
     public void updateTotalSold(String itemCode, int quantity) {
 
         boolean hasItem = false;
