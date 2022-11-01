@@ -6,7 +6,7 @@ import java.io.*;
 import java.lang.NumberFormatException;
 
 public class UserInterface {
-    private Scanner scan = new Scanner(System.in);
+    public static Scanner scan = new Scanner(System.in);
     public static VendingMachine vm = new VendingMachine();
     // Current User (null if guest user)
     public static User currentUser = new Customer("", "", "");
