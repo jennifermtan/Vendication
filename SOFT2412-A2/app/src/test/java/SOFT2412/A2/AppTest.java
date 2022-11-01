@@ -238,4 +238,19 @@ class AppTest {
         assertEquals(6, User.getUsers().size());
         vm.defaulting();
     }
+
+    // Testing editItemDetail() in owner class
+    @Test
+    void testEditItemDetail() {
+        vm.defaulting();
+        owner.editItemDetail("name", "Pringles", "testName");
+        vm.loadInventory();
+        boolean changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getName().equals("testName"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+    }
 }
