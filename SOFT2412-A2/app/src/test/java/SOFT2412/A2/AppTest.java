@@ -166,46 +166,18 @@ class AppTest {
     }
 
     @Test
-    void adminsTestEditItemName() {
-        john.editItemName("Coca Cola", "Coke");
+    void ownerTestEditItemDetail() {
+        owner.editItemDetail("name", "Coca Cola", "Coke");
         assertEquals(ui.vm.searchByItemCode("cc").getName(), "Coke");
-        owner.editItemName("Sprite", "Sprites");
-        assertEquals(ui.vm.searchByItemCode("se").getName(), "Sprites");
         ui.vm.defaulting();
     }
 
     @Test
-    void adminsTestEditItemCode() {
-        john.editItemCode("sm", "smm");
-        assertEquals(ui.vm.searchByItemCode("smm").getName(), "Smiths");
-        owner.editItemCode("se", "see");
-        assertEquals(ui.vm.searchByItemCode("see").getName(), "Sprite");
-        ui.vm.defaulting();
-    }
-
-    @Test
-    void adminsTestEditItemCategory() {
-        john.editItemCategory("pi", "Candy");
+    void sellerTestEditItemDetail() {
+        john.editItemDetail("category", "pi", "Candy");
         assertEquals(ui.vm.searchByItemCode("pi").getCategory(), "Candy");
-        owner.editItemCategory("ms", "Candy");
-        assertEquals(ui.vm.searchByItemCode("ms").getCategory(), "Candy");
         ui.vm.defaulting();
     }
-
-    @Test
-    void adminsTestEditItemPrice() {
-        john.editItemPrice("pi", 1.5);
-        assertEquals(ui.vm.searchByItemCode("pi").getCost(), 1.5);
-        owner.editItemPrice("se", 1.5);
-        assertEquals(ui.vm.searchByItemCode("se").getCost(), 1.5);
-        ui.vm.defaulting();
-    }
-
-    // @Test void ownerTestEditItemQuantity() {
-    //     owner.editItemQuantity("ts", 5);
-    //     assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("ts")), 5);
-    //     ui.vm.defaulting();
-    // }
 
     @Test void adminsEditChange() {
         owner.editChange("$5", 20);

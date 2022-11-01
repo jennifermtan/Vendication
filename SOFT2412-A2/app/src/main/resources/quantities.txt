@@ -1,4 +1,4 @@
-Sprite, se, 22
+Sprite, se, 54
 Sour Patch, sp, 77
 Bounty, by, 3
 M&M, mm, 5
