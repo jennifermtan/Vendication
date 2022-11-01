@@ -241,7 +241,7 @@ class AppTest {
 
     // Testing editItemDetail() in owner class
     @Test
-    void testEditItemDetail() {
+    void testEditItemDetailOwner() {
         boolean changed = false;
         // name
         vm.defaulting();
@@ -303,5 +303,62 @@ class AppTest {
         // 140 characters is the length of the start and end of the usernames table.
         // If length is above that, it means method returned 1 or more username's data
         assertTrue(usernames.length() > 140);
+    }
+
+    // Testing editItemDetail() in Seller class
+    @Test
+    void testEditItemDetailSeller() {
+        boolean changed = false;
+        // name
+        vm.defaulting();
+        john.editItemDetail("name", "Pringles", "testName");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getName().equals("testName"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // code
+        john.editItemDetail("code", "ps", "testCode");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getItemCode().equals("testCode"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // category
+        john.editItemDetail("category", "Chocolates", "testCategory");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getCategory().equals("testCategory"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // price
+        john.editItemDetail("price", "1.3", "100.0");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getCost() == 100.0)
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // quantity
+        john.editItemDetail("quantity", "7", "15");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(vm.getInventory().get(f) == 15)
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
     }
 }
