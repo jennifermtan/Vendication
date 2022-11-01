@@ -62,6 +62,8 @@ public class VendingMachine {
     // i.e. userType paymentType quantity itemCode givenMoney
     // GivenMoney can have a variable length so it's simply all the inputs after the itemCode
     public String payByCash(int quantity, String itemCode, String givenMoney){
+        loadCash();
+        loadInventory();
         // Check that we have enough stock for the purchase
         if (!checkStock(searchByItemCode(itemCode), quantity)){
             throw new NoSuchElementException();
@@ -93,8 +95,8 @@ public class VendingMachine {
             resultString += ("\n\nChange Breakdown: \n" + changeBreakdown);
         }
         updateItem(itemCode, quantity);
-
         updateTotalSold(itemCode, quantity);
+
         //Now that the transaction has been confirmed, update the cash.txt file to reflect the cash hashmap
         for (Map.Entry<String, Integer> cashItem: cash.entrySet()){
             updateLine("./src/main/resources/cash.txt", cashItem.getKey(), String.valueOf(cashItem.getValue()), 1);
@@ -112,10 +114,8 @@ public class VendingMachine {
             // If we haven't added any new change this round, then we can't figure out a way to give them change so return
             if (prevChange == currChange){
                 // If there was no possible change then we should return all the change to the cash hashmap
-                for (Map.Entry<String, Integer> cha: changeCash.entrySet()){
-                    cash.put(cha.getKey(), cash.get(cha.getKey()) + cha.getValue());
-                }
-
+                loadCash();
+                loadInventory();
                 throw new IllegalStateException();
             }
             prevChange = currChange;

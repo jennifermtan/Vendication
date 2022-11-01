@@ -34,5 +34,6 @@ public class Cashier extends User{
     // Edit the change and update cash.txt
     public void editChange(String cashAmount, int quantity) {
         UserInterface.vm.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
+        UserInterface.vm.loadCash();
     }
 }

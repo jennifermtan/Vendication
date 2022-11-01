@@ -10,6 +10,60 @@ public class Owner extends User{
         super(name, username, password);
     }
 
+    //Edit item name
+    public void editItemName(String name, String newName) {
+        UserInterface.vm.updateLine("./src/main/resources/inventory.txt", name, newName, 0);
+        for (Food food : UserInterface.vm.getInventory().keySet()) {
+            if (food.getName().equals(name)) {
+                food.setName(newName);
+            }
+        }
+    }
+
+    //Edit item code
+    public void editItemCode(String code, String newCode) {
+        UserInterface.vm.updateLine("./src/main/resources/inventory.txt", code, newCode, 2);
+        for (Food food : UserInterface.vm.getInventory().keySet()) {
+            if (food.getItemCode().equals(code)) {
+                food.setItemCode(newCode);
+            }
+        }
+    }
+
+    //Edit item category
+    public void editItemCategory(String itemCode, String newCategory) {
+        UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newCategory, 1);
+        for (Food food : UserInterface.vm.getInventory().keySet()) {
+            if (food.getItemCode().equals(itemCode)) {
+                food.setCategory(newCategory);
+            }
+        }
+    }
+
+    //Edit item price
+    public void editItemPrice(String itemCode, double newPrice) {
+        for (Food food : UserInterface.vm.getInventory().keySet()) {
+            if (food.getItemCode().equals(itemCode)) {
+                food.setCost(newPrice);
+            }
+        }
+
+        UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, Double.toString(newPrice), 3);
+    }
+
+    //Edit item quantity
+    public void editItemQuantity(String itemCode, int newQuantity) {
+        if (newQuantity > 15) {
+            System.out.println("Error: Maximum quantity is 15.");
+        } else if (newQuantity < 0) {
+            System.out.println("Error: Please enter a valid quantity.");
+        } else {
+            System.out.println("Help");
+            UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(newQuantity), 4);
+            UserInterface.vm.loadInventory();
+        }
+    }
+
     // Power of owner
     public static String getCancelledSummary(){
         String cancelTransactions="";
@@ -93,7 +147,8 @@ public class Owner extends User{
 
     // Edit the change and update cash.txt
     public static void editChange(String cashAmount, int quantity) {
-        UserInterface.vm.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 0);
+        UserInterface.vm.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
+        UserInterface.vm.loadCash();
     }
 
     public String getUsernames() {

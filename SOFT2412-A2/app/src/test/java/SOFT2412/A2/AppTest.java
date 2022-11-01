@@ -13,12 +13,15 @@ class AppTest {
     UserInterface ui = new UserInterface();
     VendingMachine vm = new VendingMachine();
     Seller john = new Seller("john", "john123", "pass");
+    Owner owner = new Owner("owner", "owner123", "pass");
+    Cashier karen = new Cashier("karen", "karen123", "pass");
 
     @Test
     public void testAddItem() {
         return;
     }
 
+    @Test
     // Only testing if the payByCard method works
     public void testPayByCard() {
         int quantity = 4;
@@ -26,27 +29,28 @@ class AppTest {
         vm.payByCard(quantity, itemCode);
     }
 
-    // @Test
-    // public void testCardInput() {
-    //     String[] temp = {"buy", "card", "4", "se"};
-    //     List<String> input = Arrays.asList(temp);
-    //     ui.buy(input);
-    // }
+    @Test
+    public void testCardInput() {
+        String[] temp = {"buy", "card", "4", "se"};
+        List<String> input = Arrays.asList(temp);
+        ui.buy(input);
+    }
 
     // Need to find a way to update the txt file to its original inventory after testing
-    // @Test
-    // public void testUpdateItem() {
-    //     vm.updateItem("cc", 1);
-    //     assertEquals(vm.getInventory().get(vm.searchByItemCode("cc")), 6);
-    // }
+    @Test
+    public void testUpdateItem() {
+        vm.updateItem("cc", 1);
+        assertEquals(vm.getInventory().get(vm.searchByItemCode("cc")), 6);
+    }
 
     // This also tests updateCash(), updateItem(), updateTransactions(), and calculateChange() because the method is called in payByCash()
-    @Test public void testPayByCash() {
+    @Test
+    public void testPayByCash() {
         vm.defaulting();
         vm.payByCash(1, "cc", "$5*1 $2*1");
         System.out.println();
         assertEquals(6, vm.getCash().get("$5"));
-        assertEquals( 4, vm.getCash().get("$2"));
+        assertEquals(4, vm.getCash().get("$2"));
         assertEquals(4, vm.getCash().get("50c"));
         vm.updateTotalSold("cc", -1);
         vm.defaulting();
@@ -62,7 +66,8 @@ class AppTest {
     }
 
     // Check that we've saved this card for the user ONLY
-    @Test void testUser(){
+    @Test
+    void testUser() {
         Map<String, String> holder = ui.allCommandBriefs;
         holder = ui.allCommandUsage;
         User md = new Customer("Md", "Emmder", "password124");
@@ -71,16 +76,16 @@ class AppTest {
         assertEquals(md.getCard(), coolCard);
     }
 
-    @Test public void testVendingMachineValidation(){
+    @Test
+    public void testVendingMachineValidation() {
 
         // Test that we don't let user buy something if they haven't paid enough for it
         vm.defaulting();
-        try{
+        try {
             vm.payByCash(1, "mm", "");
             vm.payByCash(1, "mm", "$1*1");
             fail("allows us to buy if they haven't paid");
-        }
-        catch(ArithmeticException ae){
+        } catch (ArithmeticException ae) {
             // Check that we haven't taken their money
             assertEquals(vm.getCash().get("$1"), 5);
             // Check that we have not given them the item
@@ -89,11 +94,10 @@ class AppTest {
 
         vm.defaulting();
         // Test that we don't let user buy something if it's over our stock
-        try{
+        try {
             vm.payByCash(8, "cc", "$100*2");
             fail("Let user buy amount over the stock that we have.");
-        }
-        catch(NoSuchElementException ne){
+        } catch (NoSuchElementException ne) {
             // Check that we didn't take their money
             assertEquals(vm.getCash().get("$100"), 5);
             // Check that we didn't lose stock
@@ -109,17 +113,22 @@ class AppTest {
         vm.updateLine("./src/main/resources/cash.txt", "$1", "0", 1);
 
         UserInterface ui = new UserInterface();
-        List<String> input = new ArrayList<String>(Arrays.asList("cash", "3", "sp", "$50*1"));
-        ui.buy(input);
-        // Check that we didn't take their money
-        assertEquals(vm.getCash().get("$50"), 5);
-        // Check that we didn't lose stock
-        assertEquals(vm.getInventory().get(vm.searchByItemCode("sp")), 7);
+        try{
+            vm.payByCash(3, "sp", "$50*1");
+            fail("allowed to buy when there was no change");
+        }catch(IllegalStateException ie){
+            // Check that we didn't lose stock
+            assertEquals(vm.getInventory().get(vm.searchByItemCode("sp")), 7);
+            // Check that we didn't take their money
+            assertEquals(vm.getCash().get("$50"), 5);
+        }
+
 
         vm.defaulting();
     }
 
-    @Test void testTransactions(){
+    @Test
+    void testTransactions() {
         vm.defaulting();
         Transaction.loadTransactions(vm);
 
@@ -141,7 +150,8 @@ class AppTest {
         vm.defaulting();
     }
 
-    @Test void callingFood(){
+    @Test
+    void callingFood() {
         Food f = new Food("new food", "just new", "jn", 100000);
         assertTrue(f.getCategory().equals("just new"));
         assertTrue(f.getName().equals("new food"));
@@ -155,34 +165,55 @@ class AppTest {
         assertTrue(Math.abs(f.getCost() - 2000) < 0.0001);
     }
 
-    @Test void sellerTestEditItemName() {
+    @Test
+    void adminsTestEditItemName() {
         john.editItemName("Coca Cola", "Coke");
         assertEquals(ui.vm.searchByItemCode("cc").getName(), "Coke");
+        owner.editItemName("Sprite", "Sprites");
+        assertEquals(ui.vm.searchByItemCode("se").getName(), "Sprites");
         ui.vm.defaulting();
     }
 
-    @Test void sellerTestEditItemCode() {
-        john.editItemCode("cc", "ccc");
-        assertEquals(ui.vm.searchByItemCode("ccc").getName(), "Coca Cola");
+    @Test
+    void adminsTestEditItemCode() {
+        john.editItemCode("sm", "smm");
+        assertEquals(ui.vm.searchByItemCode("smm").getName(), "Smiths");
+        owner.editItemCode("se", "see");
+        assertEquals(ui.vm.searchByItemCode("see").getName(), "Sprite");
         ui.vm.defaulting();
     }
 
-    @Test void sellerTestEditItemCategory() {
+    @Test
+    void adminsTestEditItemCategory() {
         john.editItemCategory("pi", "Candy");
         assertEquals(ui.vm.searchByItemCode("pi").getCategory(), "Candy");
+        owner.editItemCategory("ms", "Candy");
+        assertEquals(ui.vm.searchByItemCode("ms").getCategory(), "Candy");
         ui.vm.defaulting();
     }
 
-    @Test void sellerTestEditItemPrice() {
+    @Test
+    void adminsTestEditItemPrice() {
         john.editItemPrice("pi", 1.5);
         assertEquals(ui.vm.searchByItemCode("pi").getCost(), 1.5);
+        owner.editItemPrice("se", 1.5);
+        assertEquals(ui.vm.searchByItemCode("se").getCost(), 1.5);
         ui.vm.defaulting();
     }
 
-    @Test void sellerTestEditItemQuantity() {
-        john.editItemQuantity("pi", 15);
-        assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("pi")), 15);
+    // @Test void ownerTestEditItemQuantity() {
+    //     owner.editItemQuantity("ts", 5);
+    //     assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("ts")), 5);
+    //     ui.vm.defaulting();
+    // }
+
+    @Test void adminsEditChange() {
+        owner.editChange("$5", 20);
+        assertEquals(ui.vm.getCash().get("$5"), 20);
+        karen.editChange("$20", 1);
+        assertEquals(ui.vm.getCash().get("$20"), 1);
         ui.vm.defaulting();
+
     }
 
     @Test void testTransactionSummaries(){
@@ -195,7 +226,8 @@ class AppTest {
         vm.defaulting();
     }
 
-    @Test void ownerAddRemove(){
+    @Test
+    void ownerAddRemove() {
         // Test removing
         vm.defaulting();
         User.loadUsers();
@@ -206,9 +238,11 @@ class AppTest {
             fail("tried to remove owner");
             Owner.removeUser("fake user");
             fail("tried to remove someone who's not there");
+        } catch (IllegalStateException ie) {
+            assertTrue(true);
+        } catch (NoSuchElementException ne) {
+            assertTrue(true);
         }
-        catch(IllegalStateException ie){assertTrue(true);}
-        catch(NoSuchElementException ne){assertTrue(true);}
 
         ui.currentUser = new Owner("Own", "ownzer", "o123");
         // test removing someone who's there
@@ -219,7 +253,7 @@ class AppTest {
         User.loadUsers();
         // Test adding
         Owner.addUser("cashier", "test", "newname", "password");
-        //assertTrue(User.getUsers().contains(User.getUserByName("test")));
+        assertTrue(User.getUsers().contains(User.getUserByName("test")));
         assertEquals(6, User.getUsers().size());
         // Cannot add invalid user type
         Owner.addUser("sca", "test", "test1", "p");
