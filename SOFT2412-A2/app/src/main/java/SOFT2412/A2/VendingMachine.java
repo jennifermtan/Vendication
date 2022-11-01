@@ -330,6 +330,7 @@ public class VendingMachine {
     // Method used for testing to make cash.txt, inventory.txt, and their respective hashmaps reflect StableCash.txt and StableInventory.txt so that expected output is consistent
     public void defaulting(){
         try{
+            // Default for cash.txt
             File cashFile = new File("./src/main/resources/StableCash.txt");
             Scanner scan1 = new Scanner(cashFile);
             while (scan1.hasNextLine()){
@@ -339,6 +340,7 @@ public class VendingMachine {
             }
             scan1.close();
 
+            // Default for inventory.txt
             File invenFile = new File("./src/main/resources/StableInventory.txt");
             Scanner scan2 = new Scanner(invenFile);
             while (scan2.hasNextLine()) {
@@ -352,10 +354,17 @@ public class VendingMachine {
             }
             scan2.close();
 
+            // Default for transactions.txt
             File transactionFile = new File("./src/main/resources/transactions.txt");
             FileOutputStream o = new FileOutputStream(transactionFile, false);
             o.write("anonymous, se, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful\nanonymous, 2022-10-27T21:59:26.125755100, Cancelled due to incorrect user input\ntester, mm, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful".getBytes());
             o.close();
+
+            // Default for users.txt
+            File usersFile = new File("./src/main/resources/users.txt");
+            FileOutputStream u = new FileOutputStream(usersFile, false);
+            u.write("owner, Freddy, generic, freddyisthebest\ncustomer, Mark, mark234, mypassword\ncashier, Edith, sampleusername, samplepassword\ncustomer, name, realName, password\nseller, Naomi, naomi<3, name".getBytes());
+            u.close();
 
         }
         catch(FileNotFoundException fe){System.out.println(fe);}
