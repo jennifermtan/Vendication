@@ -169,7 +169,7 @@ class AppTest {
     void adminsTestEditItemName() {
         john.editItemName("Coca Cola", "Coke");
         assertEquals(ui.vm.searchByItemCode("cc").getName(), "Coke");
-        owner.editItemName("Sprite", "Sprites");
+        Seller.editItemName("Sprite", "Sprites");
         assertEquals(ui.vm.searchByItemCode("se").getName(), "Sprites");
         ui.vm.defaulting();
     }
@@ -178,7 +178,7 @@ class AppTest {
     void adminsTestEditItemCode() {
         john.editItemCode("sm", "smm");
         assertEquals(ui.vm.searchByItemCode("smm").getName(), "Smiths");
-        owner.editItemCode("se", "see");
+        Seller.editItemCode("se", "see");
         assertEquals(ui.vm.searchByItemCode("see").getName(), "Sprite");
         ui.vm.defaulting();
     }
@@ -187,7 +187,7 @@ class AppTest {
     void adminsTestEditItemCategory() {
         john.editItemCategory("pi", "Candy");
         assertEquals(ui.vm.searchByItemCode("pi").getCategory(), "Candy");
-        owner.editItemCategory("ms", "Candy");
+        Seller.editItemCategory("ms", "Candy");
         assertEquals(ui.vm.searchByItemCode("ms").getCategory(), "Candy");
         ui.vm.defaulting();
     }
@@ -196,35 +196,21 @@ class AppTest {
     void adminsTestEditItemPrice() {
         john.editItemPrice("pi", 1.5);
         assertEquals(ui.vm.searchByItemCode("pi").getCost(), 1.5);
-        owner.editItemPrice("se", 1.5);
+        Seller.editItemPrice("se", 1.5);
         assertEquals(ui.vm.searchByItemCode("se").getCost(), 1.5);
         ui.vm.defaulting();
     }
 
-    // @Test void ownerTestEditItemQuantity() {
-    //     owner.editItemQuantity("ts", 5);
-    //     assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("ts")), 5);
-    //     ui.vm.defaulting();
-    // }
+
 
     @Test void adminsEditChange() {
-        owner.editChange("$5", 20);
-        assertEquals(ui.vm.getCash().get("$5"), 20);
+        Cashier.editChange("$5", 15);
+        assertEquals(ui.vm.getCash().get("$5"), 15);
         karen.editChange("$20", 1);
         assertEquals(ui.vm.getCash().get("$20"), 1);
         ui.vm.defaulting();
 
     }
-
-    // @Test
-    // void testTransactionSummaries() {
-    //     vm.defaulting();
-    //     Owner o = new Owner("md", "md", "password");
-    //     assertEquals(o.getCancelledSummary().split("\n").length, 6);
-    //     Cashier c = new Cashier("md", "md", "password");
-    //     assertEquals(c.getTransactionSummary().split("\n").length, 8);
-    //     vm.defaulting();
-    // }
 
     @Test
     void ownerAddRemove() {
@@ -266,4 +252,20 @@ class AppTest {
         assertEquals(6, User.getUsers().size());
         vm.defaulting();
     }
+
+
 }
+
+/*@Test void testTransactionSummaries() {
+         vm.defaulting();
+         Owner o = new Owner("md", "md", "password");
+         assertEquals(o.getCancelledSummary().split("\n").length, 7);
+         Cashier c = new Cashier("md", "md", "password");
+         assertEquals(c.getTransactionSummary().split("\n").length, 10);
+         vm.defaulting();
+    }*/
+// @Test void ownerTestEditItemQuantity() {
+//     owner.editItemQuantity("ts", 5);
+//     assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("ts")), 5);
+//     ui.vm.defaulting();
+// }

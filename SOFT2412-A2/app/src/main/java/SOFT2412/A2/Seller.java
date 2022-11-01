@@ -9,7 +9,7 @@ public class Seller extends User{
     }
 
     //Edit item name
-    public void editItemName(String name, String newName) {
+    public static void editItemName(String name, String newName) {
         UserInterface.vm.updateLine("./src/main/resources/inventory.txt", name, newName, 0);
         for (Food food : UserInterface.vm.getInventory().keySet()) {
             if (food.getName().equals(name)) {
@@ -19,7 +19,7 @@ public class Seller extends User{
     }
 
     //Edit item code
-    public void editItemCode(String code, String newCode) {
+    public static void editItemCode(String code, String newCode) {
         UserInterface.vm.updateLine("./src/main/resources/inventory.txt", code, newCode, 2);
         for (Food food : UserInterface.vm.getInventory().keySet()) {
             if (food.getItemCode().equals(code)) {
@@ -29,7 +29,7 @@ public class Seller extends User{
     }
 
     //Edit item category
-    public void editItemCategory(String itemCode, String newCategory) {
+    public static void editItemCategory(String itemCode, String newCategory) {
         UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newCategory, 1);
         for (Food food : UserInterface.vm.getInventory().keySet()) {
             if (food.getItemCode().equals(itemCode)) {
@@ -39,7 +39,7 @@ public class Seller extends User{
     }
 
     //Edit item price
-    public void editItemPrice(String itemCode, double newPrice) {
+    public static void editItemPrice(String itemCode, double newPrice) {
         for (Food food : UserInterface.vm.getInventory().keySet()) {
             if (food.getItemCode().equals(itemCode)) {
                 food.setCost(newPrice);
@@ -50,7 +50,7 @@ public class Seller extends User{
     }
 
     //Edit item quantity
-    public void editItemQuantity(String itemCode, int newQuantity) {
+    public static void editItemQuantity(String itemCode, int newQuantity) {
         if (newQuantity > 15) { 
             System.out.println("Error: Maximum quantity is 15.");
         } else if (newQuantity < 0) {
@@ -61,7 +61,7 @@ public class Seller extends User{
         }
     }
 
-    public String getSummary() {
+    public static String getSummary() {
         String summary = "";
         summary += "--------------------------------------------\n";
         summary += "|  Snack Name  | Item Code | Quantity Sold |\n";

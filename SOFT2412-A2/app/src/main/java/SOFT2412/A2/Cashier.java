@@ -32,8 +32,12 @@ public class Cashier extends User{
     }
 
     // Edit the change and update cash.txt
-    public void editChange(String cashAmount, int quantity) {
+    public static void editChange(String cashAmount, int quantity) {
+        if (quantity > 15 || quantity < 0){
+            System.out.println("Apologies, but you cannot have less than 0 or more than 15 items in this vending machine.");
+        }
         UserInterface.vm.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
         UserInterface.vm.loadCash();
     }
+
 }

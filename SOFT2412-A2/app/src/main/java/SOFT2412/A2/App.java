@@ -22,22 +22,73 @@ public class App {
                 menu();
                 break;
 
-            case "summary":
-                if(arguments.size() == 1) {
-                    if (arguments.get(0).equals("cancelled")) {
-                        if(UserInterface.currentUser instanceof Owner)
-                            System.out.println(Owner.getCancelledSummary());
-                        else
-                            System.out.println("Sorry, you do not have permission to perform this action.");
-                    }
-                    else if (arguments.get(0).equals("successful"))
-                        if((UserInterface.currentUser instanceof Customer) || (UserInterface.currentUser == null))
-                            System.out.println("Sorry, you do not have permission to perform this action.");
-                        else
-                            System.out.println(Cashier.getTransactionSummary());
-                }
+            // Cancelled transaction summary: Power of OWNER
+            case "summaryCancelled":
+                if (arguments.size() != 0){System.out.println("Incorrect Format. For more help on this summary command, type \"help summaryCancelled\"");}
+
+                else if(UserInterface.currentUser instanceof Owner)
+                    System.out.println(Owner.getCancelledSummary());
                 else
-                    System.out.println("Incorrect Format. For more help on the summary command, type \"help summary\".");
+                    System.out.println("Sorry, you do not have permission to perform this action.");
+
+                break;
+
+            // Successful transaction summary: power of CASHIER and OWNER
+            case "summarySuccessful":
+                if (arguments.size() != 0){System.out.println("Incorrect Format. For more help on this summary command, type \"help summarySuccessful\"");}
+
+                else if((UserInterface.currentUser instanceof Customer) || (UserInterface.currentUser instanceof Seller) || (UserInterface.currentUser == null))
+                    System.out.println("Sorry, you do not have permission to perform this action.");
+                else
+                    System.out.println(Cashier.getTransactionSummary());
+
+                break;
+
+            // User summary: power of OWNER
+            case "summaryUsers":
+                if (arguments.size() != 0){System.out.println("Incorrect Format. For more help on this summary command, type \"help summaryUsers\"");}
+
+                else if (UserInterface.currentUser instanceof Owner){
+                    System.out.println(Owner.getUsernames());
+                }
+                else{
+                    System.out.println("Sorry, you do not have permission to perform this action.");
+                }
+
+                break;
+
+            // Quantity summary: power of SELLER and OWNER
+            case "summaryQuantities":
+                if (arguments.size() != 0){System.out.println("Incorrect Format. For more help on this summary command, type \"help summaryQuantities\"");}
+
+                else if (UserInterface.currentUser instanceof Owner || UserInterface.currentUser instanceof Seller){
+                    System.out.println(Seller.getSummary());
+                }
+                else{
+                    System.out.println("Sorry, you do not have permission to perform this action.");
+                }
+
+                break;
+
+            // Edit change: power of CASHIER and OWNER
+            case "editChange":
+                if (arguments.size() == 2){
+                    if (UserInterface.currentUser instanceof Cashier || UserInterface.currentUser instanceof Owner){
+                        try {
+                            int quantity = Integer.valueOf(arguments.get(1));
+                            Cashier.editChange(arguments.get(0), quantity);
+                            System.out.println("Please input \"summaryChange\" to see your changes.");
+                        }
+                        catch(NumberFormatException ne){System.out.println("We apologise, please check that you've inputted a correct integer for quantity");}
+                    }
+                    else{
+                        System.out.println("Sorry, you do not have permission to perform this action.");
+
+                    }
+                }
+                else{
+                    System.out.println("Incorrect Format. For more help on the editChange command, type \"help editChange\".");
+                }
                 break;
 
             case "addEmployee":
