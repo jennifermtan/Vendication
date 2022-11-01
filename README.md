@@ -17,3 +17,4 @@ How to use our app:
 1. We don't have to implement a 'cancel transaction' command since our text interface allows you to reach any command from any other command
 2. We don't have to implement logic for hiding user password or card details (thank you!)
 3. We have to represent our summaries in a nice table format, especially the displaying of items in the vending machine right at the beginning of the program.
+4. Restrict user creation and signup- there should only be one owner and defined sellers and cashiers.
