@@ -13,6 +13,8 @@ class AppTest {
     UserInterface ui = new UserInterface();
     VendingMachine vm = new VendingMachine();
     Seller john = new Seller("john", "john123", "pass");
+    Owner owner = new Owner("owner", "owner123", "pass");
+    Cashier karen = new Cashier("karen", "karen123", "pass");
 
     @Test
     public void testAddItem() {
@@ -183,6 +185,15 @@ class AppTest {
         john.editItemQuantity("pi", 15);
         assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("pi")), 15);
         ui.vm.defaulting();
+    }
+
+    @Test void adminsEditChange() {
+        owner.editChange("$5", 20);
+        assertEquals(ui.vm.getCash().get("$5"), 20);
+        karen.editChange("$20", 1);
+        assertEquals(ui.vm.getCash().get("$20"), 1);
+        ui.vm.defaulting();
+
     }
 
     // @Test void testTransactionSummaries(){
