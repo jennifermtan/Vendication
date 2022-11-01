@@ -336,6 +336,9 @@ public class UserInterface {
     // Help command
     public void help(List<String> arguments) {
         if(arguments.size() == 0) {
+            
+        }
+        if(arguments.size() == 1) {
             // Print out the help commands corresponding to the current user type
             System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
             Map<String, String> toPrint = new HashMap<>();
