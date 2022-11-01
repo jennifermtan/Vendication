@@ -364,7 +364,7 @@ class AppTest {
 
     // Testing getSummary() in Seller class
     @Test
-    void getSummarySeller() {
+    void testGetSummarySeller() {
         String summary = john.getSummary();
         // 176 characters is the length of the start and end of the summary table.
         // If length is above that, it means method returned data
