@@ -47,8 +47,9 @@ public class UserInterface {
         put("buy", "\nAllows any user to buy a product from the vending machine.\n" +
         "\nUsage: buy <payment method> <amount> <product code> [currency]\n" +
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
-        "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
-        "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
+        "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash) OR username and pin of user when paying by card\n" +
+        "\nExample of usage: buy cash 4 se $5*2 50c*5\n" +
+                "Example of usage: buy card 1 mm cardname 111111\n");
         // add in help for paying by card
         put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows a vending machine owner to sell a product.\n" +
@@ -80,7 +81,11 @@ public class UserInterface {
         put("summarySuccessful", "\nA summary of all the transactions made, with the time that they were made.\nUsage: summarySuccessful\n");
     }};
     public static final Map<String, String> sellerCommandUsage = new HashMap<String, String>(){{
-        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: editItems TBD\n");
+        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: editItems <change type> <name> <new value>\n" +
+                "<change type>  -> the type of change you want to make to the item. You can change the item's \"name\", \"category\", \"code\", \"price\", or \"quantity\".\n" +
+                "<name>         -> the name of the item that you want to edit.\n" +
+                "<new value>    -> the new value that you want this item to have now.\n" +
+                "Example of usage: editItems name M&M R&R");
         put("summaryItems", "\nA list of the current available items.\nUsage: summaryItems TBD");
         put("summaryQuantities", "\nA summary of the item codes, names, and quantities of all sold items.\n Usage: summaryQuantities\n");
     }};
@@ -320,6 +325,7 @@ public class UserInterface {
 
     // Displays after user logs in
     public void loggedInPage() {
+
         System.out.println("\nThese were the last few items bought by you:");
         List<String> tempFood = new ArrayList<String>();
         try {
@@ -381,20 +387,16 @@ public class UserInterface {
         else {
             Map<String, String> toPrint = new HashMap<>();
             if (UserInterface.currentUser instanceof Customer){
-                System.out.println("customer user");
                 toPrint = allCommandUsage;
             }
             if (UserInterface.currentUser instanceof Cashier){
-                System.out.println("cashier user");
                 toPrint = cashierCommandUsage;
             }
             if (UserInterface.currentUser instanceof Seller){
                 toPrint = sellerCommandUsage;
-                System.out.println("seller user");
             }
             if (UserInterface.currentUser instanceof Owner){
                 toPrint = ownerCommandUsage;
-                System.out.println("owner user");
             }
 
             for(int i = 0; i < arguments.size(); i++) {

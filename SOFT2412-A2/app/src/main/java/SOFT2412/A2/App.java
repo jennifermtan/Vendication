@@ -91,6 +91,18 @@ public class App {
                 }
                 break;
 
+                // Edit items: power of SELLER and OWNER
+            case "editItems":
+                if (arguments.size() != 3){System.out.println("Incorrect Format. For more help on the editItems command, type \"help editItems\".");}
+                else if (UserInterface.currentUser instanceof Seller || UserInterface.currentUser instanceof Owner){
+                    Seller.editItemDetail(arguments.get(0), arguments.get(1), arguments.get(2));
+                }
+                else{
+                    System.out.println("Sorry, you do not have permission to perform this action.");
+                }
+
+                break;
+
             case "addEmployee":
                 if (UserInterface.currentUser instanceof Owner){
                     if(arguments.size() == 4)

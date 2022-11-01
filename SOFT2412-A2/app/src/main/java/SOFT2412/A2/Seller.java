@@ -8,7 +8,7 @@ public class Seller extends User{
         super(name, username, password);
     }
 
-    public void editItemDetail(String detailType, String oldDetail, String newDetail) {
+    public static void editItemDetail(String detailType, String oldDetail, String newDetail) {
         switch (detailType) {
             case "name":
                 UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 0);
@@ -57,6 +57,8 @@ public class Seller extends User{
                     UserInterface.vm.loadInventory();
                 }
                 break;
+            default:
+                System.out.println("We could not find the change type you were trying to use. Please input \"help editItems\" for more help on this command.");
         }
     }
     
