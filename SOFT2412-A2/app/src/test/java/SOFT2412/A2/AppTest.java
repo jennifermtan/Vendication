@@ -242,12 +242,54 @@ class AppTest {
     // Testing editItemDetail() in owner class
     @Test
     void testEditItemDetail() {
+        boolean changed = false;
+        // name
         vm.defaulting();
         owner.editItemDetail("name", "Pringles", "testName");
         vm.loadInventory();
-        boolean changed = false;
+        changed = false;
         for(Food f: vm.getInventory().keySet()) {
             if(f.getName().equals("testName"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // code
+        owner.editItemDetail("code", "ps", "testCode");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getItemCode().equals("testCode"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // category
+        owner.editItemDetail("category", "Chocolates", "testCategory");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getCategory().equals("testCategory"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // price
+        owner.editItemDetail("price", "1.3", "100.0");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getCost() == 100.0)
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // quantity
+        owner.editItemDetail("quantity", "7", "15");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(vm.getInventory().get(f) == 15)
                 changed = true;
         }
         assertTrue(changed);
