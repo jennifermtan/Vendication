@@ -362,12 +362,32 @@ class AppTest {
         vm.defaulting();
     }
 
-    // testing getSummary() in Seller class
+    // Testing getSummary() in Seller class
     @Test
     void getSummarySeller() {
         String summary = john.getSummary();
         // 176 characters is the length of the start and end of the summary table.
         // If length is above that, it means method returned data
         assertTrue(summary.length() > 176);
+    }
+
+    // Testing signup() method in User class
+    @Test
+    void testSignup() {
+        vm.defaulting();
+        User.loadUsers();
+        ui.currentUser = new Customer("", "", ""); // Default user when application starts
+        // Testing restrictive property of signup
+        int length = User.getUsers().size();
+        User.signup("owner", "testName", "testUsername1", "testPassword");
+        User.signup("cashier", "testName", "testUsername2", "testPassword");
+        User.signup("seller", "testName", "testUsername3", "testPassword");
+        // Length should not change since default customer user is not allowed to signup for an admin type account
+        assertTrue(length == User.getUsers().size());
+
+        // Testing working functionality
+        User.signup("customer", "testName", "testUsername4", "testPassword");
+        assertFalse(length == User.getUsers().size());
+        vm.defaulting();
     }
 }
