@@ -131,8 +131,12 @@ public class App {
                 break;
 
             case "login":
-                if(arguments.size() == 2)
+                if(arguments.size() == 2) {
                     User.login(arguments.get(0), arguments.get(1));
+                    if (!UserInterface.currentUser.getName().equals("")) {
+                        ui.loggedInPage();
+                    }
+                }
                 else
                     System.out.println("Incorrect Format. For more help on the login command, type \"help login\".");
                 break;
@@ -169,7 +173,6 @@ public class App {
         String command;
         ArrayList<String> arguments;
         menu();
-        ui.anonymousPage();
         ui.help(new ArrayList<String>());
 
         while (true) {
@@ -199,7 +202,7 @@ public class App {
         System.out.println("---------------------------------- NEXT INPUT -----------------------------------");
         ExecutorService ex = Executors.newSingleThreadExecutor();
         String input = null;
-        
+
         if (UserInterface.currentUser instanceof Cashier)
             userIdentifier = "Cashier";
         else if (UserInterface.currentUser instanceof Customer)
@@ -233,6 +236,12 @@ public class App {
     // This is the 'entry point' to the program
     public static void menu(){
         ui.displaySnacks(scan, ui.vm.getInventory());
+        if (UserInterface.currentUser.getName().equals("")) {
+            ui.anonymousPage();
+        }
+        else {
+            ui.loggedInPage();
+        }
     }
 
 }

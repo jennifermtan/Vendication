@@ -2,9 +2,11 @@ package SOFT2412.A2;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.io.*;
 import java.lang.NumberFormatException;
+
 public class UserInterface {
-    private Scanner scan = new Scanner(System.in);
+    public static Scanner scan = new Scanner(System.in);
     public static VendingMachine vm = new VendingMachine();
     // Current User (null if guest user)
     public static User currentUser = new Customer("", "", "");
@@ -47,12 +49,14 @@ public class UserInterface {
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
         "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
-        put("signup", "\nAllows any user to create an account for the machine.\n" + 
-        "\nUsage: signup <type> <name> <username> <password>\n" +
-        "<type>     -> type of user (cashier, customer, owner, seller)\n" + 
+        // add in help for paying by card
+        put("sell", "Allows a vending machine owner to sell a product.");
+        put("signup", "Allows a vending machine owner to sell a product.\n" +
+        "Usage: signup <type> <name> <username> <password>\n" +
+        "<type>     -> type of user (cashier, customer, owner, seller)\n" +
         "<name>     -> name of the user\n" +
         "<username> -> username of the user, has to be unique\n" +
-        "<password> -> password of the user\n" + 
+        "<password> -> password of the user\n" +
         "\nExample of usage: signup customer John myusername mypassword\n");
         put("login", "\nAllows any user to login to their account in the machine.\n" +
         "\nUsage: login <username> <password>\n" +
@@ -96,7 +100,6 @@ public class UserInterface {
                 "\n<username>  -> the username of the cashier or seller you want to remove\n" + "Example of usage: removeEmployee FrankieFlew\n");
 
     }};
-
 
     public void buy(List<String> input){
         if (!validateInput(input)) {
@@ -163,73 +166,61 @@ public class UserInterface {
         }
 
         if (input.get(0).equals("card")) {
+            String itemQuantity = input.get(1);
+            String itemCode = input.get(2);
+            // Checking if card details match for anonymous users
+            if (currentUser == null) {
+                String cardName = input.get(3);
+                String cardNumber = input.get(4);
+                if (!Card.checkCardDetails(cardName, cardNumber)) {
+                    System.out.println("\nWe were unable to match your card, please try again.");
+                    Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to unmatched card details");
+                    Transaction.writeTransaction(t);
+                    return;
+                }
+            }
             // Check that we have enough stock for the purchase
-            if (!vm.checkStock(vm.searchByItemCode(input.get(2)), Integer.parseInt(input.get(1)))){
+            if (!vm.checkStock(vm.searchByItemCode(itemCode), Integer.parseInt(itemQuantity))) {
                 // Record the cancelled transaction
                 Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to insufficient stock");
                 System.out.println("\nSincere apologies. We do not have enough stock to accommodate that purchase. Please either reinput your quantity or press 'exit' to quit the program.");
                 return;
             }
-            String[] details;
-            System.out.println("\nPlease input your card details in the form:\nName Number\n\nFor example: Max 40420");
-            String name;
-            String number;
-            // check details against saved cards, prompts user again if fails
-            while (true) {
-                String cardInput = null;
-                try{
-                    cardInput = App.readLine();
-                }
-                catch(InterruptedException ie){}
-                // Restart the app if this doesn't get an answer in 2 mins
-                if (cardInput == null){
-                    App.menu();
-                    return;
-                }
-                details = cardInput.split(" ");
-                // If they haven't given a viable input then keep asking
-                if (details.length != 2 || !Card.checkCardDetails(details[0], details[1])){
-                    System.out.println("\nWe were unable to match your card, please try again.");
-                    continue;
-                }
-                name = details[0];
-                number = details[1];
-                break;
-            }
-
-            System.out.println(vm.payByCard(Integer.parseInt(input.get(1)), input.get(2)));
-
+            System.out.println(vm.payByCard(Integer.parseInt(itemQuantity), itemCode));
             // Record the successful transaction:
-            Transaction t = new Transaction(UserInterface.currentUser.getName(), vm.searchByItemCode(input.get(2)), LocalDateTime.now(), vm.calculateToPay(input.get(2), Integer.parseInt(input.get(1))), 0.0, "Card", "Successful");
+            Transaction t = new Transaction(UserInterface.currentUser.getName(), vm.searchByItemCode(itemCode), LocalDateTime.now(), vm.calculateToPay(itemCode, Integer.parseInt(itemQuantity)), 0.0, "Card", "Successful");
             Transaction.writeTransaction(t);
-
-            // if (user is logged in), option to save credit card details (!)
-            System.out.println("Would you like to save your card details to your account? Input 'yes' or 'no' to continue.");
-            while (true) {
-                String saveCard = null;
-                try {
-                    saveCard = App.readLine();
-                }
-                catch(InterruptedException ie) { }
-                if (saveCard == null) {
-                    App.menu();
-                    return;
-                }
-                if (saveCard.equals("yes")) {
-                    vm.saveCardDetails(new Card(name, number)); // (!) include User object to save to specific one
-                    System.out.println("Card details were successfully saved to your account!");
-                    break;
-                }
-                else if (saveCard.equals("no")) {
-                    System.out.println("Card details were not saved to your account.");
-                    break;
-                }
-                else {
-                    System.out.println("\nWe were unable to process your request, please try again.");
+            if ((!currentUser.getName().equals("")) && (currentUser.getCard() == null)) {
+                String cardName = input.get(3);
+                String cardNumber = input.get(4);
+                System.out.println("\nWould you like to save these card details to your account? Input 'yes' or 'no' to continue.");
+                while (true) {
+                    String saveCard = null;
+                    try {
+                        saveCard = App.readLine();
+                    }
+                    catch(InterruptedException ie) { }
+                    if (saveCard == null) {
+                        App.menu();
+                        return;
+                    }
+                    if (saveCard.equals("yes")) {
+                        Card userCard = new Card(cardName, cardNumber);
+                        Card.updateCards(userCard);
+                        User.addCard(UserInterface.currentUser, userCard);
+                        System.out.println("Card details were successfully saved to your account! You no longer have to input card details for your purchases!");
+                        break;
+                    }
+                    else if (saveCard.equals("no")) {
+                        System.out.println("Card details were not saved to your account.");
+                        break;
+                    }
+                    else {
+                        System.out.println("\nWe were unable to process your request, please try again.");
+                    }
                 }
             }
         }
-
         System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'help buy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }
 
@@ -291,6 +282,12 @@ public class UserInterface {
                     }
 
                 }
+                // Check if a user that has no saved card details (anonymous or first time signup) has inputted card details
+                if ((input.get(0).equals("card")) && (currentUser.getCard() == null)) {
+                    if (input.size() < 5) {
+                        return false;
+                    }
+                }
 
             }
             catch(NumberFormatException ne){return false;}
@@ -303,31 +300,61 @@ public class UserInterface {
     // Displays by default, before user chooses to log in
     public void anonymousPage() {
         List<Transaction> transactions = Transaction.anonTransactions;
-        if (transactions.size() == 0){return;}
-
-        // Print a maximum of 5 items
-        System.out.println("\nThese were the last few items bought by anonymous users:");
+        int size = transactions.size();
         int index = 1;
-        for (int i = transactions.size() - 1; i >= 0; i--) {
-            if (index > 5){
-                break;
+        System.out.println("\nThese were the last few items bought by anonymous customers:");
+        if (size < 5) {
+            for (int initial = size - 1; initial >= 0; initial -= 1) {
+                System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+                index++;
             }
-            System.out.println(index + ") " + transactions.get(i).getItemSold().getName());
-            index++;
         }
+        else if (size >= 5) {
+            for (int initial = size - 1; initial >= size - 5; initial -= 1) {
+                System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
+                index++;
+            }
+        }
+        System.out.println();
     }
 
-    // (!) Displays after user logs in
-    // public void loggedInPage(User user) {
-    //     System.out.println("\nThese were the last 5 items bought by you:");
-    //     Map<User, List<Transaction>> users = Transaction.userTransactions;
-    //     List<Transaction> transactions = users.get(user);
-    //     int index = 1;
-    //     for (int initial = transactions.size() - 1; initial >= transactions.size() - 5; initial -= 1) {
-    //         System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
-    //         index++;
-    //     }
-    // }
+    // Displays after user logs in
+    public void loggedInPage() {
+        System.out.println("\nThese were the last few items bought by you:");
+        List<String> tempFood = new ArrayList<String>();
+        try {
+            File file = new File("./src/main/resources/transactions.txt");
+            Scanner scan = new Scanner(file);
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                String[] parts = line.split(", ");
+                if (parts.length == 7) {
+                    String name = parts[0];
+                    String itemCode = parts[1];
+                    if (name.equals(currentUser.getName())) {
+                        tempFood.add(vm.searchByItemCode(itemCode).getName());
+                    }
+                }
+            }
+        }
+        catch (FileNotFoundException fe) {
+            fe.printStackTrace();
+        }
+        int size = tempFood.size();
+        int index = 1;
+        if (size < 5) {
+            for (int initial = size - 1; initial >= 0; initial -= 1) {
+                System.out.println(index + ") " + tempFood.get(initial));
+                index++;
+            }
+        }
+        else if (size >= 5) {
+            for (int initial = size - 1; initial >= size - 5; initial -= 1) {
+                System.out.println(index + ") " + tempFood.get(initial));
+                index++;
+            }
+        }
+    }
 
     // Help command
     public void help(List<String> arguments) {

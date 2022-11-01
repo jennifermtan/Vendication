@@ -3,6 +3,7 @@ package SOFT2412.A2;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 public class Cashier extends User{
     public Cashier(String name, String username, String password) {
         super(name, username, password);
@@ -27,7 +28,7 @@ public class Cashier extends User{
             allTransactions += ("|" + UserInterface.foodDetailString(14, t.getItemSold().getName()) +  UserInterface.foodDetailString(8, "$" + String.valueOf(t.getPaid())) + UserInterface.foodDetailString(8, "$" + String.valueOf(t.getChange()))
                     + UserInterface.foodDetailString(16, t.getPaymentMethod()) + UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) + "\n");
         }
-        allTransactions += "--------------------------------------------------------------------";
+        allTransactions += "--------------------------------------------------------------------\n";
         return allTransactions;
     }
 
@@ -38,6 +39,19 @@ public class Cashier extends User{
         }
         UserInterface.vm.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
         UserInterface.vm.loadCash();
+    }
+
+    public String displayAvailableChange() {
+        String summary = "";
+        summary += "------------------------\n";
+        summary += "| Coin/Note | Quantity |\n";
+        summary += "------------------------\n";
+        for (String cashAmount : UserInterface.vm.getCash().keySet()) {
+            String quantity = Integer.toString(UserInterface.vm.getCash().get(cashAmount));
+            summary += ("|" + UserInterface.foodDetailString(11, cashAmount)) +  (UserInterface.foodDetailString(10, quantity) + "\n");
+        }
+        summary += "------------------------\n";
+        return summary;
     }
 
 }

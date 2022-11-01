@@ -67,6 +67,9 @@ public class Transaction {
 
     // Read in transactions from transactions.txt and update anonTransactions and userTransactions on startup
     public static void loadTransactions(VendingMachine vm){
+        anonTransactions = new ArrayList<>();
+        userTransactions = new HashMap<>();
+        cancelTransactions = new ArrayList<>();
         try {
             // Look into transactions.txt and load the anonTransactions and userTransactions data structures
             File f = new File("./src/main/resources/transactions.txt");

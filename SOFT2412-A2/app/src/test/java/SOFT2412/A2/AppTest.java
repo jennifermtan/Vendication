@@ -72,7 +72,7 @@ class AppTest {
         holder = ui.allCommandUsage;
         User md = new Customer("Md", "Emmder", "password124");
         Card coolCard = new Card("Md", "123456");
-        md.addCard(coolCard);
+        md.addCard(md, coolCard);
         assertEquals(md.getCard(), coolCard);
     }
 
@@ -165,43 +165,11 @@ class AppTest {
         assertTrue(Math.abs(f.getCost() - 2000) < 0.0001);
     }
 
-    @Test
-    void adminsTestEditItemName() {
-        john.editItemName("Coca Cola", "Coke");
-        assertEquals(ui.vm.searchByItemCode("cc").getName(), "Coke");
-        Seller.editItemName("Sprite", "Sprites");
-        assertEquals(ui.vm.searchByItemCode("se").getName(), "Sprites");
-        ui.vm.defaulting();
-    }
-
-    @Test
-    void adminsTestEditItemCode() {
-        john.editItemCode("sm", "smm");
-        assertEquals(ui.vm.searchByItemCode("smm").getName(), "Smiths");
-        Seller.editItemCode("se", "see");
-        assertEquals(ui.vm.searchByItemCode("see").getName(), "Sprite");
-        ui.vm.defaulting();
-    }
-
-    @Test
-    void adminsTestEditItemCategory() {
-        john.editItemCategory("pi", "Candy");
+    @Test void sellerTestEditItemDetail() {
+        john.editItemDetail("category", "pi", "Candy");
         assertEquals(ui.vm.searchByItemCode("pi").getCategory(), "Candy");
-        Seller.editItemCategory("ms", "Candy");
-        assertEquals(ui.vm.searchByItemCode("ms").getCategory(), "Candy");
         ui.vm.defaulting();
     }
-
-    @Test
-    void adminsTestEditItemPrice() {
-        john.editItemPrice("pi", 1.5);
-        assertEquals(ui.vm.searchByItemCode("pi").getCost(), 1.5);
-        Seller.editItemPrice("se", 1.5);
-        assertEquals(ui.vm.searchByItemCode("se").getCost(), 1.5);
-        ui.vm.defaulting();
-    }
-
-
 
     @Test void adminsEditChange() {
         Cashier.editChange("$5", 15);
@@ -212,8 +180,17 @@ class AppTest {
 
     }
 
-    @Test
-    void ownerAddRemove() {
+    @Test void testTransactionSummaries(){
+        vm.defaulting();
+        Transaction.loadTransactions(vm);
+        Owner o = new Owner("md", "md", "password");
+        assertEquals(o.getCancelledSummary().split("\n").length, 5);
+        Cashier c = new Cashier("md", "md", "password");
+        assertEquals(c.getTransactionSummary().split("\n").length, 6);
+        vm.defaulting();
+    }
+
+    @Test void ownerAddRemove() {
         // Test removing
         vm.defaulting();
         User.loadUsers();

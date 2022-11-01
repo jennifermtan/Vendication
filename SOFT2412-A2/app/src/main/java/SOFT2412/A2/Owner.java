@@ -10,6 +10,7 @@ public class Owner extends User{
         super(name, username, password);
     }
 
+
     // Power of owner
     public static String getCancelledSummary(){
         String cancelTransactions="";
