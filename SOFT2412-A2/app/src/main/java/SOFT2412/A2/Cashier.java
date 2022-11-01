@@ -3,6 +3,7 @@ package SOFT2412.A2;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 public class Cashier extends User{
     public Cashier(String name, String username, String password) {
         super(name, username, password);
@@ -35,5 +36,18 @@ public class Cashier extends User{
     public void editChange(String cashAmount, int quantity) {
         UserInterface.vm.updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
         UserInterface.vm.loadCash();
+    }
+
+    public String displayAvailableChange() {
+        String summary = "";
+        summary += "------------------------\n";
+        summary += "| Coin/Note | Quantity |\n";
+        summary += "------------------------\n";
+        for (String cashAmount : UserInterface.vm.getCash().keySet()) {
+            String quantity = Integer.toString(UserInterface.vm.getCash().get(cashAmount));
+            summary += ("|" + UserInterface.foodDetailString(11, cashAmount)) +  (UserInterface.foodDetailString(10, quantity) + "\n");
+        }
+        summary += "------------------------\n";
+        return summary;
     }
 }
