@@ -113,12 +113,16 @@ class AppTest {
         vm.updateLine("./src/main/resources/cash.txt", "$1", "0", 1);
 
         UserInterface ui = new UserInterface();
-        List<String> input = new ArrayList<String>(Arrays.asList("cash", "3", "sp", "$50*1"));
-        ui.buy(input);
-        // Check that we didn't take their money
-        assertEquals(vm.getCash().get("$50"), 5);
-        // Check that we didn't lose stock
-        assertEquals(vm.getInventory().get(vm.searchByItemCode("sp")), 7);
+        try{
+            vm.payByCash(3, "sp", "$50*1");
+            fail("allowed to buy when there was no change");
+        }catch(IllegalStateException ie){
+            // Check that we didn't lose stock
+            assertEquals(vm.getInventory().get(vm.searchByItemCode("sp")), 7);
+            // Check that we didn't take their money
+            assertEquals(vm.getCash().get("$50"), 5);
+        }
+
 
         vm.defaulting();
     }
