@@ -39,81 +39,28 @@ public class Owner extends User{
                 }
                 break;
 
-            // case "price":
-            //     for (Food food : UserInterface.vm.getInventory().keySet()) {
-            //         if (food.getItemCode().equals(oldDetail)) {
-            //             food.setCost(newDetail);
-            //         }
-            //     }
-            //     UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, Double.toString(newDetail), 3);
-            //     break;
-            //
-            // case "quantity":
-            //     if (newQuantity > 15) {
-            //         System.out.println("Error: Maximum quantity is 15.");
-            //     } else if (newQuantity < 0) {
-            //         System.out.println("Error: Please enter a valid quantity.");
-            //     } else {
-            //         System.out.println("Help");
-            //         UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, Integer.toString(newDetail), 4);
-            //         UserInterface.vm.loadInventory();
-            //     }
-            //     break;
+            case "price":
+                for (Food food : UserInterface.vm.getInventory().keySet()) {
+                    if (food.getItemCode().equals(oldDetail)) {
+                        food.setCost(Double.parseDouble(newDetail));
+                    }
+                }
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 3);
+                break;
+            
+            case "quantity":
+                if (Integer.parseInt(newDetail) > 15) {
+                    System.out.println("Error: Maximum quantity is 15.");
+                } else if (Integer.parseInt(newDetail) < 0) {
+                    System.out.println("Error: Please enter a valid quantity.");
+                } else {
+                    System.out.println("Help");
+                    UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 4);
+                    UserInterface.vm.loadInventory();
+                }
+                break;
         }
     }
-
-    //Edit item name
-    // public void editItemName(String name, String newName) {
-    //     UserInterface.vm.updateLine("./src/main/resources/inventory.txt", name, newName, 0);
-    //     for (Food food : UserInterface.vm.getInventory().keySet()) {
-    //         if (food.getName().equals(name)) {
-    //             food.setName(newName);
-    //         }
-    //     }
-    // }
-
-    //Edit item code
-    // public void editItemCode(String code, String newCode) {
-    //     UserInterface.vm.updateLine("./src/main/resources/inventory.txt", code, newCode, 2);
-    //     for (Food food : UserInterface.vm.getInventory().keySet()) {
-    //         if (food.getItemCode().equals(code)) {
-    //             food.setItemCode(newCode);
-    //         }
-    //     }
-    // }
-
-    //Edit item category
-    // public void editItemCategory(String itemCode, String newCategory) {
-    //     UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newCategory, 1);
-    //     for (Food food : UserInterface.vm.getInventory().keySet()) {
-    //         if (food.getItemCode().equals(itemCode)) {
-    //             food.setCategory(newCategory);
-    //         }
-    //     }
-    // }
-
-    //Edit item price
-    // public void editItemPrice(String itemCode, double newPrice) {
-    //     for (Food food : UserInterface.vm.getInventory().keySet()) {
-    //         if (food.getItemCode().equals(itemCode)) {
-    //             food.setCost(newPrice);
-    //         }
-    //     }
-    //     UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, Double.toString(newPrice), 3);
-    // }
-
-    //Edit item quantity
-    // public void editItemQuantity(String itemCode, int newQuantity) {
-    //     if (newQuantity > 15) {
-    //         System.out.println("Error: Maximum quantity is 15.");
-    //     } else if (newQuantity < 0) {
-    //         System.out.println("Error: Please enter a valid quantity.");
-    //     } else {
-    //         System.out.println("Help");
-    //         UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(newQuantity), 4);
-    //         UserInterface.vm.loadInventory();
-    //     }
-    // }
 
     // Power of owner
     public static String getCancelledSummary(){
