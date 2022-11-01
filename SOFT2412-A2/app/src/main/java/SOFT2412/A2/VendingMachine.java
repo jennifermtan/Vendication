@@ -17,12 +17,15 @@ public class VendingMachine {
 
     public VendingMachine(){
         // Load in the cash and the inventory from "inventory.txt" and "cash.txt" files using methods in case we need to reload them
+        // load in the inventory from "inventory.txt"
+        loadInventory();
         // load in the cash numbers from "cash.txt"
         loadCash();
         // Load in the card details from "creditCards.json"
         Card.loadCards();
-        // load in the inventory from "inventory.txt"
-        loadInventory();
+        // Users need to be laoded in at the beginning for methods to work
+        User.loadUsers();
+        // Saved transactions from previous use are loaded in
         Transaction.loadTransactions(this);
         // Set default user null
         this.currentUser = null;
@@ -181,7 +184,7 @@ public class VendingMachine {
         updateItem(itemCode, quantity);
         updateTotalSold(itemCode, quantity);
         Food item = searchByItemCode(itemCode);
-        return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!\n";
+        return "Transaction successful! User received " + quantity + " " + item.getName() + "(s)!";
     }
 
     public Food searchByItemCode(String itemCode){
@@ -350,13 +353,13 @@ public class VendingMachine {
             // Default for transactions.txt
             File transactionFile = new File("./src/main/resources/transactions.txt");
             FileOutputStream o = new FileOutputStream(transactionFile, false);
-            o.write("anonymous, se, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful\nanonymous, 2022-10-27T21:59:26.125755100, Cancelled due to incorrect user input\ntester, mm, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful".getBytes());
+            o.write("anonymous, se, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful\nanonymous, 2022-10-27T21:59:26.125755100, Cancelled due to incorrect user input\ntester, mm, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful\n".getBytes());
             o.close();
 
             // Default for users.txt
             File usersFile = new File("./src/main/resources/users.txt");
             FileOutputStream u = new FileOutputStream(usersFile, false);
-            u.write("owner, Freddy, generic, freddyisthebest\ncustomer, Mark, mark234, mypassword\ncashier, Edith, sampleusername, samplepassword\ncustomer, name, realName, password\nseller, Naomi, naomi<3, name".getBytes());
+            u.write("owner, Freddy, generic, freddyisthebest\ncustomer, Mark, mark234, mypassword\ncashier, Edith, sampleusername, samplepassword\ncustomer, name, realName, password\nseller, Naomi, naomi<3, name\n".getBytes());
             u.close();
 
         }

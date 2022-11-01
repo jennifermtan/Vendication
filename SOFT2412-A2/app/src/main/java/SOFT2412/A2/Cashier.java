@@ -27,7 +27,7 @@ public class Cashier extends User{
             allTransactions += ("|" + UserInterface.foodDetailString(14, t.getItemSold().getName()) +  UserInterface.foodDetailString(8, "$" + String.valueOf(t.getPaid())) + UserInterface.foodDetailString(8, "$" + String.valueOf(t.getChange()))
                     + UserInterface.foodDetailString(16, t.getPaymentMethod()) + UserInterface.foodDetailString(16, t.getTimeSold().format(formatter)) + "\n");
         }
-        allTransactions += "--------------------------------------------------------------------";
+        allTransactions += "--------------------------------------------------------------------\n";
         return allTransactions;
     }
 

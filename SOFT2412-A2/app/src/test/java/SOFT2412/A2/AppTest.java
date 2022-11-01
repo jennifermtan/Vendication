@@ -187,10 +187,11 @@ class AppTest {
 
     @Test void testTransactionSummaries(){
         vm.defaulting();
+        Transaction.loadTransactions(vm);
         Owner o = new Owner("md", "md", "password");
-        assertEquals(o.getCancelledSummary().split("\n").length, 6);
+        assertEquals(o.getCancelledSummary().split("\n").length, 5);
         Cashier c = new Cashier("md", "md", "password");
-        assertEquals(c.getTransactionSummary().split("\n").length, 8);
+        assertEquals(c.getTransactionSummary().split("\n").length, 6);
         vm.defaulting();
     }
 

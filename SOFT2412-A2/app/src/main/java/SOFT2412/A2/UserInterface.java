@@ -2,6 +2,7 @@ package SOFT2412.A2;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.io.*;
 import java.lang.NumberFormatException;
 
 public class UserInterface {
@@ -193,10 +194,10 @@ public class UserInterface {
             // Record the successful transaction:
             Transaction t = new Transaction(UserInterface.currentUser.getName(), vm.searchByItemCode(itemCode), LocalDateTime.now(), vm.calculateToPay(itemCode, Integer.parseInt(itemQuantity)), 0.0, "Card", "Successful");
             Transaction.writeTransaction(t);
-            if ((currentUser != null) && (currentUser.getCard() == null)) {
+            if ((!currentUser.getName().equals("")) && (currentUser.getCard() == null)) {
                 String cardName = input.get(3);
                 String cardNumber = input.get(4);
-                System.out.println("Would you like to save these card details to your account? Input 'yes' or 'no' to continue.");
+                System.out.println("\nWould you like to save these card details to your account? Input 'yes' or 'no' to continue.");
                 while (true) {
                     String saveCard = null;
                     try {
@@ -321,30 +322,43 @@ public class UserInterface {
         System.out.println();
     }
 
-    // (!) Displays after user logs in
-    // public void loggedInPage() {
-    //     System.out.println("\nThese were the last few items bought by you:");
-    //     Map<User, List<Transaction>> users = Transaction.userTransactions;
-    //     List<Transaction> transactions = users.get(currentUser);
-    //     for (User u : users.keySet()) {
-    //         System.out.println(u.getName());
-    //     }
-    //     int size = transactions.size();
-    //     int index = 1;
-    //     if (size < 5) {
-    //         for (int initial = size - 1; initial >= 0; initial -= 1) {
-    //             System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
-    //             index++;
-    //         }
-    //     }
-    //     else if (size >= 5) {
-    //         for (int initial = size - 1; initial >= size - 5; initial -= 1) {
-    //             System.out.println(index + ") " + transactions.get(initial).getItemSold().getName());
-    //             index++;
-    //         }
-    //     }
-    //     System.out.println();
-    // }
+    // Displays after user logs in
+    public void loggedInPage() {
+        System.out.println("\nThese were the last few items bought by you:");
+        List<String> tempFood = new ArrayList<String>();
+        try {
+            File file = new File("./src/main/resources/transactions.txt");
+            Scanner scan = new Scanner(file);
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                String[] parts = line.split(", ");
+                if (parts.length == 7) {
+                    String name = parts[0];
+                    String itemCode = parts[1];
+                    if (name.equals(currentUser.getName())) {
+                        tempFood.add(vm.searchByItemCode(itemCode).getName());
+                    }
+                }
+            }
+        }
+        catch (FileNotFoundException fe) {
+            fe.printStackTrace();
+        }
+        int size = tempFood.size();
+        int index = 1;
+        if (size < 5) {
+            for (int initial = size - 1; initial >= 0; initial -= 1) {
+                System.out.println(index + ") " + tempFood.get(initial));
+                index++;
+            }
+        }
+        else if (size >= 5) {
+            for (int initial = size - 1; initial >= size - 5; initial -= 1) {
+                System.out.println(index + ") " + tempFood.get(initial));
+                index++;
+            }
+        }
+    }
 
     // Help command
     public void help(List<String> arguments) {
