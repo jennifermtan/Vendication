@@ -106,15 +106,6 @@ public class App {
     }
 
     public static void main(String[] args) {
-        // Owner owner = new Owner("owner", "owner123", "pass");
-        // Seller john = new Seller("john", "john123", "pass");
-        // // // owner.editChange("$5", 20);
-        // owner.editItemQuantity("cc", 15);
-        // john.editItemQuantity("mn", 8);
-        // System.out.println(ui.vm.getInventory().get(ui.vm.searchByItemCode("cc")));
-        // System.out.println(ui.vm.getInventory().get(ui.vm.searchByItemCode("mn")));
-        // System.out.println(ui.vm.getCash().get("$5"));
-
         System.out.println("        _______  _        ______  _________ _______  _______ __________________ _________       \n" +
                 "|\\     /|(  ____ \\( (    /|(  __  \\ \\__   __/(  ____ \\(  ___  )\\__   __/\\__   __/(  ___  )( (    /|\n" +
                 "| )   ( || (    \\/|  \\  ( || (  \\  )   ) (   | (    \\/| (   ) |   ) (      ) (   | (   ) ||  \\  ( |\n" +

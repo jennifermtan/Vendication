@@ -1,5 +1,5 @@
-Sprite, se, 29
-Sour Patch, sp, 188
+Sprite, se, 33
+Sour Patch, sp, 191
 Bounty, by, 3
 M&M, mm, 5
 Kettle, ke, 3

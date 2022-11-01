@@ -197,11 +197,11 @@ class AppTest {
         ui.vm.defaulting();
     }
 
-    @Test void ownerTestEditItemQuantity() {
-        owner.editItemQuantity("ts", 5);
-        assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("ts")), 5);
-        ui.vm.defaulting();
-    }
+    // @Test void ownerTestEditItemQuantity() {
+    //     owner.editItemQuantity("ts", 5);
+    //     assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("ts")), 5);
+    //     ui.vm.defaulting();
+    // }
 
     @Test void adminsEditChange() {
         owner.editChange("$5", 20);
