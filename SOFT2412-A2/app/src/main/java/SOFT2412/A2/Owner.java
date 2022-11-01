@@ -10,6 +10,58 @@ public class Owner extends User{
         super(name, username, password);
     }
 
+    public void editItemDetail(String detailType, String oldDetail, String newDetail) {
+        switch (detailType) {
+            case "name":
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 0);
+                for (Food food : UserInterface.vm.getInventory().keySet()) {
+                    if (food.getName().equals(oldDetail)) {
+                        food.setName(newDetail);
+                    }
+                }
+                break;
+
+            case "code":
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 2);
+                for (Food food : UserInterface.vm.getInventory().keySet()) {
+                    if (food.getItemCode().equals(oldDetail)) {
+                        food.setItemCode(newDetail);
+                    }
+                }
+                break;
+
+            case "category":
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 1);
+                for (Food food : UserInterface.vm.getInventory().keySet()) {
+                    if (food.getItemCode().equals(oldDetail)) {
+                        food.setCategory(newDetail);
+                    }
+                }
+                break;
+
+            case "price":
+                for (Food food : UserInterface.vm.getInventory().keySet()) {
+                    if (food.getItemCode().equals(oldDetail)) {
+                        food.setCost(Double.parseDouble(newDetail));
+                    }
+                }
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 3);
+                break;
+            
+            case "quantity":
+                if (Integer.parseInt(newDetail) > 15) {
+                    System.out.println("Error: Maximum quantity is 15.");
+                } else if (Integer.parseInt(newDetail) < 0) {
+                    System.out.println("Error: Please enter a valid quantity.");
+                } else {
+                    System.out.println("Help");
+                    UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 4);
+                    UserInterface.vm.loadInventory();
+                }
+                break;
+        }
+    }
+
     // Power of owner
     public static String getCancelledSummary(){
         String cancelTransactions="";

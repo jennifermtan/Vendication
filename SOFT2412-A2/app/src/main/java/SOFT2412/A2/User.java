@@ -35,10 +35,6 @@ public abstract class User {
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");
-                // if(!userLogins.containsKey(userInfo[1]))
-                //     userLogins.put(userInfo[1], userInfo[2]);
-                // else
-                //     System.out.println("That username already exists.");
                 userLogins.put(userInfo[2], userInfo[3]);
                 // Checking which type of user it is
                 if(userInfo[0].equals("cashier"))
@@ -49,9 +45,9 @@ public abstract class User {
                     tempUser = new Owner(userInfo[1], userInfo[2], userInfo[3]);
                 else if(userInfo[0].equals("seller"))
                     tempUser = new Seller(userInfo[1], userInfo[2], userInfo[3]);
-
-                if (userInfo.length == 5) {
-                    tempUser.card = Card.getCard(userInfo[4]);
+                // Check if user has card details in file
+                if (userInfo.length == 6) {
+                    tempUser.card = new Card(userInfo[4], userInfo[5]);
                 }
                 users.add(tempUser);
             }
@@ -65,11 +61,17 @@ public abstract class User {
     public static void login(String username, String password) {
         loadUsers();
         for(User u: users) {
-
             if (u.username.equals(username)) {
                 if(u.password.equals(password)) {
                     UserInterface.currentUser = u;
                     System.out.println("Login Successful!");
+                    if (u.getCard() == null) {
+                        System.out.println("You do not have any card details saved to this account.");
+                    }
+                    else {
+                        System.out.printf("You have a card (Name: %s, Number; %s) saved to this account.\n",
+                        UserInterface.currentUser.getCard().getName(), UserInterface.currentUser.getCard().getNumber());
+                    }
                     return;
                 }
                 else {
@@ -120,8 +122,7 @@ public abstract class User {
             fw = new FileWriter("./src/main/resources/users.txt", true);
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw);
-
-            pw.printf("%s, %s, %s, %s, \n", type, name, username, password);
+            pw.printf("%s, %s, %s, %s\n", type, name, username, password);
             pw.flush();
         } catch (IOException e) { System.out.println("signup: Error while writing to file."); }
         finally {
@@ -162,9 +163,31 @@ public abstract class User {
         return null;
     }
 
-    // (!) add card to individual user
-    public void addCard(Card card) {
-        this.card = card;
+    // Saving card details to users in the users.txt file
+    public static void addCard(User user, Card userCard) {
+        user.card = userCard;
+        try {
+            File file = new File("./src/main/resources/users.txt");
+            Scanner scan = new Scanner(file);
+            StringBuffer inputBuffer = new StringBuffer();
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                String[] parts =  line.split(", ");
+                if (parts[2].equals(UserInterface.currentUser.getUsername())) {
+                    line += (", " + user.card.getName() + ", " + user.card.getNumber());
+                }
+                inputBuffer.append(line);
+                inputBuffer.append("\n");
+            }
+            scan.close();
+            String inputStr = inputBuffer.toString();
+            FileOutputStream output = new FileOutputStream("./src/main/resources/users.txt");
+            output.write(inputStr.getBytes());
+            output.close();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName(){return name;}
@@ -173,4 +196,5 @@ public abstract class User {
     public Card getCard(){return card;}
     public static List<User> getUsers(){return users;}
     public static void removeUser(User u){users.remove(u);}
+
 }

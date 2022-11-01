@@ -21,6 +21,7 @@ class AppTest {
         return;
     }
 
+    @Test
     // Only testing if the payByCard method works
     public void testPayByCard() {
         int quantity = 4;
@@ -28,19 +29,19 @@ class AppTest {
         vm.payByCard(quantity, itemCode);
     }
 
-    // @Test
-    // public void testCardInput() {
-    //     String[] temp = {"buy", "card", "4", "se"};
-    //     List<String> input = Arrays.asList(temp);
-    //     ui.buy(input);
-    // }
+    @Test
+    public void testCardInput() {
+        String[] temp = {"buy", "card", "4", "se"};
+        List<String> input = Arrays.asList(temp);
+        ui.buy(input);
+    }
 
     // Need to find a way to update the txt file to its original inventory after testing
-    // @Test
-    // public void testUpdateItem() {
-    //     vm.updateItem("cc", 1);
-    //     assertEquals(vm.getInventory().get(vm.searchByItemCode("cc")), 6);
-    // }
+    @Test
+    public void testUpdateItem() {
+        vm.updateItem("cc", 1);
+        assertEquals(vm.getInventory().get(vm.searchByItemCode("cc")), 6);
+    }
 
     // This also tests updateCash(), updateItem(), updateTransactions(), and calculateChange() because the method is called in payByCash()
     @Test
@@ -71,7 +72,7 @@ class AppTest {
         holder = ui.allCommandUsage;
         User md = new Customer("Md", "Emmder", "password124");
         Card coolCard = new Card("Md", "123456");
-        md.addCard(coolCard);
+        md.addCard(md, coolCard);
         assertEquals(md.getCard(), coolCard);
     }
 
@@ -165,37 +166,16 @@ class AppTest {
     }
 
     @Test
-    void sellerTestEditItemName() {
-        john.editItemName("Coca Cola", "Coke");
+    void ownerTestEditItemDetail() {
+        owner.editItemDetail("name", "Coca Cola", "Coke");
         assertEquals(ui.vm.searchByItemCode("cc").getName(), "Coke");
         ui.vm.defaulting();
     }
 
     @Test
-    void sellerTestEditItemCode() {
-        john.editItemCode("cc", "ccc");
-        assertEquals(ui.vm.searchByItemCode("ccc").getName(), "Coca Cola");
-        ui.vm.defaulting();
-    }
-
-    @Test
-    void sellerTestEditItemCategory() {
-        john.editItemCategory("pi", "Candy");
+    void sellerTestEditItemDetail() {
+        john.editItemDetail("category", "pi", "Candy");
         assertEquals(ui.vm.searchByItemCode("pi").getCategory(), "Candy");
-        ui.vm.defaulting();
-    }
-
-    @Test
-    void sellerTestEditItemPrice() {
-        john.editItemPrice("pi", 1.5);
-        assertEquals(ui.vm.searchByItemCode("pi").getCost(), 1.5);
-        ui.vm.defaulting();
-    }
-
-    @Test
-    void sellerTestEditItemQuantity() {
-        john.editItemQuantity("pi", 15);
-        assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("pi")), 15);
         ui.vm.defaulting();
     }
 
@@ -208,15 +188,15 @@ class AppTest {
 
     }
 
-    // @Test
-    // void testTransactionSummaries() {
-    //     vm.defaulting();
-    //     Owner o = new Owner("md", "md", "password");
-    //     assertEquals(o.getCancelledSummary().split("\n").length, 6);
-    //     Cashier c = new Cashier("md", "md", "password");
-    //     assertEquals(c.getTransactionSummary().split("\n").length, 8);
-    //     vm.defaulting();
-    // }
+    @Test void testTransactionSummaries(){
+        vm.defaulting();
+        Transaction.loadTransactions(vm);
+        Owner o = new Owner("md", "md", "password");
+        assertEquals(o.getCancelledSummary().split("\n").length, 5);
+        Cashier c = new Cashier("md", "md", "password");
+        assertEquals(c.getTransactionSummary().split("\n").length, 6);
+        vm.defaulting();
+    }
 
     @Test
     void ownerAddRemove() {
