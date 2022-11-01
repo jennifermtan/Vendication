@@ -51,12 +51,13 @@ public class Seller extends User{
 
     //Edit item quantity
     public void editItemQuantity(String itemCode, int newQuantity) {
-        if (newQuantity > 15) {
+        if (newQuantity > 15) { 
             System.out.println("Error: Maximum quantity is 15.");
+        } else if (newQuantity < 0) {
+            System.out.println("Error: Please enter a valid quantity.");
         } else {
             UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(newQuantity), 4);
-            Food food = UserInterface.vm.searchByItemCode(itemCode);
-            UserInterface.vm.addItem(food, 15 - UserInterface.vm.getInventory().get(food));
+            UserInterface.vm.loadInventory();
         }
     }
 
