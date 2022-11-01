@@ -295,4 +295,13 @@ class AppTest {
         assertTrue(changed);
         vm.defaulting();
     }
+
+    // Testing getUsernames() in Owner class
+    @Test
+    void testGetUsernames() {
+        String usernames = owner.getUsernames();
+        // 140 characters is the length of the start and end of the usernames table.
+        // If length is above that, it means method returned 1 or more username's data
+        assertTrue(usernames.length() > 140);
+    }
 }
