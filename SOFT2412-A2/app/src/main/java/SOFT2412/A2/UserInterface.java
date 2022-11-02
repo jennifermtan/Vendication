@@ -327,7 +327,7 @@ public class UserInterface {
 
         List<String> tempFood = new ArrayList<String>();
         try {
-            File file = new File("./resources/transactions.txt");
+            File file = new File(".src/main/resources/transactions.txt");
             Scanner scan = new Scanner(file);
             while (scan.hasNextLine()) {
                 String line = scan.nextLine();

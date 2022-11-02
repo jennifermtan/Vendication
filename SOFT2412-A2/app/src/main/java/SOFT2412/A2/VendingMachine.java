@@ -30,7 +30,7 @@ public class VendingMachine {
 
     public void loadCash(){
         try{
-            File cashFile = new File("./resources/cash.txt");
+            File cashFile = new File(".src/main/resources/cash.txt");
             Scanner scan1 = new Scanner(cashFile);
             while (scan1.hasNextLine()){
                 String[] line = scan1.nextLine().split(", ");
@@ -44,7 +44,7 @@ public class VendingMachine {
     public void loadInventory(){
         inventory.clear();
         try{
-            File invenFile = new File("./resources/inventory.txt");
+            File invenFile = new File(".src/main/resources/inventory.txt");
             Scanner scan2 = new Scanner(invenFile);
             while (scan2.hasNextLine()){
                 String[] line = scan2.nextLine().split(", ");
@@ -97,7 +97,7 @@ public class VendingMachine {
 
         //Now that the transaction has been confirmed, update the cash.txt file to reflect the cash hashmap
         for (Map.Entry<String, Integer> cashItem: cash.entrySet()){
-            updateLine("./resources/cash.txt", cashItem.getKey(), String.valueOf(cashItem.getValue()), 1);
+            updateLine(".src/main/resources/cash.txt", cashItem.getKey(), String.valueOf(cashItem.getValue()), 1);
         }
 
         return resultString;
@@ -218,7 +218,7 @@ public class VendingMachine {
     public void updateItem(String itemCode, int quantity) {
         Food foodItem = searchByItemCode(itemCode);
         inventory.put(foodItem, inventory.get(foodItem) - quantity);
-        updateLine("./resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);
+        updateLine(".src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);
     }
 
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
@@ -265,7 +265,7 @@ public class VendingMachine {
 
         boolean hasItem = false;
         try{
-            File file = new File("./resources/quantities.txt");
+            File file = new File(".src/main/resources/quantities.txt");
             Scanner scan = new Scanner(file);
             StringBuffer inputBuffer = new StringBuffer();
 
@@ -301,37 +301,37 @@ public class VendingMachine {
     public void defaulting(){
         try{
             // Default for cash.txt
-            File cashFile = new File("./resources/StableCash.txt");
+            File cashFile = new File(".src/main/resources/StableCash.txt");
             Scanner scan1 = new Scanner(cashFile);
             while (scan1.hasNextLine()){
                 String[] line = scan1.nextLine().split(", ");
                 cash.put(line[0], Integer.valueOf(line[1]));
-                updateLine("./resources/cash.txt", line[0], line[1], 1);
+                updateLine(".src/main/resources/cash.txt", line[0], line[1], 1);
             }
             scan1.close();
 
             // Default for inventory.txt
-            File invenFile = new File("./resources/StableInventory.txt");
+            File invenFile = new File(".src/main/resources/StableInventory.txt");
             Scanner scan2 = new Scanner(invenFile);
             while (scan2.hasNextLine()) {
                 String[] line = scan2.nextLine().split(", ");
                 inventory.put(new Food(line[0], line[1], line[2], Double.parseDouble(line[3])), Integer.valueOf(line[4]));
-                updateLine("./resources/inventory.txt", line[2], line[0], 0);
-                updateLine("./resources/inventory.txt", line[0], line[1], 1);
-                updateLine("./resources/inventory.txt", line[0], line[2], 2);
-                updateLine("./resources/inventory.txt", line[0], line[3], 3);
-                updateLine("./resources/inventory.txt", line[0], line[4], 4);
+                updateLine(".src/main/resources/inventory.txt", line[2], line[0], 0);
+                updateLine(".src/main/resources/inventory.txt", line[0], line[1], 1);
+                updateLine(".src/main/resources/inventory.txt", line[0], line[2], 2);
+                updateLine(".src/main/resources/inventory.txt", line[0], line[3], 3);
+                updateLine(".src/main/resources/inventory.txt", line[0], line[4], 4);
             }
             scan2.close();
 
             // Default for transactions.txt
-            File transactionFile = new File("./resources/transactions.txt");
+            File transactionFile = new File(".src/main/resources/transactions.txt");
             FileOutputStream o = new FileOutputStream(transactionFile, false);
             o.write("anonymous, se, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful\nanonymous, 2022-10-27T21:59:26.125755100, Cancelled due to incorrect user input\ntester, mm, 2022-10-27T21:59:18.128234400, $2.5, $0.0, card, Successful\n".getBytes());
             o.close();
 
             // Default for users.txt
-            File usersFile = new File("./resources/users.txt");
+            File usersFile = new File(".src/main/resources/users.txt");
             FileOutputStream u = new FileOutputStream(usersFile, false);
             u.write("owner, Freddy, generic, freddyisthebest\ncustomer, Mark, mark234, mypassword\ncashier, Edith, sampleusername, samplepassword\ncustomer, name, realName, password\nseller, Naomi, naomi<3, name\n".getBytes());
             u.close();

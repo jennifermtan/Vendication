@@ -38,7 +38,7 @@ public class Cashier extends User{
             System.out.println("Apologies, but you cannot have less than 0 or more than 15 items in this vending machine.");
             return;
         }
-        UserInterface.vm.updateLine("./resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
+        UserInterface.vm.updateLine(".src/main/resources/cash.txt", cashAmount, Integer.toString(quantity), 1);
         UserInterface.vm.loadCash();
     }
 
