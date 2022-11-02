@@ -8,30 +8,30 @@ public class Seller extends User{
         super(name, username, password);
     }
 
-    public static void editItemDetail(String detailType, String oldDetail, String newDetail) {
+    public static void editItemDetail(String detailType, String itemCode, String newDetail) {
         switch (detailType) {
             case "name":
-                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 0);
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 0);
                 for (Food food : UserInterface.vm.getInventory().keySet()) {
-                    if (food.getName().equals(oldDetail)) {
+                    if (food.getName().equals(itemCode)) {
                         food.setName(newDetail);
                     }
                 }
                 break;
 
             case "code":
-                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 2);
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 2);
                 for (Food food : UserInterface.vm.getInventory().keySet()) {
-                    if (food.getItemCode().equals(oldDetail)) {
+                    if (food.getItemCode().equals(itemCode)) {
                         food.setItemCode(newDetail);
                     }
                 }
                 break;
 
             case "category":
-                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 1);
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 1);
                 for (Food food : UserInterface.vm.getInventory().keySet()) {
-                    if (food.getItemCode().equals(oldDetail)) {
+                    if (food.getItemCode().equals(itemCode)) {
                         food.setCategory(newDetail);
                     }
                 }
@@ -39,11 +39,11 @@ public class Seller extends User{
 
             case "price":
                 for (Food food : UserInterface.vm.getInventory().keySet()) {
-                    if (food.getItemCode().equals(oldDetail)) {
+                    if (food.getItemCode().equals(itemCode)) {
                         food.setCost(Double.parseDouble(newDetail));
                     }
                 }
-                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 3);
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 3);
                 break;
             
             case "quantity":
@@ -52,8 +52,7 @@ public class Seller extends User{
                 } else if (Integer.parseInt(newDetail) < 0) {
                     System.out.println("Error: Please enter a valid quantity.");
                 } else {
-                    System.out.println("Help");
-                    UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 4);
+                    UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 4);
                     UserInterface.vm.loadInventory();
                 }
                 break;
@@ -62,7 +61,7 @@ public class Seller extends User{
         }
     }
     
-    public void itemsSummary() {
+    public static void itemsSummary() {
         UserInterface.displaySnacks(UserInterface.scan, UserInterface.vm.getInventory());
     }
 
