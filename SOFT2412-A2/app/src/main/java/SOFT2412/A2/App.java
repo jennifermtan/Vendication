@@ -76,7 +76,16 @@ public class App {
                 }
 
                 break;
-
+            case "summaryChange":
+                if (arguments.size() != 0)
+                    System.out.println("Incorrect Format. For more help on this summary command, type \"help summaryChange\"");
+                else if (UserInterface.currentUser instanceof Owner || UserInterface.currentUser instanceof Cashier){
+                    System.out.println(Cashier.displayAvailableChange());
+                }
+                else{
+                    System.out.println("Sorry, you do not have permission to perform this action.");
+                }
+                break;
             // Edit change: power of CASHIER and OWNER
             case "editChange":
                 if (arguments.size() == 2){

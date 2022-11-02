@@ -42,7 +42,7 @@ public class Cashier extends User{
         UserInterface.vm.loadCash();
     }
 
-    public String displayAvailableChange() {
+    public static String displayAvailableChange() {
         String summary = "";
         summary += "------------------------\n";
         summary += "| Coin/Note | Quantity |\n";
