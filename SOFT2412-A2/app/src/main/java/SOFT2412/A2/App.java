@@ -283,7 +283,7 @@ public class App {
 
     // This is the 'entry point' to the program
     public static void menu(){
-        ui.displaySnacks(scan, ui.vm.getInventory());
+        ui.displaySnacks(ui.vm.getInventory());
         if (UserInterface.currentUser.getName().equals("")) {
             ui.anonymousPage();
         }

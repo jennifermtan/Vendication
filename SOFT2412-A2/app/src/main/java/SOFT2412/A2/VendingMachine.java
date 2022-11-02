@@ -7,13 +7,11 @@ import java.util.*;
 import java.io.*;
 public class VendingMachine {
 
-    private List<Customer> customers = new ArrayList<Customer>();
     // A hashmap of the form: foodType: quantity in the vending machine
     private HashMap<Food, Integer> inventory = new HashMap<Food, Integer>();
     // A hashmap that records all the cash in the form cashType: quantity
     private HashMap<String, Integer> cash = new LinkedHashMap<String, Integer>();
-    // Current user
-    private User currentUser;
+
 
     public VendingMachine(){
         // Load in the cash and the inventory from "inventory.txt" and "cash.txt" files using methods in case we need to reload them
@@ -27,8 +25,7 @@ public class VendingMachine {
         User.loadUsers();
         // Saved transactions from previous use are loaded in
         Transaction.loadTransactions(this);
-        // Set default user null
-        this.currentUser = null;
+
     }
 
     public void loadCash(){
@@ -216,20 +213,6 @@ public class VendingMachine {
         return true;
     }
 
-    public void addItem(Food item, int quantity) {
-        if (! inventory.containsKey(item) && quantity <= 15) {
-            inventory.put(item, quantity);
-            // Append a line in the txt file
-        } else if (inventory.get(item) + quantity <= 15) {
-            inventory.put(item, inventory.get(item) + quantity);
-            updateLine("../src/main/resources/inventory.txt", item.getName(), Integer.toString(quantity), 4);
-        } else {
-            inventory.put(item, 15);
-            updateLine("../src/main/resources/inventory.txt", item.getName(), "15", 4);
-            System.out.printf("Maximum quantity is 15: only %s items added", 15 - inventory.get(item));
-            System.out.println();
-        }
-    }
 
     //When a user makes a transaction, update the quantity and/or cash
     public void updateItem(String itemCode, int quantity) {
