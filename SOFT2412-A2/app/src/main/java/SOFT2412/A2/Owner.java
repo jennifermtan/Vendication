@@ -32,7 +32,7 @@ public class Owner extends User{
         if (type.equals("seller") || type.equals("cashier")){
             User.signup(type, name, username, password);}
         else if (type.equals("customer")){
-            System.out.println("I think we can let the customers sign themselves up");
+            System.out.println("I think we can let the customers sign themselves up.");
         }
         else if (type.equals("owner")){
             System.out.println("I don't think you want to assign another owner who can usurp you...");
