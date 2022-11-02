@@ -228,7 +228,7 @@ public class UserInterface {
         System.out.println("\nEnjoy! If you'd like to buy anything else, please use the previous format (you can enter 'help buy' or 'help' for a refresher). Otherwise, press 'exit' to exit.");
     }
 
-    public static void displaySnacks(Scanner scan, Map<Food, Integer> inventory) {
+    public static void displaySnacks(Map<Food, Integer> inventory) {
         System.out.println("----------------------------------------------------------");
         System.out.println("|  Snack Name  | Category | Item Code | Quantity |  Price |");
         System.out.println("----------------------------------------------------------");
@@ -373,7 +373,7 @@ public class UserInterface {
         }
         else if(arguments.size() == 1 && arguments.get(0).equals("admin")) {
             // Print out the help commands corresponding to the current user type
-            System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
+            System.out.println("Below is a list of your valid commands. For more information on usage, type \"help <command>\".\n");
             Map<String, String> toPrint = new HashMap<>();
             if (UserInterface.currentUser instanceof Customer){
                 toPrint = allCommandBriefs;

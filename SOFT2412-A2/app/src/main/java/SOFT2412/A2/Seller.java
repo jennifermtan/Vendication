@@ -62,7 +62,7 @@ public class Seller extends User{
     }
     
     public static void itemsSummary() {
-        UserInterface.displaySnacks(UserInterface.scan, UserInterface.vm.getInventory());
+        UserInterface.displaySnacks(UserInterface.vm.getInventory());
     }
 
     public static String getSummary() {
