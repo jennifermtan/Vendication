@@ -237,16 +237,6 @@ public class VendingMachine {
         updateLine("./src/main/resources/inventory.txt", itemCode, Integer.toString(inventory.get(foodItem)), 4);
     }
 
-    public void removeCash(String cashAmount, int quantity) {
-        cash.put(cashAmount, cash.get(cashAmount) - quantity);
-        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
-    }
-
-    public void addCash(String cashAmount, int quantity) {
-        cash.put(cashAmount, cash.get(cashAmount) + quantity);
-        updateLine("./src/main/resources/cash.txt", cashAmount, Integer.toString(cash.get(cashAmount)), 1);
-    }
-
     // Update a line in a file by searching for a specific string (somewhat like a code to find the line)
     // and replacing a string on a specified index
     // If string is not in file, append to the file

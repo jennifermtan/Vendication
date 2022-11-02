@@ -165,23 +165,15 @@ class AppTest {
         assertTrue(Math.abs(f.getCost() - 2000) < 0.0001);
     }
 
-    @Test
-    void ownerTestEditItemDetail() {
-        owner.editItemDetail("name", "Coca Cola", "Coke");
-        assertEquals(ui.vm.searchByItemCode("cc").getName(), "Coke");
-        ui.vm.defaulting();
-    }
-
-    @Test
-    void sellerTestEditItemDetail() {
+    @Test void sellerTestEditItemDetail() {
         john.editItemDetail("category", "pi", "Candy");
         assertEquals(ui.vm.searchByItemCode("pi").getCategory(), "Candy");
         ui.vm.defaulting();
     }
 
     @Test void adminsEditChange() {
-        owner.editChange("$5", 20);
-        assertEquals(ui.vm.getCash().get("$5"), 20);
+        Cashier.editChange("$5", 15);
+        assertEquals(ui.vm.getCash().get("$5"), 15);
         karen.editChange("$20", 1);
         assertEquals(ui.vm.getCash().get("$20"), 1);
         ui.vm.defaulting();
@@ -198,8 +190,7 @@ class AppTest {
         vm.defaulting();
     }
 
-    @Test
-    void ownerAddRemove() {
+    @Test void ownerAddRemove() {
         // Test removing
         vm.defaulting();
         User.loadUsers();
@@ -236,63 +227,6 @@ class AppTest {
         // Cannot add owner
         Owner.addUser("owner", "test", "test3", "p");
         assertEquals(6, User.getUsers().size());
-        vm.defaulting();
-    }
-
-    // Testing editItemDetail() in owner class
-    @Test
-    void testEditItemDetailOwner() {
-        boolean changed = false;
-        // name
-        vm.defaulting();
-        owner.editItemDetail("name", "Pringles", "testName");
-        vm.loadInventory();
-        changed = false;
-        for(Food f: vm.getInventory().keySet()) {
-            if(f.getName().equals("testName"))
-                changed = true;
-        }
-        assertTrue(changed);
-        vm.defaulting();
-        // code
-        owner.editItemDetail("code", "ps", "testCode");
-        vm.loadInventory();
-        changed = false;
-        for(Food f: vm.getInventory().keySet()) {
-            if(f.getItemCode().equals("testCode"))
-                changed = true;
-        }
-        assertTrue(changed);
-        vm.defaulting();
-        // category
-        owner.editItemDetail("category", "Chocolates", "testCategory");
-        vm.loadInventory();
-        changed = false;
-        for(Food f: vm.getInventory().keySet()) {
-            if(f.getCategory().equals("testCategory"))
-                changed = true;
-        }
-        assertTrue(changed);
-        vm.defaulting();
-        // price
-        owner.editItemDetail("price", "1.3", "100.0");
-        vm.loadInventory();
-        changed = false;
-        for(Food f: vm.getInventory().keySet()) {
-            if(f.getCost() == 100.0)
-                changed = true;
-        }
-        assertTrue(changed);
-        vm.defaulting();
-        // quantity
-        owner.editItemDetail("quantity", "7", "15");
-        vm.loadInventory();
-        changed = false;
-        for(Food f: vm.getInventory().keySet()) {
-            if(vm.getInventory().get(f) == 15)
-                changed = true;
-        }
-        assertTrue(changed);
         vm.defaulting();
     }
 
@@ -390,4 +324,19 @@ class AppTest {
         assertFalse(length == User.getUsers().size());
         vm.defaulting();
     }
+
 }
+
+/*@Test void testTransactionSummaries() {
+         vm.defaulting();
+         Owner o = new Owner("md", "md", "password");
+         assertEquals(o.getCancelledSummary().split("\n").length, 7);
+         Cashier c = new Cashier("md", "md", "password");
+         assertEquals(c.getTransactionSummary().split("\n").length, 10);
+         vm.defaulting();
+    }*/
+// @Test void ownerTestEditItemQuantity() {
+//     owner.editItemQuantity("ts", 5);
+//     assertEquals(ui.vm.getInventory().get(ui.vm.searchByItemCode("ts")), 5);
+//     ui.vm.defaulting();
+// }

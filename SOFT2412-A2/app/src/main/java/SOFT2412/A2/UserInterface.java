@@ -22,15 +22,15 @@ public class UserInterface {
         put("exit", "Exits the application.");
     }};
     public static final Map<String, String> cashierCommandBriefs = new HashMap<String, String>(){{
-        put("fill", "Allows you to modify the number of notes/coins in the vending machine. Don't steal! ;) TBD");
-        put("changeSummary", "A summary of all the money inside the vending machine. TBD");
-        put("summary", "A summary of all the transactions made, with the time that they were made.");
+        put("editChange", "Allows you to modify the number of notes/coins in the vending machine. Don't steal! ;)");
+        put("summaryChange", "A summary of all the money inside the vending machine. TBD");
+        put("summarySuccessful", "A summary of all the transactions made, with the time that they were made.");
     }};
 
     public static final Map<String, String> sellerCommandBriefs = new HashMap<String, String>(){{
         put("editItems", "Allows you to edit any quality of any item in the vending machine.TBD");
-        put("itemsSummary", "A list of the current available items.TBD");
-        put("saleSummary", "A summary of the item codes, names, and quantities of all sold items.TBD");
+        put("summaryItems", "A list of the current available items.TBD");
+        put("summaryQuantities", "A summary of the item codes, names, and quantities of all sold items.");
     }};
 
     public static final Map<String, String> ownerCommandBriefs = new HashMap<String, String>(){{
@@ -38,8 +38,8 @@ public class UserInterface {
         putAll(sellerCommandBriefs);
         put("addEmployee", "Allows you to add a seller or cashier account for your employee.");
         put("removeEmployee", "Allows you to remove a seller or cashier. Also saves you an awkward conversation.");
-        put("usersSummary", "Shows you a list of all the users in the vending machine.TBD");
-        put("cancelledSummary", "Shows you a list of all the cancelled transactions.");
+        put("summaryUsers", "Shows you a list of all the users in the vending machine.");
+        put("summaryCancelled", "Shows you a list of all the cancelled transactions.");
     }};
 
     // HashMap of all valid commands and their usage
@@ -47,8 +47,9 @@ public class UserInterface {
         put("buy", "\nAllows any user to buy a product from the vending machine.\n" +
         "\nUsage: buy <payment method> <amount> <product code> [currency]\n" +
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
-        "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash)\n" +
-        "\nExample of usage: buy cash 4 se $5*2 50c*5\n");
+        "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash) OR username and pin of user when paying by card\n" +
+        "\nExample of usage: buy cash 4 se $5*2 50c*5\n" +
+                "Example of usage: buy card 1 mm cardname 111111\n");
         // add in help for paying by card
         put("sell", "Allows a vending machine owner to sell a product.");
         put("signup", "Allows a vending machine owner to sell a product.\n" +
@@ -58,10 +59,6 @@ public class UserInterface {
         "<username> -> username of the user, has to be unique\n" +
         "<password> -> password of the user\n" +
         "\nExample of usage: signup customer John myusername mypassword\n");
-        put("summary", "Allows admin type accounts to generate summary of transactions. Type of summary depends on priveledge.\n" +
-        "\nUsage: summary <type>\n" +
-        "<type> -> Type of transaction summary wanted (successful, cancelled)\n" +
-        "\nExample of usage: summary cancelled\n");
         put("login", "\nAllows any user to login to their account in the machine.\n" +
         "\nUsage: login <username> <password>\n" +
         "<username> -> username registered upon signup\n" +
@@ -76,23 +73,27 @@ public class UserInterface {
     }};
 
     public static final Map<String, String> cashierCommandUsage = new HashMap<String, String>(){{
-        put("fill", "\nAllows you to modify the number of notes/coins in the vending machine. Don't steal! ;)\n" +
-                "Usage: edit cash <cashAmount> <quantity>\n" +
-                "\n<cashAmount>  -> australian cash amounts, with dollars represented as $num and cents as numc e.g $20 and 20c" +
-                "\n<quantity>    -> number of this cash value that you want there to be" +"\nExample of usage: edit cash $50 10 TBD");
-        put("changeSummary", "\nA summary of all the money inside the vending machine.\nUsage: summary change TBD\n");
-        put("summary", "\nA summary of all the transactions made, with the time that they were made.\nUsage: summary successful");
+        put("editChange", "\nAllows you to modify the number of notes/coins in the vending machine. Don't steal! ;)\n" +
+                "Usage: editChange <cashAmount> <quantity>\n" +
+                "\n<cashAmount>  -> Australian cash amounts, with dollars represented as $num and cents as numc e.g $20 and 20c" +
+                "\n<quantity>    -> number of this cash value that you want there to be" +"\nExample of usage: editChange $50 10\n");
+        put("summaryChange", "\nA summary of all the money inside the vending machine.\nUsage: summaryChange TBD\n");
+        put("summarySuccessful", "\nA summary of all the transactions made, with the time that they were made.\nUsage: summarySuccessful\n");
     }};
     public static final Map<String, String> sellerCommandUsage = new HashMap<String, String>(){{
-        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: edit items TBD");
-        put("itemsSummary", "\nA list of the current available items.\nUsage: summary items TBD");
-        put("saleSummary", "\nA summary of the item codes, names, and quantities of all sold items.\n Usage: summary quantities TBD");
+        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: editItems <change type> <name> <new value>\n" +
+                "<change type>  -> the type of change you want to make to the item. You can change the item's \"name\", \"category\", \"code\", \"price\", or \"quantity\".\n" +
+                "<name>         -> the name of the item that you want to edit.\n" +
+                "<new value>    -> the new value that you want this item to have now.\n" +
+                "Example of usage: editItems name M&M R&R");
+        put("summaryItems", "\nA list of the current available items.\nUsage: summaryItems TBD");
+        put("summaryQuantities", "\nA summary of the item codes, names, and quantities of all sold items.\n Usage: summaryQuantities\n");
     }};
     public static final Map<String, String> ownerCommandUsage = new HashMap<String, String>(){{
         putAll(sellerCommandUsage);
         putAll(cashierCommandUsage);
-        put("userSummary", "\nShows you a list of all the users in the vending machine.\nUsage: summary users\nTBD");
-        put("cancelledSummary", "\nShows you a list of all the cancelled transactions.\nUsage: summary cancelled\n");
+        put("summaryUsers", "\nShows you a list of all the users in the vending machine.\nUsage: summaryUsers\n");
+        put("summaryCancelled", "\nShows you a list of all the cancelled transactions.\nUsage: summaryCancelled\n");
         put("addEmployee", "\nAllows you to add a seller or cashier account for your employee." +
                 "\nUsage: addEmployee <type> <name> <username> <password>\n" +
                 "<type>     -> type of user (cashier, seller)\n" +
@@ -324,6 +325,7 @@ public class UserInterface {
 
     // Displays after user logs in
     public void loggedInPage() {
+
         System.out.println("\nThese were the last few items bought by you:");
         List<String> tempFood = new ArrayList<String>();
         try {
