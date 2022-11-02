@@ -324,7 +324,7 @@ class AppTest {
         assertFalse(length == User.getUsers().size());
         vm.defaulting();
     }
->>>>>>> 727335c0db9252905af4cd671ca23fca6d971ac3
+
 }
 
 /*@Test void testTransactionSummaries() {
