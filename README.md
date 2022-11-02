@@ -14,7 +14,7 @@ _A Vending Machine Revolution. Bop it, Twist it, Vend it_
 
 
 
-### Specific instructions given to us by Freddy:
+### Freddy's Requirements
 
 - We don't have to implement a 'cancel transaction' command since our text interface allows you to reach any command from any other command
 - We don't have to implement logic for hiding user password or card details (thank you!)
