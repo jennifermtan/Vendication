@@ -109,7 +109,20 @@ public class App {
                         }
 
                     }
-                    Seller.editItemDetail(arguments.get(0), arguments.get(1), newValue);
+                    double value;
+                    if (arguments.get(0).equals("price")){
+                        try{
+                            value = Double.parseDouble(newValue);
+                            Seller.editItemDetail(arguments.get(0), arguments.get(1), String.valueOf(value));
+                        }
+                        catch(NumberFormatException nf){
+                            System.out.println("Only numeric input allowed for new price.");
+                        }
+                    }
+                    else{
+                        Seller.editItemDetail(arguments.get(0), arguments.get(1), newValue);
+                    }
+
                 }
                 else{
                     System.out.println("Sorry, you do not have permission to perform this action.");
