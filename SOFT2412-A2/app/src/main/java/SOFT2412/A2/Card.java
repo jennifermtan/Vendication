@@ -81,14 +81,6 @@ public class Card {
     }
 
 
-    public static Card getCard(String cardNumber) {
-        for (Card c : cards) {
-            if (c.number.equals(cardNumber))
-                return c;
-        }
-        return null;
-    }
-
     public static void defaultCards() {
         JSONParser parser = new JSONParser();
         try {

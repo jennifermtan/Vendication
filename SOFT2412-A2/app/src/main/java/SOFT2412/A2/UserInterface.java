@@ -173,7 +173,7 @@ public class UserInterface {
             String itemQuantity = input.get(1);
             String itemCode = input.get(2);
             // Checking if card details match for anonymous users
-            if (currentUser == null) {
+            if (currentUser.getName().equals("")) {
                 String cardName = input.get(3);
                 String cardNumber = input.get(4);
                 if (!Card.checkCardDetails(cardName, cardNumber)) {
@@ -393,9 +393,7 @@ public class UserInterface {
         }
         else {
             Map<String, String> toPrint = new HashMap<>();
-            if (UserInterface.currentUser instanceof Customer){
-                toPrint = allCommandUsage;
-            }
+
             if (UserInterface.currentUser instanceof Cashier){
                 toPrint = cashierCommandUsage;
             }

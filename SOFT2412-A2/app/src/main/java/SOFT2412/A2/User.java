@@ -72,6 +72,12 @@ public abstract class User {
                         System.out.printf("You have a card (Name: %s, Number; %s) saved to this account.\n",
                         UserInterface.currentUser.getCard().getName(), UserInterface.currentUser.getCard().getNumber());
                     }
+                    UserInterface ui = new UserInterface();
+                    List<String> arguments = new ArrayList<String>();
+                    if (!(UserInterface.currentUser instanceof Customer)){
+                        arguments.add("admin");
+                    }
+                    ui.help(arguments);
                     return;
                 }
                 else {

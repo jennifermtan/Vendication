@@ -14,7 +14,7 @@ public class Seller extends User{
                 UserInterface.vm.updateLine("./src/main/resources/inventory.txt", oldDetail, newDetail, 0);
                 for (Food food : UserInterface.vm.getInventory().keySet()) {
                     if (food.getName().equals(oldDetail)) {
-                        food.setName(newDetail);
+                         food.setName(newDetail);
                     }
                 }
                 break;
@@ -62,7 +62,7 @@ public class Seller extends User{
         }
     }
     
-    public void itemsSummary() {
+    public static void itemsSummary() {
         UserInterface.displaySnacks(UserInterface.scan, UserInterface.vm.getInventory());
     }
 
