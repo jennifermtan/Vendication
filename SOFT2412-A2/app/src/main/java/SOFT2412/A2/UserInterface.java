@@ -14,7 +14,6 @@ public class UserInterface {
     public static final Map<String, String> allCommandBriefs = new HashMap<String, String>() {{
         put("buy", "Allows any user to buy a product from the vending machine.");
         put("signup", "Allows any user to create an account for the machine.");
-        put("summary", "Allows admin type accounts to generate summary of transactions. Type of summary depends on priveledge.");
         put("login", "Allows any user to login to their account in the machine.");
         put("logout", "Allows any user to log out of their account.");
         put("help", "Gives information on how to use the application.");
@@ -326,7 +325,6 @@ public class UserInterface {
     // Displays after user logs in
     public void loggedInPage() {
 
-        System.out.println("\nThese were the last few items bought by you:");
         List<String> tempFood = new ArrayList<String>();
         try {
             File file = new File("./src/main/resources/transactions.txt");
@@ -348,6 +346,8 @@ public class UserInterface {
         }
         int size = tempFood.size();
         int index = 1;
+        if (size == 0){return;}
+        System.out.println("\nThese were the last few items bought by you:");
         if (size < 5) {
             for (int initial = size - 1; initial >= 0; initial -= 1) {
                 System.out.println(index + ") " + tempFood.get(initial));
