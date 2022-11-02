@@ -43,7 +43,7 @@ public class UserInterface {
 
     // HashMap of all valid commands and their usage
     public static final Map<String, String> allCommandUsage = new HashMap<String, String>() {{
-        put("buy", "\nAllows any user to buy a product from the vending machine.\n" +
+        put("buy", "\nAllows any user to buy a product from the vending machine. Logged in users can save a card to their account when used.\n" +
         "\nUsage: buy <payment method> <amount> <product code> [currency]\n" +
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash) OR username and pin of user when paying by card\n" +
@@ -80,9 +80,9 @@ public class UserInterface {
         put("summarySuccessful", "\nA summary of all the transactions made, with the time that they were made.\nUsage: summarySuccessful\n");
     }};
     public static final Map<String, String> sellerCommandUsage = new HashMap<String, String>(){{
-        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: editItems <change type> <name> <new value>\n" +
+        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: editItems <change type> <item code> <new value>\n" +
                 "<change type>  -> the type of change you want to make to the item. You can change the item's \"name\", \"category\", \"code\", \"price\", or \"quantity\".\n" +
-                "<name>         -> the name of the item that you want to edit.\n" +
+                "<item code>    -> the name of the item that you want to edit.\n" +
                 "<new value>    -> the new value that you want this item to have now.\n" +
                 "Example of usage: editItems name M&M R&R");
         put("summaryItems", "\nA list of the current available items.\nUsage: summaryItems TBD");
@@ -177,7 +177,7 @@ public class UserInterface {
                 String cardName = input.get(3);
                 String cardNumber = input.get(4);
                 if (!Card.checkCardDetails(cardName, cardNumber)) {
-                    System.out.println("\nWe were unable to match your card, please try again.");
+                    System.out.println("\nWe were unable to match your card, please try again. You can add a new card by logging in.");
                     Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to unmatched card details");
                     Transaction.writeTransaction(t);
                     return;
@@ -212,7 +212,7 @@ public class UserInterface {
                         Card userCard = new Card(cardName, cardNumber);
                         Card.updateCards(userCard);
                         User.addCard(UserInterface.currentUser, userCard);
-                        System.out.println("Card details were successfully saved to your account! You no longer have to input card details for your purchases!");
+                        System.out.println("Card details were successfully saved to your account! You no longer have to input card details for your purchases, they will be implemented automatically when you pay by card.");
                         break;
                     }
                     else if (saveCard.equals("no")) {
@@ -371,7 +371,7 @@ public class UserInterface {
             for(String command : toPrint.keySet()){
                 System.out.printf("%15s:          %s%n", command, toPrint.get(command));}
         }
-        if(arguments.size() == 1 && arguments.get(0).equals("admin")) {
+        else if(arguments.size() == 1 && arguments.get(0).equals("admin")) {
             // Print out the help commands corresponding to the current user type
             System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
             Map<String, String> toPrint = new HashMap<>();
@@ -389,7 +389,7 @@ public class UserInterface {
             }
 
             for(String command : toPrint.keySet()){
-                System.out.printf("%15s:          %s%n", command, toPrint.get(command));}
+                System.out.printf("%17s:          %s%n", command, toPrint.get(command));}
         }
         else {
             Map<String, String> toPrint = new HashMap<>();
