@@ -31,7 +31,7 @@ public abstract class User {
         String[] userInfo;
         User tempUser = null;
         try {
-            Scanner usersFile = new Scanner(new File(".src/main/resources/users.txt"));
+            Scanner usersFile = new Scanner(new File("./src/main/resources/users.txt"));
             while(usersFile.hasNextLine()) {
                 String line = usersFile.nextLine();
                 userInfo = line.split(", ");
@@ -125,7 +125,7 @@ public abstract class User {
         BufferedWriter bw = null;
         PrintWriter pw = null;
         try {
-            fw = new FileWriter(".src/main/resources/users.txt", true);
+            fw = new FileWriter("./src/main/resources/users.txt", true);
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw);
             pw.printf("%s, %s, %s, %s\n", type, name, username, password);
@@ -173,7 +173,7 @@ public abstract class User {
     public static void addCard(User user, Card userCard) {
         user.card = userCard;
         try {
-            File file = new File(".src/main/resources/users.txt");
+            File file = new File("./src/main/resources/users.txt");
             Scanner scan = new Scanner(file);
             StringBuffer inputBuffer = new StringBuffer();
             while (scan.hasNextLine()) {
@@ -187,7 +187,7 @@ public abstract class User {
             }
             scan.close();
             String inputStr = inputBuffer.toString();
-            FileOutputStream output = new FileOutputStream(".src/main/resources/users.txt");
+            FileOutputStream output = new FileOutputStream("./src/main/resources/users.txt");
             output.write(inputStr.getBytes());
             output.close();
         }
