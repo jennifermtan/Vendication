@@ -173,11 +173,11 @@ public class UserInterface {
             String itemQuantity = input.get(1);
             String itemCode = input.get(2);
             // Checking if card details match for anonymous users
-            if (currentUser == null) {
+            if (currentUser.getName().equals("")) {
                 String cardName = input.get(3);
                 String cardNumber = input.get(4);
                 if (!Card.checkCardDetails(cardName, cardNumber)) {
-                    System.out.println("\nWe were unable to match your card, please try again.");
+                    System.out.println("\nWe were unable to match your card, please try again. You can add a new card by logging in.");
                     Transaction t = new Transaction(UserInterface.currentUser.getName(), LocalDateTime.now(), "Cancelled due to unmatched card details");
                     Transaction.writeTransaction(t);
                     return;
