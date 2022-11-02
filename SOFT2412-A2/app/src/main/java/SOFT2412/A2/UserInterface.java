@@ -22,13 +22,13 @@ public class UserInterface {
     }};
     public static final Map<String, String> cashierCommandBriefs = new HashMap<String, String>(){{
         put("editChange", "Allows you to modify the number of notes/coins in the vending machine. Don't steal! ;)");
-        put("summaryChange", "A summary of all the money inside the vending machine. TBD");
+        put("summaryChange", "A summary of all the money inside the vending machine.");
         put("summarySuccessful", "A summary of all the transactions made, with the time that they were made.");
     }};
 
     public static final Map<String, String> sellerCommandBriefs = new HashMap<String, String>(){{
-        put("editItems", "Allows you to edit any quality of any item in the vending machine.TBD");
-        put("summaryItems", "A list of the current available items.TBD");
+        put("editItems", "Allows you to edit any quality of any item in the vending machine.");
+        put("summaryItems", "A list of the current available items.");
         put("summaryQuantities", "A summary of the item codes, names, and quantities of all sold items.");
     }};
 
@@ -76,16 +76,16 @@ public class UserInterface {
                 "Usage: editChange <cashAmount> <quantity>\n" +
                 "\n<cashAmount>  -> Australian cash amounts, with dollars represented as $num and cents as numc e.g $20 and 20c" +
                 "\n<quantity>    -> number of this cash value that you want there to be" +"\nExample of usage: editChange $50 10\n");
-        put("summaryChange", "\nA summary of all the money inside the vending machine.\nUsage: summaryChange TBD\n");
+        put("summaryChange", "\nA summary of all the money inside the vending machine.\nUsage: summaryChange\n");
         put("summarySuccessful", "\nA summary of all the transactions made, with the time that they were made.\nUsage: summarySuccessful\n");
     }};
     public static final Map<String, String> sellerCommandUsage = new HashMap<String, String>(){{
-        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: editItems <change type> <name> <new value>\n" +
+        put("editItems", "\nAllows you to edit any attribute of any item in the vending machine. \nUsage: editItems <change type> <item code> <new value>\n" +
                 "<change type>  -> the type of change you want to make to the item. You can change the item's \"name\", \"category\", \"code\", \"price\", or \"quantity\".\n" +
-                "<name>         -> the name of the item that you want to edit.\n" +
-                "<new value>    -> the new value that you want this item to have now.\n" +
+                "<item code>    -> the name of the item that you want to edit.\n" +
+                "<new value>    -> the new value that you want this item to have now. If you're changing the price, please just place\n" +
                 "Example of usage: editItems name M&M R&R");
-        put("summaryItems", "\nA list of the current available items.\nUsage: summaryItems TBD");
+        put("summaryItems", "\nA list of the current available items.\nUsage: summaryItems");
         put("summaryQuantities", "\nA summary of the item codes, names, and quantities of all sold items.\n Usage: summaryQuantities\n");
     }};
     public static final Map<String, String> ownerCommandUsage = new HashMap<String, String>(){{
@@ -393,9 +393,7 @@ public class UserInterface {
         }
         else {
             Map<String, String> toPrint = new HashMap<>();
-            if (UserInterface.currentUser instanceof Customer){
-                toPrint = allCommandUsage;
-            }
+
             if (UserInterface.currentUser instanceof Cashier){
                 toPrint = cashierCommandUsage;
             }
