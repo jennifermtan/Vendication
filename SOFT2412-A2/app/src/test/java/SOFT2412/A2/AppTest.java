@@ -230,7 +230,101 @@ class AppTest {
         vm.defaulting();
     }
 
+    // Testing getUsernames() in Owner class
+    @Test
+    void testGetUsernames() {
+        String usernames = owner.getUsernames();
+        // 140 characters is the length of the start and end of the usernames table.
+        // If length is above that, it means method returned 1 or more username's data
+        assertTrue(usernames.length() > 140);
+    }
 
+    // Testing editItemDetail() in Seller class
+    @Test
+    void testEditItemDetailSeller() {
+        boolean changed = false;
+        // name
+        vm.defaulting();
+        john.editItemDetail("name", "Pringles", "testName");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getName().equals("testName"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // code
+        john.editItemDetail("code", "ps", "testCode");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getItemCode().equals("testCode"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // category
+        john.editItemDetail("category", "Chocolates", "testCategory");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getCategory().equals("testCategory"))
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // price
+        john.editItemDetail("price", "1.3", "100.0");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(f.getCost() == 100.0)
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+        // quantity
+        john.editItemDetail("quantity", "7", "15");
+        vm.loadInventory();
+        changed = false;
+        for(Food f: vm.getInventory().keySet()) {
+            if(vm.getInventory().get(f) == 15)
+                changed = true;
+        }
+        assertTrue(changed);
+        vm.defaulting();
+    }
+
+    // Testing getSummary() in Seller class
+    @Test
+    void testGetSummarySeller() {
+        String summary = john.getSummary();
+        // 176 characters is the length of the start and end of the summary table.
+        // If length is above that, it means method returned data
+        assertTrue(summary.length() > 176);
+    }
+
+    // Testing signup() method in User class
+    @Test
+    void testSignup() {
+        vm.defaulting();
+        User.loadUsers();
+        ui.currentUser = new Customer("", "", ""); // Default user when application starts
+        // Testing restrictive property of signup
+        int length = User.getUsers().size();
+        User.signup("owner", "testName", "testUsername1", "testPassword");
+        User.signup("cashier", "testName", "testUsername2", "testPassword");
+        User.signup("seller", "testName", "testUsername3", "testPassword");
+        // Length should not change since default customer user is not allowed to signup for an admin type account
+        assertTrue(length == User.getUsers().size());
+
+        // Testing working functionality
+        User.signup("customer", "testName", "testUsername4", "testPassword");
+        assertFalse(length == User.getUsers().size());
+        vm.defaulting();
+    }
+>>>>>>> 727335c0db9252905af4cd671ca23fca6d971ac3
 }
 
 /*@Test void testTransactionSummaries() {

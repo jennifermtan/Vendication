@@ -365,6 +365,13 @@ public class UserInterface {
     // Help command
     public void help(List<String> arguments) {
         if(arguments.size() == 0) {
+            Map<String, String> toPrint = new HashMap<>();
+            toPrint = allCommandBriefs;
+
+            for(String command : toPrint.keySet()){
+                System.out.printf("%15s:          %s%n", command, toPrint.get(command));}
+        }
+        if(arguments.size() == 1 && arguments.get(0).equals("admin")) {
             // Print out the help commands corresponding to the current user type
             System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
             Map<String, String> toPrint = new HashMap<>();
@@ -399,10 +406,19 @@ public class UserInterface {
                 toPrint = ownerCommandUsage;
             }
 
+            outerloop:
             for(int i = 0; i < arguments.size(); i++) {
                 for(String command : toPrint.keySet()) {
-                    if(command.equals(arguments.get(i)))
+                    if(command.equals(arguments.get(i))) {
                         System.out.println(toPrint.get(command));
+                        continue outerloop;
+                    }
+                }
+                for(String command : allCommandUsage.keySet()) {
+                    if(command.equals(arguments.get(i))) {
+                        System.out.println(allCommandUsage.get(command));
+                        continue outerloop;
+                    }
                 }
             }
         }
