@@ -43,7 +43,7 @@ public class UserInterface {
 
     // HashMap of all valid commands and their usage
     public static final Map<String, String> allCommandUsage = new HashMap<String, String>() {{
-        put("buy", "\nAllows any user to buy a product from the vending machine.\n" +
+        put("buy", "\nAllows any user to buy a product from the vending machine. Logged in users can save a card to their account when used.\n" +
         "\nUsage: buy <payment method> <amount> <product code> [currency]\n" +
         "<payment method> -> card or cash\n<amount>         -> amount of the product\n" +
         "<product code>   -> code of the desired product\n[currency]       -> Currency denomination of given payment (Optional argument given only when paying by cash) OR username and pin of user when paying by card\n" +
@@ -212,7 +212,7 @@ public class UserInterface {
                         Card userCard = new Card(cardName, cardNumber);
                         Card.updateCards(userCard);
                         User.addCard(UserInterface.currentUser, userCard);
-                        System.out.println("Card details were successfully saved to your account! You no longer have to input card details for your purchases!");
+                        System.out.println("Card details were successfully saved to your account! You no longer have to input card details for your purchases, they will be implemented automatically when you pay by card.");
                         break;
                     }
                     else if (saveCard.equals("no")) {
@@ -371,7 +371,7 @@ public class UserInterface {
             for(String command : toPrint.keySet()){
                 System.out.printf("%15s:          %s%n", command, toPrint.get(command));}
         }
-        if(arguments.size() == 1 && arguments.get(0).equals("admin")) {
+        else if(arguments.size() == 1 && arguments.get(0).equals("admin")) {
             // Print out the help commands corresponding to the current user type
             System.out.println("Below is a list of all valid commands in the application. For more information on usage, type \"help <command>\".\n");
             Map<String, String> toPrint = new HashMap<>();
@@ -389,7 +389,7 @@ public class UserInterface {
             }
 
             for(String command : toPrint.keySet()){
-                System.out.printf("%15s:          %s%n", command, toPrint.get(command));}
+                System.out.printf("%17s:          %s%n", command, toPrint.get(command));}
         }
         else {
             Map<String, String> toPrint = new HashMap<>();

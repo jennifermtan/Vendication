@@ -21,7 +21,14 @@ public class App {
             case "menu":
                 menu();
                 break;
-
+            case "summaryItems":
+                if (arguments.size() != 0)
+                    System.out.println("Incorrect Format. For more help on this summary command, type \"help summaryItems\"");
+                else if(UserInterface.currentUser instanceof Customer)
+                    System.out.println("Sorry, you do not have permission to perform this action.");
+                else
+                    Seller.itemsSummary();
+                break;
             // Cancelled transaction summary: Power of OWNER
             case "summaryCancelled":
                 if (arguments.size() != 0){System.out.println("Incorrect Format. For more help on this summary command, type \"help summaryCancelled\"");}

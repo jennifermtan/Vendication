@@ -45,6 +45,7 @@ public class VendingMachine {
     }
 
     public void loadInventory(){
+        inventory.clear();
         try{
             File invenFile = new File("./src/main/resources/inventory.txt");
             Scanner scan2 = new Scanner(invenFile);
