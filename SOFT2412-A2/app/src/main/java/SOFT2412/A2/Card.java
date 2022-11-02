@@ -35,7 +35,7 @@ public class Card {
     public static void loadCards() {
         JSONParser parser = new JSONParser();
         try {
-            Object object = parser.parse(new FileReader("./src/main/resources/creditCards.json"));
+            Object object = parser.parse(new FileReader("./resources/creditCards.json"));
             cardArray = (JSONArray) object;
             for (Object o : cardArray) {
                 JSONObject entry = (JSONObject) o;
@@ -61,7 +61,7 @@ public class Card {
         newCard.put("number", card.getNumber());
         cardArray.add(newCard);
         // Writes card to creditCards.json
-        try (FileWriter file = new FileWriter("./src/main/resources/creditCards.json")) {
+        try (FileWriter file = new FileWriter("./resources/creditCards.json")) {
             file.write(Card.getCardArray().toJSONString());
             file.flush();
             file.close();
@@ -84,7 +84,7 @@ public class Card {
     public static void defaultCards() {
         JSONParser parser = new JSONParser();
         try {
-            Object object = parser.parse(new FileReader("./src/main/resources/stableCards.json"));
+            Object object = parser.parse(new FileReader("./resources/stableCards.json"));
             cardArray = (JSONArray) object;
             for (Object o : cardArray) {
                 JSONObject entry = (JSONObject) o;

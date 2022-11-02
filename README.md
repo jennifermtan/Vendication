@@ -1,7 +1,8 @@
-Vendication- A Vending Machine Revolution.
-    Bop it, Twist it, Vend it
+## Vendication
+
+_A Vending Machine Revolution. Bop it, Twist it, Vend it_
     
-How to use our app:
+### How to use our app:
 
 1. Clone the repository from GitHub.
 2. After opening the repo on an IDE, cd into the SOFT2412-A2 folder.
@@ -13,8 +14,9 @@ How to use our app:
 
 
 
-- Specific instructions given to us by Freddy:
-1. We don't have to implement a 'cancel transaction' command since our text interface allows you to reach any command from any other command
-2. We don't have to implement logic for hiding user password or card details (thank you!)
-3. We have to represent our summaries in a nice table format, especially the displaying of items in the vending machine right at the beginning of the program.
-4. Restrict user creation and signup- there should only be one owner and defined sellers and cashiers.
+### Specific instructions given to us by Freddy:
+
+- We don't have to implement a 'cancel transaction' command since our text interface allows you to reach any command from any other command
+- We don't have to implement logic for hiding user password or card details (thank you!)
+- We have to represent our summaries in a nice table format, especially the displaying of items in the vending machine right at the beginning of the program.
+- Restrict user creation and signup- there should only be one owner and defined sellers and cashiers.
