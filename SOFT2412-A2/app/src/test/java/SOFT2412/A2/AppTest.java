@@ -106,11 +106,11 @@ class AppTest {
         vm.defaulting();
 
         // Test that we don't let user buy something if we don't have enough change by first removing all our change
-        vm.updateLine("./resources/cash.txt", "5c", "0", 1);
-        vm.updateLine("./resources/cash.txt", "10c", "0", 1);
-        vm.updateLine("./resources/cash.txt", "20c", "0", 1);
-        vm.updateLine("./resources/cash.txt", "50c", "0", 1);
-        vm.updateLine("./resources/cash.txt", "$1", "0", 1);
+        vm.updateLine("./src/main/resources/cash.txt", "5c", "0", 1);
+        vm.updateLine("./src/main/resources/cash.txt", "10c", "0", 1);
+        vm.updateLine("./src/main/resources/cash.txt", "20c", "0", 1);
+        vm.updateLine("./src/main/resources/cash.txt", "50c", "0", 1);
+        vm.updateLine("./src/main/resources/cash.txt", "$1", "0", 1);
 
         UserInterface ui = new UserInterface();
         try{

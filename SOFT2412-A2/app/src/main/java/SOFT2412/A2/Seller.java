@@ -11,7 +11,7 @@ public class Seller extends User{
     public static void editItemDetail(String detailType, String itemCode, String newDetail) {
         switch (detailType) {
             case "name":
-                UserInterface.vm.updateLine("./resources/inventory.txt", itemCode, newDetail, 0);
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 0);
                 for (Food food : UserInterface.vm.getInventory().keySet()) {
                     if (food.getName().equals(itemCode)) {
                         food.setName(newDetail);
@@ -20,7 +20,7 @@ public class Seller extends User{
                 break;
 
             case "code":
-                UserInterface.vm.updateLine("./resources/inventory.txt", itemCode, newDetail, 2);
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 2);
                 for (Food food : UserInterface.vm.getInventory().keySet()) {
                     if (food.getItemCode().equals(itemCode)) {
                         food.setItemCode(newDetail);
@@ -29,7 +29,7 @@ public class Seller extends User{
                 break;
 
             case "category":
-                UserInterface.vm.updateLine("./resources/inventory.txt", itemCode, newDetail, 1);
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 1);
                 for (Food food : UserInterface.vm.getInventory().keySet()) {
                     if (food.getItemCode().equals(itemCode)) {
                         food.setCategory(newDetail);
@@ -43,7 +43,7 @@ public class Seller extends User{
                         food.setCost(Double.parseDouble(newDetail));
                     }
                 }
-                UserInterface.vm.updateLine("./resources/inventory.txt", itemCode, newDetail, 3);
+                UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 3);
                 break;
             
             case "quantity":
@@ -52,7 +52,7 @@ public class Seller extends User{
                 } else if (Integer.parseInt(newDetail) < 0) {
                     System.out.println("Error: Please enter a valid quantity.");
                 } else {
-                    UserInterface.vm.updateLine("./resources/inventory.txt", itemCode, newDetail, 4);
+                    UserInterface.vm.updateLine("./src/main/resources/inventory.txt", itemCode, newDetail, 4);
                     UserInterface.vm.loadInventory();
                 }
                 break;
@@ -71,7 +71,7 @@ public class Seller extends User{
         summary += "|  Snack Name  | Item Code | Quantity Sold |\n";
         summary += "--------------------------------------------\n";
         try{
-            File file = new File("./resources/quantities.txt");
+            File file = new File("./src/main/resources/quantities.txt");
             Scanner scan = new Scanner(file);
 
             while (scan.hasNextLine()) {

@@ -72,7 +72,7 @@ public class Transaction {
         cancelTransactions = new ArrayList<>();
         try {
             // Look into transactions.txt and load the anonTransactions and userTransactions data structures
-            File f = new File("./resources/transactions.txt");
+            File f = new File("./src/main/resources/transactions.txt");
             Scanner scan = new Scanner(f);
 
             while (scan.hasNextLine()) {
@@ -106,7 +106,7 @@ public class Transaction {
             else{
                 transactionLine = newT.getUserName() + ", " + newT.getTimeSold() + ", " + newT.getState() + "\n";
             }
-            Files.write(Paths.get("./resources/transactions.txt"), transactionLine.getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get("./src/main/resources/transactions.txt"), transactionLine.getBytes(), StandardOpenOption.APPEND);
         }
         catch(IOException fn){System.out.println(fn);}
     }

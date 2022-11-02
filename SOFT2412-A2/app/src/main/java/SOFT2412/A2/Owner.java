@@ -58,15 +58,15 @@ public class Owner extends User{
         // Remove from list of users
         allUsers.remove(toRemove);
 
-        File currUsers = new File("./resources/users.txt");
-        File newUsers = new File("./resources/tempUsers.txt");
+        File currUsers = new File("./src/main/resources/users.txt");
+        File newUsers = new File("./src/main/resources/tempUsers.txt");
         //Remove this user from users.txt by making a new file with all of the users except the user we want to delete
         try{
-            FileWriter fw = new FileWriter("./resources/tempUsers.txt", true);
+            FileWriter fw = new FileWriter("./src/main/resources/tempUsers.txt", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
-            FileReader fr = new FileReader("./resources/users.txt");
+            FileReader fr = new FileReader("./src/main/resources/users.txt");
             BufferedReader br = new BufferedReader(fr);
 
             String currentLine;
@@ -86,7 +86,7 @@ public class Owner extends User{
             fw.close();
 
             currUsers.delete();
-            File dump = new File("./resources/users.txt");
+            File dump = new File("./src/main/resources/users.txt");
             newUsers.renameTo(dump);
         }
         catch(IOException fe){System.out.println(fe);}
@@ -99,7 +99,7 @@ public class Owner extends User{
         users += "|      Username      |    Role    |\n";
         users += "-----------------------------------\n";
         try{
-            File file = new File("./resources/users.txt");
+            File file = new File("./src/main/resources/users.txt");
             Scanner scan = new Scanner(file);
             scan.nextLine();
 
