@@ -422,7 +422,8 @@ public class UserInterface {
                 }
             }
         }
-
+        if(!(UserInterface.currentUser instanceof Customer))
+            System.out.println("\nPlease type \"help admin\" to view all your account-specific commands.");
     }
 
 }
